@@ -1,0 +1,5 @@
+spring.application.name: my-application
+
+spring:
+  datasource:
+    url: jdbc:pros://localhost:3306/mydb
