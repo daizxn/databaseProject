@@ -15,6 +15,7 @@ public enum ResultCodeEnum {
     USER_ACCOUNT_ERROR("5003", "账号或密码错误"),
     USER_NOT_EXIST_ERROR("5004", "用户不存在"),
     PARAM_PASSWORD_ERROR("5005", "原密码输入错误"),
+    PARAM_NAME_EXISTED("5006", "名称已存在"),
     INSERT_ERROR("5011","插入失败"),
     DELETE_ERROR("5012","删除失败"),
     UPDATE_ERROR("5013","更新失败"),

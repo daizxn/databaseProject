@@ -17,12 +17,12 @@ public class Departments {
      * 
      */
     @TableId
-    private Integer dzxDid;
+    private Integer dzxDepartmentId;
 
     /**
      * 
      */
-    private String dzxDname;
+    private String dzxDepartmentName;
 
     @Override
     public boolean equals(Object that) {
@@ -36,16 +36,16 @@ public class Departments {
             return false;
         }
         Departments other = (Departments) that;
-        return (this.getDzxDid() == null ? other.getDzxDid() == null : this.getDzxDid().equals(other.getDzxDid()))
-            && (this.getDzxDname() == null ? other.getDzxDname() == null : this.getDzxDname().equals(other.getDzxDname()));
+        return (this.getDzxDepartmentId() == null ? other.getDzxDepartmentId() == null : this.getDzxDepartmentId().equals(other.getDzxDepartmentId()))
+            && (this.getDzxDepartmentName() == null ? other.getDzxDepartmentName() == null : this.getDzxDepartmentName().equals(other.getDzxDepartmentName()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getDzxDid() == null) ? 0 : getDzxDid().hashCode());
-        result = prime * result + ((getDzxDname() == null) ? 0 : getDzxDname().hashCode());
+        result = prime * result + ((getDzxDepartmentId() == null) ? 0 : getDzxDepartmentId().hashCode());
+        result = prime * result + ((getDzxDepartmentName() == null) ? 0 : getDzxDepartmentName().hashCode());
         return result;
     }
 
@@ -55,8 +55,8 @@ public class Departments {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dzxDid=").append(dzxDid);
-        sb.append(", dzxDname=").append(dzxDname);
+        sb.append(", dzxDepartmentId=").append(dzxDepartmentId);
+        sb.append(", dzxDepartmentName=").append(dzxDepartmentName);
         sb.append("]");
         return sb.toString();
     }

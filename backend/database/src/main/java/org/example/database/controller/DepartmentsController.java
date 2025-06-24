@@ -30,6 +30,12 @@ public class DepartmentsController {
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody Departments departments) {
+        // Dname不重复
+        QueryWrapper<Departments> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("dzx_department_name", departments.getDzxDepartmentName());
+        if (departmentsService.count(queryWrapper) > 0) {
+            return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
+        }
         return departmentsService.save(departments) ? Result.success() : Result.error(ResultCodeEnum.INSERT_ERROR);
     }
 
@@ -101,7 +107,7 @@ public class DepartmentsController {
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper <Departments> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Departments::getDzxDname, departments.getDzxDname());
+        queryWrapper.like(Departments::getDzxDepartmentName, departments.getDzxDepartmentName());
         IPage<Departments> page =new Page<>(pageNum,pageSize);
         IPage<Departments> departmentsPage = departmentsService.page(page, queryWrapper);
         if (departmentsPage.getRecords().isEmpty()) {

@@ -5,11 +5,11 @@
 <mapper namespace="org.example.database.mapper.DepartmentsMapper">
 
     <resultMap id="BaseResultMap" type="org.example.database.entity.Departments">
-            <id property="dzxDid" column="dzx_did" />
-            <result property="dzxDname" column="dzx_dname" />
+            <id property="dzxDepartmentId" column="dzx_department_id" />
+            <result property="dzxDepartmentName" column="dzx_department_name" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        dzx_did,dzx_dname
+        dzx_department_id,dzx_department_name
     </sql>
 </mapper>

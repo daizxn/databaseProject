@@ -16,6 +16,7 @@ mybatis-plus:
   global-config:
     db-config:
       table-prefix: daizx_
+      id-type: auto
   type-aliases-package: org.example.database.entity
 
 
