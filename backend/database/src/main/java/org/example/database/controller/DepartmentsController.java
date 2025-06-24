@@ -92,8 +92,6 @@ public class DepartmentsController {
     @GetMapping("/selectByName/{name}")
     @ResponseBody
     public Result selectByName(@PathVariable String name) {
-//        List<Departments> departmentsList = departmentsService.selectByName(name);
-//        return !departmentsList.isEmpty() ? Result.success(departmentsList) : Result.error(ResultCodeEnum.NO_GOODS);
 
         QueryWrapper<Departments> queryWrapper = new QueryWrapper<>();
         queryWrapper.like("dzx_dname", name);
