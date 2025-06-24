@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.RegionsMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.Regions">
+            <id property="dzxRegionId" column="dzx_region_id" />
+            <result property="dzxRegionName" column="dzx_region_name" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_region_id,dzx_region_name
+    </sql>
+</mapper>

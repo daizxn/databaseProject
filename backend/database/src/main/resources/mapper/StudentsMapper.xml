@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.StudentsMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.Students">
+            <id property="dzxStudentNumber" column="dzx_student_number" />
+            <result property="dzxStudentName" column="dzx_student_name" />
+            <result property="dzxStudentGender" column="dzx_student_gender" />
+            <result property="dzxStudentAge" column="dzx_student_age" />
+            <result property="dzxStudentRegionId" column="dzx_student_region_id" />
+            <result property="dzxStudentTotalCredits" column="dzx_student_total_credits" />
+            <result property="dzxClassId" column="dzx_class_id" />
+            <result property="dzxEnrollmentDate" column="dzx_enrollment_date" />
+            <result property="dzxStudentStatus" column="dzx_student_status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_student_number,dzx_student_name,dzx_student_gender,dzx_student_age,dzx_student_region_id,dzx_student_total_credits,
+        dzx_class_id,dzx_enrollment_date,dzx_student_status
+    </sql>
+</mapper>
