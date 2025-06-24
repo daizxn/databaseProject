@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.ClassesMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.Classes">
+            <id property="dzxClassId" column="dzx_class_id" />
+            <result property="dzxClassName" column="dzx_class_name" />
+            <result property="dzxDepartmentId" column="dzx_department_id" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_class_id,dzx_class_name,dzx_department_id
+    </sql>
+</mapper>
