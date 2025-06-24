@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.TeachersMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.Teachers">
+            <id property="dzxTeacherNumber" column="dzx_teacher_number" />
+            <result property="dzxTeacherName" column="dzx_teacher_name" />
+            <result property="dzxTeacherGender" column="dzx_teacher_gender" />
+            <result property="dzxTeacherAge" column="dzx_teacher_age" />
+            <result property="dzxTeacherTitle" column="dzx_teacher_title" />
+            <result property="dzxTeacherPhone" column="dzx_teacher_phone" />
+            <result property="dzxHireDate" column="dzx_hire_date" />
+            <result property="dzxTeacherStatus" column="dzx_teacher_status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_teacher_number,dzx_teacher_name,dzx_teacher_gender,dzx_teacher_age,dzx_teacher_title,dzx_teacher_phone,
+        dzx_hire_date,dzx_teacher_status
+    </sql>
+</mapper>
