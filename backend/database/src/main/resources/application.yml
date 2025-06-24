@@ -2,4 +2,14 @@ spring.application.name: my-application
 
 spring:
   datasource:
-    url: jdbc:pros://localhost:3306/mydb
+    url: jdbc:postgresql://localhost:5432/databaseproject
+    username: gaussdb
+    password: openGauss@123
+    driver-class-name: org.postgresql.Driver
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: org.example.database.entity
