@@ -1,7 +1,7 @@
 spring.application.name: my-application
 
 server:
-  port: 9090
+  port: 9091
 
 spring:
   autoconfigure:
@@ -16,7 +16,11 @@ mybatis-plus:
   global-config:
     db-config:
       table-prefix: daizx_
+  type-aliases-package: org.example.database.entity
 
 
-
-
+pagehelper:
+  helper-dialect: opengauss
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

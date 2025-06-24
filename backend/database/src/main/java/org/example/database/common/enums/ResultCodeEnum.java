@@ -15,6 +15,10 @@ public enum ResultCodeEnum {
     USER_ACCOUNT_ERROR("5003", "账号或密码错误"),
     USER_NOT_EXIST_ERROR("5004", "用户不存在"),
     PARAM_PASSWORD_ERROR("5005", "原密码输入错误"),
+    INSERT_ERROR("5011","插入失败"),
+    DELETE_ERROR("5012","删除失败"),
+    UPDATE_ERROR("5013","更新失败"),
+    SELECT_ERROR("5014","查询失败"),
 
     NO_AUTH("403", "无权限访问"),
     NO_GOODS("404", "信息不存在"),
