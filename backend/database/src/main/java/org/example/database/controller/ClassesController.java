@@ -34,8 +34,9 @@ public class ClassesController {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         // Cname不重复
-        QueryWrapper<Classes> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dzx_cname", classes.getDzxClassName());
+        LambdaQueryWrapper<Classes> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Classes::getDzxClassName, classes.getDzxClassName())
+                .eq(Classes::getDzxDepartmentId, classes.getDzxDepartmentId());
         if (classesService.count(queryWrapper) > 0) {
             return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
         }
@@ -113,9 +114,14 @@ public class ClassesController {
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Classes> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Classes::getDzxClassName, classes.getDzxClassName());
-        queryWrapper.eq(Classes::getDzxDepartmentId, classes.getDzxDepartmentId());
-        IPage<Classes> page =new Page<>(pageNum,pageSize);
+        if (classes.getDzxDepartmentId() != null) {
+            queryWrapper.eq(Classes::getDzxDepartmentId, classes.getDzxDepartmentId());
+        }
+        if (classes.getDzxClassName() != null) {
+            queryWrapper.like(Classes::getDzxClassName, classes.getDzxClassName());
+        }
+
+        IPage<Classes> page = new Page<>(pageNum, pageSize);
         IPage<Classes> classesPage = classesService.page(page, queryWrapper);
         if (classesPage.getRecords().isEmpty()) {
             return Result.error(ResultCodeEnum.NO_GOODS);
