@@ -8,7 +8,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
+import org.example.database.entity.StudentFullInfo;
 import org.example.database.entity.Students;
+import org.example.database.mapper.StudentsMapper;
+import org.example.database.service.StudentFullInfoService;
 import org.example.database.service.StudentsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,9 @@ import java.util.List;
 public class StudentsController {
     @Resource
     private StudentsService studentsService;
+
+    @Resource
+    private StudentFullInfoService studentFullInfoService;
 
     /**
      * 插入
@@ -69,13 +75,13 @@ public class StudentsController {
     }
 
     /**
-     * @param department 需要更新的数据
+     * @param student 需要更新的数据
      * @return 返回Result状态
      */
     @PostMapping("/updateById")
     @ResponseBody
-    public Result updateById(@RequestBody Students department) {
-        return studentsService.updateById(department) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
+    public Result updateById(@RequestBody Students student) {
+        return studentsService.updateById(student) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
     @PostMapping("/updateBatch")
@@ -84,11 +90,20 @@ public class StudentsController {
         return studentsService.updateBatchById(students) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
-    @GetMapping("/selectById/{Id}")
+    @GetMapping("/selectByNumber/{Number}")
     @ResponseBody
-    public Result selectById(@PathVariable Integer Id) {
-        Students department = studentsService.getById(Id);
-        return department != null ? Result.success(department) : Result.error(ResultCodeEnum.SELECT_ERROR);
+    public Result selectById(@PathVariable String Number) {
+        Students student = studentsService.getById(Number);
+        return student != null ? Result.success(student) : Result.error(ResultCodeEnum.SELECT_ERROR);
+    }
+
+    @GetMapping("selectByNumber/FullInfo/{Number}")
+    @ResponseBody
+    public Result selectByNumberFullInfo(@PathVariable String Number) {
+        LambdaQueryWrapper<StudentFullInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(StudentFullInfo::getStudentNumber, Number);
+        StudentFullInfo studentFullInfo = studentFullInfoService.getOne(queryWrapper);
+        return studentFullInfo != null ? Result.success(studentFullInfo) : Result.error(ResultCodeEnum.SELECT_ERROR);
     }
 
     @GetMapping("/selectAll")

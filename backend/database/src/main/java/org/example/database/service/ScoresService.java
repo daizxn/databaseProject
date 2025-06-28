@@ -1,5 +1,7 @@
 package org.example.database.service;
 
+import com.github.jeffreyning.mybatisplus.service.IMppService;
+
 import org.example.database.entity.Scores;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -8,6 +10,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @description 针对表【daizx_scores】的数据库操作Service
 * @createDate 2025-06-28 22:16:10
 */
-public interface ScoresService extends IService<Scores> {
+public interface ScoresService extends IMppService<Scores> {
 
 }

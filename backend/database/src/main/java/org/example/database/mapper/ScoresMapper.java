@@ -1,5 +1,6 @@
 package org.example.database.mapper;
 
+import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import org.example.database.entity.Scores;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -9,7 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2025-06-28 22:16:10
 * @Entity org.example.database.entity.Scores
 */
-public interface ScoresMapper extends BaseMapper<Scores> {
+public interface ScoresMapper extends MppBaseMapper<Scores> {
 
 }
 
