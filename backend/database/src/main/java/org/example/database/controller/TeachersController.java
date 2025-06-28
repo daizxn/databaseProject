@@ -30,12 +30,12 @@ public class TeachersController {
     @ResponseBody
     public Result add(@RequestBody Teachers teachers) {
         //name不为空
-        if (teachers.getDzxTeacherName() == null ) {
+        if (teachers.getTeacherName() == null ) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         // name不重复
         LambdaQueryWrapper<Teachers> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Teachers::getDzxTeacherName, teachers.getDzxTeacherName());
+        queryWrapper.eq(Teachers::getTeacherName, teachers.getTeacherName());
         if (teachersService.count(queryWrapper) > 0) {
             return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
         }
@@ -102,7 +102,7 @@ public class TeachersController {
     @ResponseBody
     public Result selectByName(@PathVariable String name) {
         QueryWrapper<Teachers> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("dzx_dname", name);
+        queryWrapper.like("dzx_teacher_name", name);
         List<Teachers> teachersList = teachersService.list(queryWrapper);
         return !teachersList.isEmpty() ? Result.success(teachersList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
@@ -113,7 +113,7 @@ public class TeachersController {
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Teachers> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Teachers::getDzxTeacherName, teachers.getDzxTeacherName());
+        queryWrapper.like(Teachers::getTeacherName, teachers.getTeacherName());
         IPage<Teachers> page =new Page<>(pageNum,pageSize);
         IPage<Teachers> teachersPage = teachersService.page(page, queryWrapper);
         if (teachersPage.getRecords().isEmpty()) {

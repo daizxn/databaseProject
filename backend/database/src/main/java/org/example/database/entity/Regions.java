@@ -16,13 +16,14 @@ public class Regions {
     /**
      * 
      */
-    @TableId
-    private Integer dzxRegionId;
+    @TableId(value = "dzx_region_id")
+    private Integer regionId;
 
     /**
      * 
      */
-    private String dzxRegionName;
+    @TableField(value = "dzx_region_name")
+    private String regionName;
 
     @Override
     public boolean equals(Object that) {
@@ -36,16 +37,16 @@ public class Regions {
             return false;
         }
         Regions other = (Regions) that;
-        return (this.getDzxRegionId() == null ? other.getDzxRegionId() == null : this.getDzxRegionId().equals(other.getDzxRegionId()))
-            && (this.getDzxRegionName() == null ? other.getDzxRegionName() == null : this.getDzxRegionName().equals(other.getDzxRegionName()));
+        return (this.getRegionId() == null ? other.getRegionId() == null : this.getRegionId().equals(other.getRegionId()))
+            && (this.getRegionName() == null ? other.getRegionName() == null : this.getRegionName().equals(other.getRegionName()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getDzxRegionId() == null) ? 0 : getDzxRegionId().hashCode());
-        result = prime * result + ((getDzxRegionName() == null) ? 0 : getDzxRegionName().hashCode());
+        result = prime * result + ((getRegionId() == null) ? 0 : getRegionId().hashCode());
+        result = prime * result + ((getRegionName() == null) ? 0 : getRegionName().hashCode());
         return result;
     }
 
@@ -55,8 +56,8 @@ public class Regions {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dzxRegionId=").append(dzxRegionId);
-        sb.append(", dzxRegionName=").append(dzxRegionName);
+        sb.append(", regionId=").append(regionId);
+        sb.append(", regionName=").append(regionName);
         sb.append("]");
         return sb.toString();
     }

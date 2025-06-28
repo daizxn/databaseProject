@@ -5,15 +5,15 @@
 <mapper namespace="org.example.database.mapper.StudentsMapper">
 
     <resultMap id="BaseResultMap" type="org.example.database.entity.Students">
-            <id property="dzxStudentNumber" column="dzx_student_number" />
-            <result property="dzxStudentName" column="dzx_student_name" />
-            <result property="dzxStudentGender" column="dzx_student_gender" />
-            <result property="dzxStudentAge" column="dzx_student_age" />
-            <result property="dzxRegionId" column="dzx_region_id" />
-            <result property="dzxStudentTotalCredits" column="dzx_student_total_credits" />
-            <result property="dzxClassId" column="dzx_class_id" />
-            <result property="dzxEnrollmentDate" column="dzx_enrollment_date" />
-            <result property="dzxStudentStatus" column="dzx_student_status" />
+            <id property="studentNumber" column="dzx_student_number" />
+            <result property="studentName" column="dzx_student_name" />
+            <result property="studentGender" column="dzx_student_gender" />
+            <result property="studentAge" column="dzx_student_age" />
+            <result property="regionId" column="dzx_region_id" />
+            <result property="studentTotalCredits" column="dzx_student_total_credits" />
+            <result property="classId" column="dzx_class_id" />
+            <result property="enrollmentDate" column="dzx_enrollment_date" />
+            <result property="studentStatus" column="dzx_student_status" />
     </resultMap>
 
     <sql id="Base_Column_List">

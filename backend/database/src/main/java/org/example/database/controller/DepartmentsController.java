@@ -32,7 +32,7 @@ public class DepartmentsController {
     public Result add(@RequestBody Departments departments) {
         // Dname不重复
         QueryWrapper<Departments> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("dzx_department_name", departments.getDzxDepartmentName());
+        queryWrapper.eq("dzx_department_name", departments.getDepartmentName());
         if (departmentsService.count(queryWrapper) > 0) {
             return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
         }
@@ -94,7 +94,7 @@ public class DepartmentsController {
     public Result selectByName(@PathVariable String name) {
 
         QueryWrapper<Departments> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("dzx_dname", name);
+        queryWrapper.like("dzx_department_name", name);
         List<Departments> departmentsList = departmentsService.list(queryWrapper);
         return !departmentsList.isEmpty() ? Result.success(departmentsList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
@@ -105,7 +105,7 @@ public class DepartmentsController {
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper <Departments> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Departments::getDzxDepartmentName, departments.getDzxDepartmentName());
+        queryWrapper.like(Departments::getDepartmentName, departments.getDepartmentName());
         IPage<Departments> page =new Page<>(pageNum,pageSize);
         IPage<Departments> departmentsPage = departmentsService.page(page, queryWrapper);
         if (departmentsPage.getRecords().isEmpty()) {

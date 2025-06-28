@@ -5,8 +5,8 @@
 <mapper namespace="org.example.database.mapper.RegionsMapper">
 
     <resultMap id="BaseResultMap" type="org.example.database.entity.Regions">
-            <id property="dzxRegionId" column="dzx_region_id" />
-            <result property="dzxRegionName" column="dzx_region_name" />
+            <id property="regionId" column="dzx_region_id" />
+            <result property="regionName" column="dzx_region_name" />
     </resultMap>
 
     <sql id="Base_Column_List">

@@ -5,16 +5,16 @@
 <mapper namespace="org.example.database.mapper.CoursesMapper">
 
     <resultMap id="BaseResultMap" type="org.example.database.entity.Courses">
-            <id property="dzxCourseNumber" column="dzx_course_number" />
-            <result property="dzxCourseName" column="dzx_course_name" />
-            <result property="dzxTeacherNumber" column="dzx_teacher_number" />
-            <result property="dzxAcademicYear" column="dzx_academic_year" />
-            <result property="dzxSemester" column="dzx_semester" />
-            <result property="dzxCourseHours" column="dzx_course_hours" />
-            <result property="dzxCourseType" column="dzx_course_type" />
-            <result property="dzxCourseCredits" column="dzx_course_credits" />
-            <result property="dzxClassId" column="dzx_class_id" />
-            <result property="dzxCourseStatus" column="dzx_course_status" />
+            <id property="courseNumber" column="dzx_course_number" />
+            <result property="courseName" column="dzx_course_name" />
+            <result property="teacherNumber" column="dzx_teacher_number" />
+            <result property="academicYear" column="dzx_academic_year" />
+            <result property="semester" column="dzx_semester" />
+            <result property="courseHours" column="dzx_course_hours" />
+            <result property="courseType" column="dzx_course_type" />
+            <result property="courseCredits" column="dzx_course_credits" />
+            <result property="classId" column="dzx_class_id" />
+            <result property="courseStatus" column="dzx_course_status" />
     </resultMap>
 
     <sql id="Base_Column_List">

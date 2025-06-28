@@ -5,8 +5,8 @@
 <mapper namespace="org.example.database.mapper.DepartmentsMapper">
 
     <resultMap id="BaseResultMap" type="org.example.database.entity.Departments">
-            <id property="dzxDepartmentId" column="dzx_department_id" />
-            <result property="dzxDepartmentName" column="dzx_department_name" />
+            <id property="departmentId" column="dzx_department_id" />
+            <result property="departmentName" column="dzx_department_name" />
     </resultMap>
 
     <sql id="Base_Column_List">

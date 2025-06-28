@@ -17,43 +17,50 @@ public class Teachers {
     /**
      * 
      */
-    @TableId
-    private String dzxTeacherNumber;
+    @TableId(value = "dzx_teacher_number")
+    private String teacherNumber;
 
     /**
      * 
      */
-    private String dzxTeacherName;
+    @TableField(value = "dzx_teacher_name")
+    private String teacherName;
 
     /**
      * 
      */
-    private String dzxTeacherGender;
+    @TableField(value = "dzx_teacher_gender")
+    private String teacherGender;
 
     /**
      * 
      */
-    private Integer dzxTeacherAge;
+    @TableField(value = "dzx_teacher_age")
+    private Integer teacherAge;
 
     /**
      * 
      */
-    private String dzxTeacherTitle;
+    @TableField(value = "dzx_teacher_title")
+    private String teacherTitle;
 
     /**
      * 
      */
-    private String dzxTeacherPhone;
+    @TableField(value = "dzx_teacher_phone")
+    private String teacherPhone;
 
     /**
      * 
      */
-    private LocalDate dzxHireDate;
+    @TableField(value = "dzx_hire_date")
+    private LocalDate hireDate;
 
     /**
      * 
      */
-    private String dzxTeacherStatus;
+    @TableField(value = "dzx_teacher_status")
+    private String teacherStatus;
 
     @Override
     public boolean equals(Object that) {
@@ -67,28 +74,28 @@ public class Teachers {
             return false;
         }
         Teachers other = (Teachers) that;
-        return (this.getDzxTeacherNumber() == null ? other.getDzxTeacherNumber() == null : this.getDzxTeacherNumber().equals(other.getDzxTeacherNumber()))
-            && (this.getDzxTeacherName() == null ? other.getDzxTeacherName() == null : this.getDzxTeacherName().equals(other.getDzxTeacherName()))
-            && (this.getDzxTeacherGender() == null ? other.getDzxTeacherGender() == null : this.getDzxTeacherGender().equals(other.getDzxTeacherGender()))
-            && (this.getDzxTeacherAge() == null ? other.getDzxTeacherAge() == null : this.getDzxTeacherAge().equals(other.getDzxTeacherAge()))
-            && (this.getDzxTeacherTitle() == null ? other.getDzxTeacherTitle() == null : this.getDzxTeacherTitle().equals(other.getDzxTeacherTitle()))
-            && (this.getDzxTeacherPhone() == null ? other.getDzxTeacherPhone() == null : this.getDzxTeacherPhone().equals(other.getDzxTeacherPhone()))
-            && (this.getDzxHireDate() == null ? other.getDzxHireDate() == null : this.getDzxHireDate().equals(other.getDzxHireDate()))
-            && (this.getDzxTeacherStatus() == null ? other.getDzxTeacherStatus() == null : this.getDzxTeacherStatus().equals(other.getDzxTeacherStatus()));
+        return (this.getTeacherNumber() == null ? other.getTeacherNumber() == null : this.getTeacherNumber().equals(other.getTeacherNumber()))
+            && (this.getTeacherName() == null ? other.getTeacherName() == null : this.getTeacherName().equals(other.getTeacherName()))
+            && (this.getTeacherGender() == null ? other.getTeacherGender() == null : this.getTeacherGender().equals(other.getTeacherGender()))
+            && (this.getTeacherAge() == null ? other.getTeacherAge() == null : this.getTeacherAge().equals(other.getTeacherAge()))
+            && (this.getTeacherTitle() == null ? other.getTeacherTitle() == null : this.getTeacherTitle().equals(other.getTeacherTitle()))
+            && (this.getTeacherPhone() == null ? other.getTeacherPhone() == null : this.getTeacherPhone().equals(other.getTeacherPhone()))
+            && (this.getHireDate() == null ? other.getHireDate() == null : this.getHireDate().equals(other.getHireDate()))
+            && (this.getTeacherStatus() == null ? other.getTeacherStatus() == null : this.getTeacherStatus().equals(other.getTeacherStatus()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getDzxTeacherNumber() == null) ? 0 : getDzxTeacherNumber().hashCode());
-        result = prime * result + ((getDzxTeacherName() == null) ? 0 : getDzxTeacherName().hashCode());
-        result = prime * result + ((getDzxTeacherGender() == null) ? 0 : getDzxTeacherGender().hashCode());
-        result = prime * result + ((getDzxTeacherAge() == null) ? 0 : getDzxTeacherAge().hashCode());
-        result = prime * result + ((getDzxTeacherTitle() == null) ? 0 : getDzxTeacherTitle().hashCode());
-        result = prime * result + ((getDzxTeacherPhone() == null) ? 0 : getDzxTeacherPhone().hashCode());
-        result = prime * result + ((getDzxHireDate() == null) ? 0 : getDzxHireDate().hashCode());
-        result = prime * result + ((getDzxTeacherStatus() == null) ? 0 : getDzxTeacherStatus().hashCode());
+        result = prime * result + ((getTeacherNumber() == null) ? 0 : getTeacherNumber().hashCode());
+        result = prime * result + ((getTeacherName() == null) ? 0 : getTeacherName().hashCode());
+        result = prime * result + ((getTeacherGender() == null) ? 0 : getTeacherGender().hashCode());
+        result = prime * result + ((getTeacherAge() == null) ? 0 : getTeacherAge().hashCode());
+        result = prime * result + ((getTeacherTitle() == null) ? 0 : getTeacherTitle().hashCode());
+        result = prime * result + ((getTeacherPhone() == null) ? 0 : getTeacherPhone().hashCode());
+        result = prime * result + ((getHireDate() == null) ? 0 : getHireDate().hashCode());
+        result = prime * result + ((getTeacherStatus() == null) ? 0 : getTeacherStatus().hashCode());
         return result;
     }
 
@@ -98,14 +105,14 @@ public class Teachers {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dzxTeacherNumber=").append(dzxTeacherNumber);
-        sb.append(", dzxTeacherName=").append(dzxTeacherName);
-        sb.append(", dzxTeacherGender=").append(dzxTeacherGender);
-        sb.append(", dzxTeacherAge=").append(dzxTeacherAge);
-        sb.append(", dzxTeacherTitle=").append(dzxTeacherTitle);
-        sb.append(", dzxTeacherPhone=").append(dzxTeacherPhone);
-        sb.append(", dzxHireDate=").append(dzxHireDate);
-        sb.append(", dzxTeacherStatus=").append(dzxTeacherStatus);
+        sb.append(", teacherNumber=").append(teacherNumber);
+        sb.append(", teacherName=").append(teacherName);
+        sb.append(", teacherGender=").append(teacherGender);
+        sb.append(", teacherAge=").append(teacherAge);
+        sb.append(", teacherTitle=").append(teacherTitle);
+        sb.append(", teacherPhone=").append(teacherPhone);
+        sb.append(", hireDate=").append(hireDate);
+        sb.append(", teacherStatus=").append(teacherStatus);
         sb.append("]");
         return sb.toString();
     }

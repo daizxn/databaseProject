@@ -5,14 +5,14 @@
 <mapper namespace="org.example.database.mapper.TeachersMapper">
 
     <resultMap id="BaseResultMap" type="org.example.database.entity.Teachers">
-            <id property="dzxTeacherNumber" column="dzx_teacher_number" />
-            <result property="dzxTeacherName" column="dzx_teacher_name" />
-            <result property="dzxTeacherGender" column="dzx_teacher_gender" />
-            <result property="dzxTeacherAge" column="dzx_teacher_age" />
-            <result property="dzxTeacherTitle" column="dzx_teacher_title" />
-            <result property="dzxTeacherPhone" column="dzx_teacher_phone" />
-            <result property="dzxHireDate" column="dzx_hire_date" />
-            <result property="dzxTeacherStatus" column="dzx_teacher_status" />
+            <id property="teacherNumber" column="dzx_teacher_number" />
+            <result property="teacherName" column="dzx_teacher_name" />
+            <result property="teacherGender" column="dzx_teacher_gender" />
+            <result property="teacherAge" column="dzx_teacher_age" />
+            <result property="teacherTitle" column="dzx_teacher_title" />
+            <result property="teacherPhone" column="dzx_teacher_phone" />
+            <result property="hireDate" column="dzx_hire_date" />
+            <result property="teacherStatus" column="dzx_teacher_status" />
     </resultMap>
 
     <sql id="Base_Column_List">

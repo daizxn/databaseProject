@@ -29,13 +29,13 @@ public class ClassesController {
     @ResponseBody
     public Result add(@RequestBody Classes classes) {
         //Did与Cname不为空
-        if (classes.getDzxDepartmentId() == null || classes.getDzxClassName() == null) {
+        if (classes.getDepartmentId() == null || classes.getClassName() == null) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         // Cname不重复
         LambdaQueryWrapper<Classes> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Classes::getDzxClassName, classes.getDzxClassName())
-                .eq(Classes::getDzxDepartmentId, classes.getDzxDepartmentId());
+        queryWrapper.eq(Classes::getClassName, classes.getClassName())
+                .eq(Classes::getDepartmentId, classes.getDepartmentId());
         if (classesService.count(queryWrapper) > 0) {
             return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
         }
@@ -102,7 +102,7 @@ public class ClassesController {
     @ResponseBody
     public Result selectByName(@PathVariable String name) {
         QueryWrapper<Classes> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("dzx_dname", name);
+        queryWrapper.like("dzx_class_name", name);
         List<Classes> classesList = classesService.list(queryWrapper);
         return !classesList.isEmpty() ? Result.success(classesList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
@@ -113,11 +113,11 @@ public class ClassesController {
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Classes> queryWrapper = new LambdaQueryWrapper<>();
-        if (classes.getDzxDepartmentId() != null) {
-            queryWrapper.eq(Classes::getDzxDepartmentId, classes.getDzxDepartmentId());
+        if (classes.getDepartmentId() != null) {
+            queryWrapper.eq(Classes::getDepartmentId, classes.getDepartmentId());
         }
-        if (classes.getDzxClassName() != null) {
-            queryWrapper.like(Classes::getDzxClassName, classes.getDzxClassName());
+        if (classes.getClassName() != null) {
+            queryWrapper.like(Classes::getClassName, classes.getClassName());
         }
 
         IPage<Classes> page = new Page<>(pageNum, pageSize);

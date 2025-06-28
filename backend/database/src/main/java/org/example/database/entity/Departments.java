@@ -16,13 +16,14 @@ public class Departments {
     /**
      * 
      */
-    @TableId
-    private Integer dzxDepartmentId;
+    @TableId(value = "dzx_department_id")
+    private Integer departmentId;
 
     /**
      * 
      */
-    private String dzxDepartmentName;
+    @TableField(value = "dzx_department_name")
+    private String departmentName;
 
     @Override
     public boolean equals(Object that) {
@@ -36,16 +37,16 @@ public class Departments {
             return false;
         }
         Departments other = (Departments) that;
-        return (this.getDzxDepartmentId() == null ? other.getDzxDepartmentId() == null : this.getDzxDepartmentId().equals(other.getDzxDepartmentId()))
-            && (this.getDzxDepartmentName() == null ? other.getDzxDepartmentName() == null : this.getDzxDepartmentName().equals(other.getDzxDepartmentName()));
+        return (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
+            && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getDzxDepartmentId() == null) ? 0 : getDzxDepartmentId().hashCode());
-        result = prime * result + ((getDzxDepartmentName() == null) ? 0 : getDzxDepartmentName().hashCode());
+        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
+        result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
         return result;
     }
 
@@ -55,8 +56,8 @@ public class Departments {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dzxDepartmentId=").append(dzxDepartmentId);
-        sb.append(", dzxDepartmentName=").append(dzxDepartmentName);
+        sb.append(", departmentId=").append(departmentId);
+        sb.append(", departmentName=").append(departmentName);
         sb.append("]");
         return sb.toString();
     }

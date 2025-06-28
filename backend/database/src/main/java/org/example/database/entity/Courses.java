@@ -16,53 +16,62 @@ public class Courses {
     /**
      * 
      */
-    @TableId
-    private String dzxCourseNumber;
+    @TableId(value = "dzx_course_number")
+    private String courseNumber;
 
     /**
      * 
      */
-    private String dzxCourseName;
+    @TableField(value = "dzx_course_name")
+    private String courseName;
 
     /**
      * 
      */
-    private String dzxTeacherNumber;
+    @TableField(value = "dzx_teacher_number")
+    private String teacherNumber;
 
     /**
      * 
      */
-    private String dzxAcademicYear;
+    @TableField(value = "dzx_academic_year")
+    private String academicYear;
 
     /**
      * 
      */
-    private Integer dzxSemester;
+    @TableField(value = "dzx_semester")
+    private Integer semester;
 
     /**
      * 
      */
-    private Integer dzxCourseHours;
+    @TableField(value = "dzx_course_hours")
+    private Integer courseHours;
 
     /**
      * 
      */
-    private String dzxCourseType;
+    @TableField(value = "dzx_course_type")
+    private String courseType;
 
     /**
      * 
      */
-    private Integer dzxCourseCredits;
+    @TableField(value = "dzx_course_credits")
+    private Integer courseCredits;
 
     /**
      * 
      */
-    private Integer dzxClassId;
+    @TableField(value = "dzx_class_id")
+    private Integer classId;
 
     /**
      * 
      */
-    private String dzxCourseStatus;
+    @TableField(value = "dzx_course_status")
+    private String courseStatus;
 
     @Override
     public boolean equals(Object that) {
@@ -76,32 +85,32 @@ public class Courses {
             return false;
         }
         Courses other = (Courses) that;
-        return (this.getDzxCourseNumber() == null ? other.getDzxCourseNumber() == null : this.getDzxCourseNumber().equals(other.getDzxCourseNumber()))
-            && (this.getDzxCourseName() == null ? other.getDzxCourseName() == null : this.getDzxCourseName().equals(other.getDzxCourseName()))
-            && (this.getDzxTeacherNumber() == null ? other.getDzxTeacherNumber() == null : this.getDzxTeacherNumber().equals(other.getDzxTeacherNumber()))
-            && (this.getDzxAcademicYear() == null ? other.getDzxAcademicYear() == null : this.getDzxAcademicYear().equals(other.getDzxAcademicYear()))
-            && (this.getDzxSemester() == null ? other.getDzxSemester() == null : this.getDzxSemester().equals(other.getDzxSemester()))
-            && (this.getDzxCourseHours() == null ? other.getDzxCourseHours() == null : this.getDzxCourseHours().equals(other.getDzxCourseHours()))
-            && (this.getDzxCourseType() == null ? other.getDzxCourseType() == null : this.getDzxCourseType().equals(other.getDzxCourseType()))
-            && (this.getDzxCourseCredits() == null ? other.getDzxCourseCredits() == null : this.getDzxCourseCredits().equals(other.getDzxCourseCredits()))
-            && (this.getDzxClassId() == null ? other.getDzxClassId() == null : this.getDzxClassId().equals(other.getDzxClassId()))
-            && (this.getDzxCourseStatus() == null ? other.getDzxCourseStatus() == null : this.getDzxCourseStatus().equals(other.getDzxCourseStatus()));
+        return (this.getCourseNumber() == null ? other.getCourseNumber() == null : this.getCourseNumber().equals(other.getCourseNumber()))
+            && (this.getCourseName() == null ? other.getCourseName() == null : this.getCourseName().equals(other.getCourseName()))
+            && (this.getTeacherNumber() == null ? other.getTeacherNumber() == null : this.getTeacherNumber().equals(other.getTeacherNumber()))
+            && (this.getAcademicYear() == null ? other.getAcademicYear() == null : this.getAcademicYear().equals(other.getAcademicYear()))
+            && (this.getSemester() == null ? other.getSemester() == null : this.getSemester().equals(other.getSemester()))
+            && (this.getCourseHours() == null ? other.getCourseHours() == null : this.getCourseHours().equals(other.getCourseHours()))
+            && (this.getCourseType() == null ? other.getCourseType() == null : this.getCourseType().equals(other.getCourseType()))
+            && (this.getCourseCredits() == null ? other.getCourseCredits() == null : this.getCourseCredits().equals(other.getCourseCredits()))
+            && (this.getClassId() == null ? other.getClassId() == null : this.getClassId().equals(other.getClassId()))
+            && (this.getCourseStatus() == null ? other.getCourseStatus() == null : this.getCourseStatus().equals(other.getCourseStatus()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getDzxCourseNumber() == null) ? 0 : getDzxCourseNumber().hashCode());
-        result = prime * result + ((getDzxCourseName() == null) ? 0 : getDzxCourseName().hashCode());
-        result = prime * result + ((getDzxTeacherNumber() == null) ? 0 : getDzxTeacherNumber().hashCode());
-        result = prime * result + ((getDzxAcademicYear() == null) ? 0 : getDzxAcademicYear().hashCode());
-        result = prime * result + ((getDzxSemester() == null) ? 0 : getDzxSemester().hashCode());
-        result = prime * result + ((getDzxCourseHours() == null) ? 0 : getDzxCourseHours().hashCode());
-        result = prime * result + ((getDzxCourseType() == null) ? 0 : getDzxCourseType().hashCode());
-        result = prime * result + ((getDzxCourseCredits() == null) ? 0 : getDzxCourseCredits().hashCode());
-        result = prime * result + ((getDzxClassId() == null) ? 0 : getDzxClassId().hashCode());
-        result = prime * result + ((getDzxCourseStatus() == null) ? 0 : getDzxCourseStatus().hashCode());
+        result = prime * result + ((getCourseNumber() == null) ? 0 : getCourseNumber().hashCode());
+        result = prime * result + ((getCourseName() == null) ? 0 : getCourseName().hashCode());
+        result = prime * result + ((getTeacherNumber() == null) ? 0 : getTeacherNumber().hashCode());
+        result = prime * result + ((getAcademicYear() == null) ? 0 : getAcademicYear().hashCode());
+        result = prime * result + ((getSemester() == null) ? 0 : getSemester().hashCode());
+        result = prime * result + ((getCourseHours() == null) ? 0 : getCourseHours().hashCode());
+        result = prime * result + ((getCourseType() == null) ? 0 : getCourseType().hashCode());
+        result = prime * result + ((getCourseCredits() == null) ? 0 : getCourseCredits().hashCode());
+        result = prime * result + ((getClassId() == null) ? 0 : getClassId().hashCode());
+        result = prime * result + ((getCourseStatus() == null) ? 0 : getCourseStatus().hashCode());
         return result;
     }
 
@@ -111,16 +120,16 @@ public class Courses {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dzxCourseNumber=").append(dzxCourseNumber);
-        sb.append(", dzxCourseName=").append(dzxCourseName);
-        sb.append(", dzxTeacherNumber=").append(dzxTeacherNumber);
-        sb.append(", dzxAcademicYear=").append(dzxAcademicYear);
-        sb.append(", dzxSemester=").append(dzxSemester);
-        sb.append(", dzxCourseHours=").append(dzxCourseHours);
-        sb.append(", dzxCourseType=").append(dzxCourseType);
-        sb.append(", dzxCourseCredits=").append(dzxCourseCredits);
-        sb.append(", dzxClassId=").append(dzxClassId);
-        sb.append(", dzxCourseStatus=").append(dzxCourseStatus);
+        sb.append(", courseNumber=").append(courseNumber);
+        sb.append(", courseName=").append(courseName);
+        sb.append(", teacherNumber=").append(teacherNumber);
+        sb.append(", academicYear=").append(academicYear);
+        sb.append(", semester=").append(semester);
+        sb.append(", courseHours=").append(courseHours);
+        sb.append(", courseType=").append(courseType);
+        sb.append(", courseCredits=").append(courseCredits);
+        sb.append(", classId=").append(classId);
+        sb.append(", courseStatus=").append(courseStatus);
         sb.append("]");
         return sb.toString();
     }

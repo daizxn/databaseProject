@@ -17,48 +17,56 @@ public class Students {
     /**
      * 
      */
-    @TableId
-    private String dzxStudentNumber;
+    @TableId(value = "dzx_student_number")
+    private String studentNumber;
 
     /**
      * 
      */
-    private String dzxStudentName;
+    @TableField(value = "dzx_student_name")
+    private String studentName;
 
     /**
      * 
      */
-    private String dzxStudentGender;
+    @TableField(value = "dzx_student_gender")
+    private String studentGender;
 
     /**
      * 
      */
-    private Integer dzxStudentAge;
+    @TableField(value = "dzx_student_age")
+    private Integer studentAge;
 
     /**
      * 
      */
-    private Integer dzxRegionId;
+    @TableField(value = "dzx_region_id")
+    private Integer regionId;
 
     /**
      * 
      */
-    private Integer dzxStudentTotalCredits;
+    @TableField(value = "dzx_student_total_credits")
+    private Integer studentTotalCredits;
 
     /**
      * 
      */
-    private Integer dzxClassId;
+    @TableField(value = "dzx_class_id")
+    private Integer classId;
 
     /**
      * 
      */
-    private LocalDate dzxEnrollmentDate;
+    @TableField(value = "dzx_enrollment_date")
+    private LocalDate enrollmentDate;
 
     /**
      * 
      */
-    private String dzxStudentStatus;
+    @TableField(value = "dzx_student_status")
+    private String studentStatus;
 
     @Override
     public boolean equals(Object that) {
@@ -72,30 +80,30 @@ public class Students {
             return false;
         }
         Students other = (Students) that;
-        return (this.getDzxStudentNumber() == null ? other.getDzxStudentNumber() == null : this.getDzxStudentNumber().equals(other.getDzxStudentNumber()))
-            && (this.getDzxStudentName() == null ? other.getDzxStudentName() == null : this.getDzxStudentName().equals(other.getDzxStudentName()))
-            && (this.getDzxStudentGender() == null ? other.getDzxStudentGender() == null : this.getDzxStudentGender().equals(other.getDzxStudentGender()))
-            && (this.getDzxStudentAge() == null ? other.getDzxStudentAge() == null : this.getDzxStudentAge().equals(other.getDzxStudentAge()))
-            && (this.getDzxRegionId() == null ? other.getDzxRegionId() == null : this.getDzxRegionId().equals(other.getDzxRegionId()))
-            && (this.getDzxStudentTotalCredits() == null ? other.getDzxStudentTotalCredits() == null : this.getDzxStudentTotalCredits().equals(other.getDzxStudentTotalCredits()))
-            && (this.getDzxClassId() == null ? other.getDzxClassId() == null : this.getDzxClassId().equals(other.getDzxClassId()))
-            && (this.getDzxEnrollmentDate() == null ? other.getDzxEnrollmentDate() == null : this.getDzxEnrollmentDate().equals(other.getDzxEnrollmentDate()))
-            && (this.getDzxStudentStatus() == null ? other.getDzxStudentStatus() == null : this.getDzxStudentStatus().equals(other.getDzxStudentStatus()));
+        return (this.getStudentNumber() == null ? other.getStudentNumber() == null : this.getStudentNumber().equals(other.getStudentNumber()))
+            && (this.getStudentName() == null ? other.getStudentName() == null : this.getStudentName().equals(other.getStudentName()))
+            && (this.getStudentGender() == null ? other.getStudentGender() == null : this.getStudentGender().equals(other.getStudentGender()))
+            && (this.getStudentAge() == null ? other.getStudentAge() == null : this.getStudentAge().equals(other.getStudentAge()))
+            && (this.getRegionId() == null ? other.getRegionId() == null : this.getRegionId().equals(other.getRegionId()))
+            && (this.getStudentTotalCredits() == null ? other.getStudentTotalCredits() == null : this.getStudentTotalCredits().equals(other.getStudentTotalCredits()))
+            && (this.getClassId() == null ? other.getClassId() == null : this.getClassId().equals(other.getClassId()))
+            && (this.getEnrollmentDate() == null ? other.getEnrollmentDate() == null : this.getEnrollmentDate().equals(other.getEnrollmentDate()))
+            && (this.getStudentStatus() == null ? other.getStudentStatus() == null : this.getStudentStatus().equals(other.getStudentStatus()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getDzxStudentNumber() == null) ? 0 : getDzxStudentNumber().hashCode());
-        result = prime * result + ((getDzxStudentName() == null) ? 0 : getDzxStudentName().hashCode());
-        result = prime * result + ((getDzxStudentGender() == null) ? 0 : getDzxStudentGender().hashCode());
-        result = prime * result + ((getDzxStudentAge() == null) ? 0 : getDzxStudentAge().hashCode());
-        result = prime * result + ((getDzxRegionId() == null) ? 0 : getDzxRegionId().hashCode());
-        result = prime * result + ((getDzxStudentTotalCredits() == null) ? 0 : getDzxStudentTotalCredits().hashCode());
-        result = prime * result + ((getDzxClassId() == null) ? 0 : getDzxClassId().hashCode());
-        result = prime * result + ((getDzxEnrollmentDate() == null) ? 0 : getDzxEnrollmentDate().hashCode());
-        result = prime * result + ((getDzxStudentStatus() == null) ? 0 : getDzxStudentStatus().hashCode());
+        result = prime * result + ((getStudentNumber() == null) ? 0 : getStudentNumber().hashCode());
+        result = prime * result + ((getStudentName() == null) ? 0 : getStudentName().hashCode());
+        result = prime * result + ((getStudentGender() == null) ? 0 : getStudentGender().hashCode());
+        result = prime * result + ((getStudentAge() == null) ? 0 : getStudentAge().hashCode());
+        result = prime * result + ((getRegionId() == null) ? 0 : getRegionId().hashCode());
+        result = prime * result + ((getStudentTotalCredits() == null) ? 0 : getStudentTotalCredits().hashCode());
+        result = prime * result + ((getClassId() == null) ? 0 : getClassId().hashCode());
+        result = prime * result + ((getEnrollmentDate() == null) ? 0 : getEnrollmentDate().hashCode());
+        result = prime * result + ((getStudentStatus() == null) ? 0 : getStudentStatus().hashCode());
         return result;
     }
 
@@ -105,15 +113,15 @@ public class Students {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dzxStudentNumber=").append(dzxStudentNumber);
-        sb.append(", dzxStudentName=").append(dzxStudentName);
-        sb.append(", dzxStudentGender=").append(dzxStudentGender);
-        sb.append(", dzxStudentAge=").append(dzxStudentAge);
-        sb.append(", dzxRegionId=").append(dzxRegionId);
-        sb.append(", dzxStudentTotalCredits=").append(dzxStudentTotalCredits);
-        sb.append(", dzxClassId=").append(dzxClassId);
-        sb.append(", dzxEnrollmentDate=").append(dzxEnrollmentDate);
-        sb.append(", dzxStudentStatus=").append(dzxStudentStatus);
+        sb.append(", studentNumber=").append(studentNumber);
+        sb.append(", studentName=").append(studentName);
+        sb.append(", studentGender=").append(studentGender);
+        sb.append(", studentAge=").append(studentAge);
+        sb.append(", regionId=").append(regionId);
+        sb.append(", studentTotalCredits=").append(studentTotalCredits);
+        sb.append(", classId=").append(classId);
+        sb.append(", enrollmentDate=").append(enrollmentDate);
+        sb.append(", studentStatus=").append(studentStatus);
         sb.append("]");
         return sb.toString();
     }

@@ -29,12 +29,12 @@ public class CoursesController {
     @ResponseBody
     public Result add(@RequestBody Courses courses) {
         //name不为空
-        if (courses.getDzxCourseName() == null ) {
+        if (courses.getCourseName() == null ) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         // name不重复
         LambdaQueryWrapper<Courses> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Courses::getDzxCourseName, courses.getDzxCourseName());
+        queryWrapper.eq(Courses::getCourseName, courses.getCourseName());
         if (coursesService.count(queryWrapper) > 0) {
             return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
         }
@@ -112,7 +112,7 @@ public class CoursesController {
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Courses> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Courses::getDzxCourseName, courses.getDzxCourseName());
+        queryWrapper.like(Courses::getCourseName, courses.getCourseName());
         IPage<Courses> page =new Page<>(pageNum,pageSize);
         IPage<Courses> coursesPage = coursesService.page(page, queryWrapper);
         if (coursesPage.getRecords().isEmpty()) {

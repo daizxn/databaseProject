@@ -16,18 +16,20 @@ public class Classes {
     /**
      * 
      */
-    @TableId
-    private Integer dzxClassId;
+    @TableId(value = "dzx_class_id")
+    private Integer classId;
 
     /**
      * 
      */
-    private String dzxClassName;
+    @TableField(value = "dzx_class_name")
+    private String className;
 
     /**
      * 
      */
-    private Integer dzxDepartmentId;
+    @TableField(value = "dzx_department_id")
+    private Integer departmentId;
 
     @Override
     public boolean equals(Object that) {
@@ -41,18 +43,18 @@ public class Classes {
             return false;
         }
         Classes other = (Classes) that;
-        return (this.getDzxClassId() == null ? other.getDzxClassId() == null : this.getDzxClassId().equals(other.getDzxClassId()))
-            && (this.getDzxClassName() == null ? other.getDzxClassName() == null : this.getDzxClassName().equals(other.getDzxClassName()))
-            && (this.getDzxDepartmentId() == null ? other.getDzxDepartmentId() == null : this.getDzxDepartmentId().equals(other.getDzxDepartmentId()));
+        return (this.getClassId() == null ? other.getClassId() == null : this.getClassId().equals(other.getClassId()))
+            && (this.getClassName() == null ? other.getClassName() == null : this.getClassName().equals(other.getClassName()))
+            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getDzxClassId() == null) ? 0 : getDzxClassId().hashCode());
-        result = prime * result + ((getDzxClassName() == null) ? 0 : getDzxClassName().hashCode());
-        result = prime * result + ((getDzxDepartmentId() == null) ? 0 : getDzxDepartmentId().hashCode());
+        result = prime * result + ((getClassId() == null) ? 0 : getClassId().hashCode());
+        result = prime * result + ((getClassName() == null) ? 0 : getClassName().hashCode());
+        result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         return result;
     }
 
@@ -62,9 +64,9 @@ public class Classes {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", dzxClassId=").append(dzxClassId);
-        sb.append(", dzxClassName=").append(dzxClassName);
-        sb.append(", dzxDepartmentId=").append(dzxDepartmentId);
+        sb.append(", classId=").append(classId);
+        sb.append(", className=").append(className);
+        sb.append(", departmentId=").append(departmentId);
         sb.append("]");
         return sb.toString();
     }

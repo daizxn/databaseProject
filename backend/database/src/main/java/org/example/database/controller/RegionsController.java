@@ -29,12 +29,12 @@ public class RegionsController {
     @ResponseBody
     public Result add(@RequestBody Regions regions) {
         //name不为空
-        if (regions.getDzxRegionName() == null ) {
+        if (regions.getRegionName() == null ) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         // name不重复
         LambdaQueryWrapper<Regions> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Regions::getDzxRegionName, regions.getDzxRegionName());
+        queryWrapper.eq(Regions::getRegionName, regions.getRegionName());
         if (regionsService.count(queryWrapper) > 0) {
             return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
         }
@@ -101,7 +101,7 @@ public class RegionsController {
     @ResponseBody
     public Result selectByName(@PathVariable String name) {
         QueryWrapper<Regions> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("dzx_dname", name);
+        queryWrapper.like("dzx_region_name", name);
         List<Regions> regionsList = regionsService.list(queryWrapper);
         return !regionsList.isEmpty() ? Result.success(regionsList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
@@ -112,7 +112,7 @@ public class RegionsController {
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Regions> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Regions::getDzxRegionName, regions.getDzxRegionName());
+        queryWrapper.like(Regions::getRegionName, regions.getRegionName());
         IPage<Regions> page =new Page<>(pageNum,pageSize);
         IPage<Regions> regionsPage = regionsService.page(page, queryWrapper);
         if (regionsPage.getRecords().isEmpty()) {
