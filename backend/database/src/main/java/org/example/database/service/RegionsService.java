@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
 * @author daizxn
 * @description 针对表【daizx_regions】的数据库操作Service
-* @createDate 2025-06-24 19:57:06
+* @createDate 2025-06-28 21:43:04
 */
 public interface RegionsService extends IService<Regions> {
 

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 /**
 * @author daizxn
 * @description 针对表【daizx_teachers】的数据库操作Service
-* @createDate 2025-06-24 22:04:31
+* @createDate 2025-06-28 21:43:26
 */
 public interface TeachersService extends IService<Teachers> {
 

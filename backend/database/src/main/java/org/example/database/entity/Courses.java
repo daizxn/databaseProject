@@ -32,7 +32,12 @@ public class Courses {
     /**
      * 
      */
-    private String dzxSemester;
+    private String dzxAcademicYear;
+
+    /**
+     * 
+     */
+    private Integer dzxSemester;
 
     /**
      * 
@@ -74,6 +79,7 @@ public class Courses {
         return (this.getDzxCourseNumber() == null ? other.getDzxCourseNumber() == null : this.getDzxCourseNumber().equals(other.getDzxCourseNumber()))
             && (this.getDzxCourseName() == null ? other.getDzxCourseName() == null : this.getDzxCourseName().equals(other.getDzxCourseName()))
             && (this.getDzxTeacherNumber() == null ? other.getDzxTeacherNumber() == null : this.getDzxTeacherNumber().equals(other.getDzxTeacherNumber()))
+            && (this.getDzxAcademicYear() == null ? other.getDzxAcademicYear() == null : this.getDzxAcademicYear().equals(other.getDzxAcademicYear()))
             && (this.getDzxSemester() == null ? other.getDzxSemester() == null : this.getDzxSemester().equals(other.getDzxSemester()))
             && (this.getDzxCourseHours() == null ? other.getDzxCourseHours() == null : this.getDzxCourseHours().equals(other.getDzxCourseHours()))
             && (this.getDzxCourseType() == null ? other.getDzxCourseType() == null : this.getDzxCourseType().equals(other.getDzxCourseType()))
@@ -89,6 +95,7 @@ public class Courses {
         result = prime * result + ((getDzxCourseNumber() == null) ? 0 : getDzxCourseNumber().hashCode());
         result = prime * result + ((getDzxCourseName() == null) ? 0 : getDzxCourseName().hashCode());
         result = prime * result + ((getDzxTeacherNumber() == null) ? 0 : getDzxTeacherNumber().hashCode());
+        result = prime * result + ((getDzxAcademicYear() == null) ? 0 : getDzxAcademicYear().hashCode());
         result = prime * result + ((getDzxSemester() == null) ? 0 : getDzxSemester().hashCode());
         result = prime * result + ((getDzxCourseHours() == null) ? 0 : getDzxCourseHours().hashCode());
         result = prime * result + ((getDzxCourseType() == null) ? 0 : getDzxCourseType().hashCode());
@@ -107,6 +114,7 @@ public class Courses {
         sb.append(", dzxCourseNumber=").append(dzxCourseNumber);
         sb.append(", dzxCourseName=").append(dzxCourseName);
         sb.append(", dzxTeacherNumber=").append(dzxTeacherNumber);
+        sb.append(", dzxAcademicYear=").append(dzxAcademicYear);
         sb.append(", dzxSemester=").append(dzxSemester);
         sb.append(", dzxCourseHours=").append(dzxCourseHours);
         sb.append(", dzxCourseType=").append(dzxCourseType);

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
 * @author daizxn
 * @description 针对表【daizx_classes】的数据库操作Mapper
-* @createDate 2025-06-24 18:02:50
+* @createDate 2025-06-28 21:42:09
 * @Entity org.example.database.entity.Classes
 */
 public interface ClassesMapper extends BaseMapper<Classes> {

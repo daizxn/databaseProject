@@ -37,3 +37,7 @@ build/
 /mvnw
 /mvnw.cmd
 /src/test/
+/lib/opengauss-jdbc-5.0.0.jar
+/lib/postgresql.jar
+/system.sql
+/src/main/java/org/example/database/controller/testController.java

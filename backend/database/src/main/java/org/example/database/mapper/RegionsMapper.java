@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 /**
 * @author daizxn
 * @description 针对表【daizx_regions】的数据库操作Mapper
-* @createDate 2025-06-24 19:57:06
+* @createDate 2025-06-28 21:43:04
 * @Entity org.example.database.entity.Regions
 */
 public interface RegionsMapper extends BaseMapper<Regions> {

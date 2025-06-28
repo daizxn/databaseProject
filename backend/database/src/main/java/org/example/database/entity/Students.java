@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Data;
 
 /**
@@ -38,7 +38,7 @@ public class Students {
     /**
      * 
      */
-    private Integer dzxStudentRegionId;
+    private Integer dzxRegionId;
 
     /**
      * 
@@ -53,7 +53,7 @@ public class Students {
     /**
      * 
      */
-    private LocalDateTime dzxEnrollmentDate;
+    private LocalDate dzxEnrollmentDate;
 
     /**
      * 
@@ -76,7 +76,7 @@ public class Students {
             && (this.getDzxStudentName() == null ? other.getDzxStudentName() == null : this.getDzxStudentName().equals(other.getDzxStudentName()))
             && (this.getDzxStudentGender() == null ? other.getDzxStudentGender() == null : this.getDzxStudentGender().equals(other.getDzxStudentGender()))
             && (this.getDzxStudentAge() == null ? other.getDzxStudentAge() == null : this.getDzxStudentAge().equals(other.getDzxStudentAge()))
-            && (this.getDzxStudentRegionId() == null ? other.getDzxStudentRegionId() == null : this.getDzxStudentRegionId().equals(other.getDzxStudentRegionId()))
+            && (this.getDzxRegionId() == null ? other.getDzxRegionId() == null : this.getDzxRegionId().equals(other.getDzxRegionId()))
             && (this.getDzxStudentTotalCredits() == null ? other.getDzxStudentTotalCredits() == null : this.getDzxStudentTotalCredits().equals(other.getDzxStudentTotalCredits()))
             && (this.getDzxClassId() == null ? other.getDzxClassId() == null : this.getDzxClassId().equals(other.getDzxClassId()))
             && (this.getDzxEnrollmentDate() == null ? other.getDzxEnrollmentDate() == null : this.getDzxEnrollmentDate().equals(other.getDzxEnrollmentDate()))
@@ -91,7 +91,7 @@ public class Students {
         result = prime * result + ((getDzxStudentName() == null) ? 0 : getDzxStudentName().hashCode());
         result = prime * result + ((getDzxStudentGender() == null) ? 0 : getDzxStudentGender().hashCode());
         result = prime * result + ((getDzxStudentAge() == null) ? 0 : getDzxStudentAge().hashCode());
-        result = prime * result + ((getDzxStudentRegionId() == null) ? 0 : getDzxStudentRegionId().hashCode());
+        result = prime * result + ((getDzxRegionId() == null) ? 0 : getDzxRegionId().hashCode());
         result = prime * result + ((getDzxStudentTotalCredits() == null) ? 0 : getDzxStudentTotalCredits().hashCode());
         result = prime * result + ((getDzxClassId() == null) ? 0 : getDzxClassId().hashCode());
         result = prime * result + ((getDzxEnrollmentDate() == null) ? 0 : getDzxEnrollmentDate().hashCode());
@@ -109,7 +109,7 @@ public class Students {
         sb.append(", dzxStudentName=").append(dzxStudentName);
         sb.append(", dzxStudentGender=").append(dzxStudentGender);
         sb.append(", dzxStudentAge=").append(dzxStudentAge);
-        sb.append(", dzxStudentRegionId=").append(dzxStudentRegionId);
+        sb.append(", dzxRegionId=").append(dzxRegionId);
         sb.append(", dzxStudentTotalCredits=").append(dzxStudentTotalCredits);
         sb.append(", dzxClassId=").append(dzxClassId);
         sb.append(", dzxEnrollmentDate=").append(dzxEnrollmentDate);

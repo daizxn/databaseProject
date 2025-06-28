@@ -56,9 +56,14 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.opengauss-me</groupId>-->
+<!--            <artifactId>opengauss-jdbc-me</artifactId>-->
+<!--            <version>5.0.0</version>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>org.opengauss-me</groupId>
-            <artifactId>opengauss-jdbc-me</artifactId>
+            <groupId>org.gaussdb</groupId>
+            <artifactId>gaussdb-jdb</artifactId>
             <version>5.0.0</version>
         </dependency>
 
