@@ -41,3 +41,7 @@ build/
 /lib/postgresql.jar
 /system.sql
 /src/main/java/org/example/database/controller/testController.java
+/data.sql
+/lib/gsjdbc4.jar
+/lib/gsjdbc200.jar
+/lib/opengaussjdbc.jar

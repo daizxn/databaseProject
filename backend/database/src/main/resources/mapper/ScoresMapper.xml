@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.ScoresMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.Scores">
+            <id property="studentNumber" column="dzx_student_number" />
+            <id property="courseNumber" column="dzx_course_number" />
+            <id property="academicYear" column="dzx_academic_year" />
+            <id property="semester" column="dzx_semester" />
+            <result property="score" column="dzx_score" />
+            <result property="teacherNumber" column="dzx_teacher_number" />
+            <result property="gradeLevel" column="dzx_grade_level" />
+            <result property="examDate" column="dzx_exam_date" />
+            <result property="scoreStatus" column="dzx_score_status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_student_number,dzx_course_number,dzx_academic_year,dzx_semester,dzx_score,dzx_teacher_number,
+        dzx_grade_level,dzx_exam_date,dzx_score_status
+    </sql>
+</mapper>
