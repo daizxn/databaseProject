@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import com.github.jeffreyning.mybatisplus.anno.MppMultiId;
 import lombok.Data;
 
 /**
@@ -18,12 +20,14 @@ public class Scores {
     /**
      * 
      */
+    @MppMultiId
     @TableField(value = "dzx_student_number")
     private String studentNumber;
 
     /**
      * 
      */
+    @MppMultiId
     @TableField(value = "dzx_course_number")
     private String courseNumber;
 
