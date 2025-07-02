@@ -8,9 +8,15 @@ import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Courses;
+import org.example.database.entity.CoursesDTO;
+import org.example.database.entity.TeacherCourses;
 import org.example.database.service.CoursesService;
+import org.example.database.service.TeacherCoursesService;
+import org.example.database.utils.NameChangeUtil;
+
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @RestController
@@ -18,6 +24,9 @@ import java.util.List;
 public class CoursesController {
     @Resource
     private CoursesService coursesService;
+
+    @Resource
+    private TeacherCoursesService teacherCoursesService;
 
     /**
      * 插入
@@ -29,7 +38,7 @@ public class CoursesController {
     @ResponseBody
     public Result add(@RequestBody Courses courses) {
         //name不为空
-        if (courses.getCourseName() == null ) {
+        if (courses.getCourseName() == null) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         // name不重复
@@ -113,12 +122,47 @@ public class CoursesController {
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Courses> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(Courses::getCourseName, courses.getCourseName());
-        IPage<Courses> page =new Page<>(pageNum,pageSize);
+        IPage<Courses> page = new Page<>(pageNum, pageSize);
         IPage<Courses> coursesPage = coursesService.page(page, queryWrapper);
         if (coursesPage.getRecords().isEmpty()) {
             return Result.error(ResultCodeEnum.NO_GOODS);
         } else {
             return Result.success(coursesPage);
         }
+    }
+
+    @GetMapping("/selectByTeacher/{teacherNumber}")
+    @ResponseBody
+    public Result selectByTeacher(@PathVariable String teacherNumber) {
+        if (teacherNumber == null || teacherNumber.isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        LambdaQueryWrapper<TeacherCourses> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TeacherCourses::getTeacherNumber, teacherNumber);
+        List<TeacherCourses> teacherCoursesList = teacherCoursesService.list(queryWrapper);
+        return !teacherCoursesList.isEmpty() ? Result.success(teacherCoursesList) : Result.error(ResultCodeEnum.NO_GOODS);
+    }
+
+    @GetMapping("/selectByParam/HaveTeacher")
+    @ResponseBody
+    public Result selectByParamHaveTeacher(@RequestBody CoursesDTO coursesDTO) {
+        QueryWrapper<TeacherCourses> queryWrapper = new QueryWrapper<>();
+        //若对应字段不为空，则设为参数
+        Field[] fields = CoursesDTO.class.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(coursesDTO);
+                if (value != null) {
+                    String fieldName = field.getName();
+                    String ColumnName = "dzx_" + NameChangeUtil.camelToSnake(fieldName);
+                    queryWrapper.eq(ColumnName, value);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        List<TeacherCourses> teacherCoursesList = teacherCoursesService.list(queryWrapper);
+        return teacherCoursesList.isEmpty() ? Result.error(ResultCodeEnum.NO_GOODS) : Result.success(teacherCoursesList);
     }
 }

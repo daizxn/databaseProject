@@ -2,23 +2,24 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.example.database.mapper.StudentFullInfoMapper">
+<mapper namespace="org.example.database.mapper.RegionStudentsMapper">
 
-    <resultMap id="BaseResultMap" type="org.example.database.entity.StudentDTO">
+    <resultMap id="BaseResultMap" type="org.example.database.entity.RegionStudents">
+            <result property="regionId" column="dzx_region_id" />
+            <result property="regionName" column="dzx_region_name" />
             <result property="studentNumber" column="dzx_student_number" />
             <result property="studentName" column="dzx_student_name" />
             <result property="studentGender" column="dzx_student_gender" />
             <result property="studentAge" column="dzx_student_age" />
             <result property="studentTotalCredits" column="dzx_student_total_credits" />
-            <result property="enrollmentDate" column="dzx_enrollment_date" />
-            <result property="studentStatus" column="dzx_student_status" />
-            <result property="regionName" column="dzx_region_name" />
             <result property="className" column="dzx_class_name" />
             <result property="departmentName" column="dzx_department_name" />
+            <result property="enrollmentDate" column="dzx_enrollment_date" />
+            <result property="studentStatus" column="dzx_student_status" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        dzx_student_number,dzx_student_name,dzx_student_gender,dzx_student_age,dzx_student_total_credits,dzx_enrollment_date,
-        dzx_student_status,dzx_region_name,dzx_class_name,dzx_department_name
+        dzx_region_id,dzx_region_name,dzx_student_number,dzx_student_name,dzx_student_gender,dzx_student_age,
+        dzx_student_total_credits,dzx_class_name,dzx_department_name,dzx_enrollment_date,dzx_student_status
     </sql>
 </mapper>

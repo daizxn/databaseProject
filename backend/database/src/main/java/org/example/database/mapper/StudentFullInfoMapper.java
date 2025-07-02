@@ -1,6 +1,6 @@
 package org.example.database.mapper;
 
-import org.example.database.entity.StudentFullInfo;
+import org.example.database.entity.StudentDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2025-06-29 23:17:53
 * @Entity org.example.database.entity.StudentFullInfo
 */
-public interface StudentFullInfoMapper extends BaseMapper<StudentFullInfo> {
+public interface StudentFullInfoMapper extends BaseMapper<StudentDTO> {
 
 }
 

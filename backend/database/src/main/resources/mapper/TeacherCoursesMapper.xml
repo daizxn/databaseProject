@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.TeacherCoursesMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.TeacherCourses">
+            <result property="teacherNumber" column="dzx_teacher_number" />
+            <result property="teacherName" column="dzx_teacher_name" />
+            <result property="teacherGender" column="dzx_teacher_gender" />
+            <result property="teacherTitle" column="dzx_teacher_title" />
+            <result property="teacherStatus" column="dzx_teacher_status" />
+            <result property="courseNumber" column="dzx_course_number" />
+            <result property="courseName" column="dzx_course_name" />
+            <result property="courseType" column="dzx_course_type" />
+            <result property="courseCredits" column="dzx_course_credits" />
+            <result property="courseHours" column="dzx_course_hours" />
+            <result property="academicYear" column="dzx_academic_year" />
+            <result property="semester" column="dzx_semester" />
+            <result property="className" column="dzx_class_name" />
+            <result property="departmentName" column="dzx_department_name" />
+            <result property="courseStatus" column="dzx_course_status" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_teacher_number,dzx_teacher_name,dzx_teacher_gender,dzx_teacher_title,dzx_teacher_status,dzx_course_number,
+        dzx_course_name,dzx_course_type,dzx_course_credits,dzx_course_hours,dzx_academic_year,
+        dzx_semester,dzx_class_name,dzx_department_name,dzx_course_status
+    </sql>
+</mapper>

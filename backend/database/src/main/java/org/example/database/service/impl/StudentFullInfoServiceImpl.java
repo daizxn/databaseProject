@@ -1,7 +1,7 @@
 package org.example.database.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.example.database.entity.StudentFullInfo;
+import org.example.database.entity.StudentDTO;
 import org.example.database.service.StudentFullInfoService;
 import org.example.database.mapper.StudentFullInfoMapper;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 * @createDate 2025-06-29 23:17:53
 */
 @Service
-public class StudentFullInfoServiceImpl extends ServiceImpl<StudentFullInfoMapper, StudentFullInfo>
+public class StudentFullInfoServiceImpl extends ServiceImpl<StudentFullInfoMapper, StudentDTO>
     implements StudentFullInfoService{
 
 }

@@ -12,6 +12,8 @@ import org.example.database.service.ClassesService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/classes")
@@ -89,6 +91,19 @@ public class ClassesController {
     public Result selectById(@PathVariable Integer Id) {
         Classes department = classesService.getById(Id);
         return department != null ? Result.success(department) : Result.error(ResultCodeEnum.SELECT_ERROR);
+    }
+
+    @GetMapping("selectByDepartmentId/{departmentId}")
+    @ResponseBody
+    public Result selectByDepartmentId(@PathVariable Integer departmentId) {
+        if (departmentId == -1) {
+            return selectAll();
+        }
+        LambdaQueryWrapper<Classes> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Classes::getDepartmentId, departmentId);
+        List<Classes> classesList = classesService.list(queryWrapper);
+
+        return !classesList.isEmpty() ? Result.success(classesList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
 
     @GetMapping("/selectAll")

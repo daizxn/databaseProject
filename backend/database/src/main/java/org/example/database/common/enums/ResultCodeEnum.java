@@ -21,6 +21,9 @@ public enum ResultCodeEnum {
     UPDATE_ERROR("5013","更新失败"),
     SELECT_ERROR("5014","查询失败"),
 
+    ID_NOT_EXIST_ERROR("5021", "ID不存在"),
+    ID_EXIST_ERROR("5022", "ID已存在"),
+
     NO_AUTH("403", "无权限访问"),
     NO_GOODS("404", "信息不存在"),
     ;

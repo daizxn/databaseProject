@@ -111,7 +111,7 @@ public class RegionsController {
 
     @GetMapping("/selectByPage")
     @ResponseBody
-    public Result selectByPage(@RequestBody Regions regions,
+    public Result selectByPage(Regions regions,
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Regions> queryWrapper = new LambdaQueryWrapper<>();
@@ -125,9 +125,9 @@ public class RegionsController {
         }
     }
 
-    @GetMapping("/selectRegionsInfoById/{Id}")
-    @ResponseBody
-    public Result selectRegionsInfoById(@PathVariable Integer Id) {
-
-    }
+//    @GetMapping("/selectRegionsInfoById/{Id}")
+//    @ResponseBody
+//    public Result selectRegionsInfoById(@PathVariable Integer Id) {
+//
+//    }
 }

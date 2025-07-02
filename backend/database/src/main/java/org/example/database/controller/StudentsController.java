@@ -8,12 +8,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
-import org.example.database.entity.StudentFullInfo;
+import org.example.database.entity.StudentDTO;
 import org.example.database.entity.Students;
 import org.example.database.service.StudentFullInfoService;
 import org.example.database.service.StudentsService;
+import org.example.database.utils.NameChangeUtil;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @RestController
@@ -38,11 +40,11 @@ public class StudentsController {
         if (students.getStudentName() == null ) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
-        // name不重复
+        //Number唯一
         LambdaQueryWrapper<Students> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Students::getStudentName, students.getStudentName());
+        queryWrapper.eq(Students::getStudentNumber, students.getStudentNumber());
         if (studentsService.count(queryWrapper) > 0) {
-            return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
+            return Result.error(ResultCodeEnum.ID_EXIST_ERROR);
         }
         return studentsService.save(students) ? Result.success() : Result.error(ResultCodeEnum.INSERT_ERROR);
     }
@@ -58,6 +60,17 @@ public class StudentsController {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         return studentsService.removeById(Id) ? Result.success() : Result.error(ResultCodeEnum.DELETE_ERROR);
+    }
+
+    @DeleteMapping("/deleteByNumber/{number}")
+    @ResponseBody
+    public Result deleteByNumber(@PathVariable String number) {
+        if (number == null || number.isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        LambdaQueryWrapper<Students> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Students::getStudentNumber, number);
+        return studentsService.remove(queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.DELETE_ERROR);
     }
 
     /**
@@ -77,13 +90,24 @@ public class StudentsController {
      * @param student 需要更新的数据
      * @return 返回Result状态
      */
-    @PostMapping("/updateById")
+    @PutMapping("/updateById")
     @ResponseBody
     public Result updateById(@RequestBody Students student) {
         return studentsService.updateById(student) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
-    @PostMapping("/updateBatch")
+    @PutMapping("/updateByNumber")
+    @ResponseBody
+    public Result updateByNumber(@RequestBody Students student) {
+        if (student.getStudentNumber() == null || student.getStudentNumber().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        LambdaQueryWrapper<Students> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Students::getStudentNumber, student.getStudentNumber());
+        return studentsService.update(student, queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
+    }
+
+    @PutMapping("/updateBatch")
     @ResponseBody
     public Result updateBatch(@RequestBody List<Students> students) {
         return studentsService.updateBatchById(students) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
@@ -99,10 +123,10 @@ public class StudentsController {
     @GetMapping("/selectById/FullInfo/{number}")
     @ResponseBody
     public Result selectByIdFullInfo(@PathVariable String number) {
-        LambdaQueryWrapper<StudentFullInfo> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StudentFullInfo::getStudentNumber, number);
-        StudentFullInfo studentFullInfo = studentFullInfoService.getOne(queryWrapper);
-        return studentFullInfo != null ? Result.success(studentFullInfo) : Result.error(ResultCodeEnum.SELECT_ERROR);
+        LambdaQueryWrapper<StudentDTO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(StudentDTO::getStudentNumber, number);
+        StudentDTO studentDTO = studentFullInfoService.getOne(queryWrapper);
+        return studentDTO != null ? Result.success(studentDTO) : Result.error(ResultCodeEnum.SELECT_ERROR);
     }
 
     @GetMapping("/selectAll")
@@ -130,6 +154,39 @@ public class StudentsController {
         queryWrapper.like(Students::getStudentName, students.getStudentName());
         IPage<Students> page =new Page<>(pageNum,pageSize);
         IPage<Students> studentsPage = studentsService.page(page, queryWrapper);
+        if (studentsPage.getRecords().isEmpty()) {
+            return Result.error(ResultCodeEnum.NO_GOODS);
+        } else {
+            return Result.success(studentsPage);
+        }
+    }
+
+    @GetMapping("/selectByPage/FullInfo")
+    @ResponseBody
+    public Result selectByPageFullInfo(StudentDTO studentDTO,
+                                       @RequestParam(defaultValue = "1") Integer pageNum,
+                                       @RequestParam(defaultValue = "10") Integer pageSize) {
+        QueryWrapper<StudentDTO> queryWrapper = new QueryWrapper<>();
+        Field[] fields = StudentDTO.class.getDeclaredFields();
+        for(Field field : fields) {
+            try {
+                field.setAccessible(true);
+                Object value = field.get(studentDTO);
+                if (value != null) {
+                    String fieldName = field.getName();
+                    String ColumnName = "dzx_" + NameChangeUtil.camelToSnake(fieldName);
+                    queryWrapper.like(ColumnName, value);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        queryWrapper.orderByAsc("dzx_student_number"); // 按学号升序排序
+
+        IPage<StudentDTO> page =new Page<>(pageNum,pageSize);
+        IPage<StudentDTO> studentsPage = studentFullInfoService.page(page, queryWrapper);
+
         if (studentsPage.getRecords().isEmpty()) {
             return Result.error(ResultCodeEnum.NO_GOODS);
         } else {

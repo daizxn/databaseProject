@@ -9,11 +9,23 @@ import lombok.Data;
 
 /**
  * 
- * @TableName view_student_full_info
+ * @TableName view_region_students
  */
-@TableName(value ="view_student_full_info")
+@TableName(value ="view_region_students")
 @Data
-public class StudentFullInfo {
+public class RegionStudents {
+    /**
+     * 
+     */
+    @TableField(value = "dzx_region_id")
+    private Integer regionId;
+
+    /**
+     * 
+     */
+    @TableField(value = "dzx_region_name")
+    private String regionName;
+
     /**
      * 
      */
@@ -47,24 +59,6 @@ public class StudentFullInfo {
     /**
      * 
      */
-    @TableField(value = "dzx_enrollment_date")
-    private LocalDate enrollmentDate;
-
-    /**
-     * 
-     */
-    @TableField(value = "dzx_student_status")
-    private String studentStatus;
-
-    /**
-     * 
-     */
-    @TableField(value = "dzx_region_name")
-    private String regionName;
-
-    /**
-     * 
-     */
     @TableField(value = "dzx_class_name")
     private String className;
 
@@ -73,6 +67,18 @@ public class StudentFullInfo {
      */
     @TableField(value = "dzx_department_name")
     private String departmentName;
+
+    /**
+     * 
+     */
+    @TableField(value = "dzx_enrollment_date")
+    private LocalDate enrollmentDate;
+
+    /**
+     * 
+     */
+    @TableField(value = "dzx_student_status")
+    private String studentStatus;
 
     @Override
     public boolean equals(Object that) {
@@ -85,33 +91,35 @@ public class StudentFullInfo {
         if (getClass() != that.getClass()) {
             return false;
         }
-        StudentFullInfo other = (StudentFullInfo) that;
-        return (this.getStudentNumber() == null ? other.getStudentNumber() == null : this.getStudentNumber().equals(other.getStudentNumber()))
+        RegionStudents other = (RegionStudents) that;
+        return (this.getRegionId() == null ? other.getRegionId() == null : this.getRegionId().equals(other.getRegionId()))
+            && (this.getRegionName() == null ? other.getRegionName() == null : this.getRegionName().equals(other.getRegionName()))
+            && (this.getStudentNumber() == null ? other.getStudentNumber() == null : this.getStudentNumber().equals(other.getStudentNumber()))
             && (this.getStudentName() == null ? other.getStudentName() == null : this.getStudentName().equals(other.getStudentName()))
             && (this.getStudentGender() == null ? other.getStudentGender() == null : this.getStudentGender().equals(other.getStudentGender()))
             && (this.getStudentAge() == null ? other.getStudentAge() == null : this.getStudentAge().equals(other.getStudentAge()))
             && (this.getStudentTotalCredits() == null ? other.getStudentTotalCredits() == null : this.getStudentTotalCredits().equals(other.getStudentTotalCredits()))
-            && (this.getEnrollmentDate() == null ? other.getEnrollmentDate() == null : this.getEnrollmentDate().equals(other.getEnrollmentDate()))
-            && (this.getStudentStatus() == null ? other.getStudentStatus() == null : this.getStudentStatus().equals(other.getStudentStatus()))
-            && (this.getRegionName() == null ? other.getRegionName() == null : this.getRegionName().equals(other.getRegionName()))
             && (this.getClassName() == null ? other.getClassName() == null : this.getClassName().equals(other.getClassName()))
-            && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()));
+            && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
+            && (this.getEnrollmentDate() == null ? other.getEnrollmentDate() == null : this.getEnrollmentDate().equals(other.getEnrollmentDate()))
+            && (this.getStudentStatus() == null ? other.getStudentStatus() == null : this.getStudentStatus().equals(other.getStudentStatus()));
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getRegionId() == null) ? 0 : getRegionId().hashCode());
+        result = prime * result + ((getRegionName() == null) ? 0 : getRegionName().hashCode());
         result = prime * result + ((getStudentNumber() == null) ? 0 : getStudentNumber().hashCode());
         result = prime * result + ((getStudentName() == null) ? 0 : getStudentName().hashCode());
         result = prime * result + ((getStudentGender() == null) ? 0 : getStudentGender().hashCode());
         result = prime * result + ((getStudentAge() == null) ? 0 : getStudentAge().hashCode());
         result = prime * result + ((getStudentTotalCredits() == null) ? 0 : getStudentTotalCredits().hashCode());
-        result = prime * result + ((getEnrollmentDate() == null) ? 0 : getEnrollmentDate().hashCode());
-        result = prime * result + ((getStudentStatus() == null) ? 0 : getStudentStatus().hashCode());
-        result = prime * result + ((getRegionName() == null) ? 0 : getRegionName().hashCode());
         result = prime * result + ((getClassName() == null) ? 0 : getClassName().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
+        result = prime * result + ((getEnrollmentDate() == null) ? 0 : getEnrollmentDate().hashCode());
+        result = prime * result + ((getStudentStatus() == null) ? 0 : getStudentStatus().hashCode());
         return result;
     }
 
@@ -121,16 +129,17 @@ public class StudentFullInfo {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", regionId=").append(regionId);
+        sb.append(", regionName=").append(regionName);
         sb.append(", studentNumber=").append(studentNumber);
         sb.append(", studentName=").append(studentName);
         sb.append(", studentGender=").append(studentGender);
         sb.append(", studentAge=").append(studentAge);
         sb.append(", studentTotalCredits=").append(studentTotalCredits);
-        sb.append(", enrollmentDate=").append(enrollmentDate);
-        sb.append(", studentStatus=").append(studentStatus);
-        sb.append(", regionName=").append(regionName);
         sb.append(", className=").append(className);
         sb.append(", departmentName=").append(departmentName);
+        sb.append(", enrollmentDate=").append(enrollmentDate);
+        sb.append(", studentStatus=").append(studentStatus);
         sb.append("]");
         return sb.toString();
     }
