@@ -62,6 +62,12 @@ public class Teachers {
     @TableField(value = "dzx_teacher_status")
     private String teacherStatus;
 
+    /**
+     * 
+     */
+    @TableField(value = "dzx_teacher_email")
+    private Integer teacherEmail;
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -81,7 +87,8 @@ public class Teachers {
             && (this.getTeacherTitle() == null ? other.getTeacherTitle() == null : this.getTeacherTitle().equals(other.getTeacherTitle()))
             && (this.getTeacherPhone() == null ? other.getTeacherPhone() == null : this.getTeacherPhone().equals(other.getTeacherPhone()))
             && (this.getHireDate() == null ? other.getHireDate() == null : this.getHireDate().equals(other.getHireDate()))
-            && (this.getTeacherStatus() == null ? other.getTeacherStatus() == null : this.getTeacherStatus().equals(other.getTeacherStatus()));
+            && (this.getTeacherStatus() == null ? other.getTeacherStatus() == null : this.getTeacherStatus().equals(other.getTeacherStatus()))
+            && (this.getTeacherEmail() == null ? other.getTeacherEmail() == null : this.getTeacherEmail().equals(other.getTeacherEmail()));
     }
 
     @Override
@@ -96,6 +103,7 @@ public class Teachers {
         result = prime * result + ((getTeacherPhone() == null) ? 0 : getTeacherPhone().hashCode());
         result = prime * result + ((getHireDate() == null) ? 0 : getHireDate().hashCode());
         result = prime * result + ((getTeacherStatus() == null) ? 0 : getTeacherStatus().hashCode());
+        result = prime * result + ((getTeacherEmail() == null) ? 0 : getTeacherEmail().hashCode());
         return result;
     }
 
@@ -113,6 +121,7 @@ public class Teachers {
         sb.append(", teacherPhone=").append(teacherPhone);
         sb.append(", hireDate=").append(hireDate);
         sb.append(", teacherStatus=").append(teacherStatus);
+        sb.append(", teacherEmail=").append(teacherEmail);
         sb.append("]");
         return sb.toString();
     }

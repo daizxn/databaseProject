@@ -13,10 +13,11 @@
             <result property="teacherPhone" column="dzx_teacher_phone" />
             <result property="hireDate" column="dzx_hire_date" />
             <result property="teacherStatus" column="dzx_teacher_status" />
+            <result property="teacherEmail" column="dzx_teacher_email" />
     </resultMap>
 
     <sql id="Base_Column_List">
         dzx_teacher_number,dzx_teacher_name,dzx_teacher_gender,dzx_teacher_age,dzx_teacher_title,dzx_teacher_phone,
-        dzx_hire_date,dzx_teacher_status
+        dzx_hire_date,dzx_teacher_status,dzx_teacher_email
     </sql>
 </mapper>

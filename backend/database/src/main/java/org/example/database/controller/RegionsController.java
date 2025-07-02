@@ -8,6 +8,7 @@ import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Regions;
+import org.example.database.service.RegionStudentsService;
 import org.example.database.service.RegionsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,8 @@ public class RegionsController {
     @Resource
     private RegionsService regionsService;
 
+    @Resource
+    private RegionStudentsService regionStudentsService;
     /**
      * 插入
      *
@@ -68,13 +71,13 @@ public class RegionsController {
     }
 
     /**
-     * @param department 需要更新的数据
+     * @param region 需要更新的数据
      * @return 返回Result状态
      */
     @PostMapping("/updateById")
     @ResponseBody
-    public Result updateById(@RequestBody Regions department) {
-        return regionsService.updateById(department) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
+    public Result updateById(@RequestBody Regions region) {
+        return regionsService.updateById(region) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
     @PostMapping("/updateBatch")
@@ -120,5 +123,11 @@ public class RegionsController {
         } else {
             return Result.success(regionsPage);
         }
+    }
+
+    @GetMapping("/selectRegionsInfoById/{Id}")
+    @ResponseBody
+    public Result selectRegionsInfoById(@PathVariable Integer Id) {
+
     }
 }
