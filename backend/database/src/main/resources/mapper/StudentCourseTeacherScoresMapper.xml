@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.StudentCourseTeacherScoresMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.StudentCourseTeacherScores">
+            <result property="studentNumber" column="dzx_student_number" />
+            <result property="studentName" column="dzx_student_name" />
+            <result property="studentGender" column="dzx_student_gender" />
+            <result property="studentAge" column="dzx_student_age" />
+            <result property="className" column="dzx_class_name" />
+            <result property="departmentName" column="dzx_department_name" />
+            <result property="regionName" column="dzx_region_name" />
+            <result property="courseNumber" column="dzx_course_number" />
+            <result property="courseName" column="dzx_course_name" />
+            <result property="courseType" column="dzx_course_type" />
+            <result property="courseCredits" column="dzx_course_credits" />
+            <result property="courseHours" column="dzx_course_hours" />
+            <result property="teacherNumber" column="dzx_teacher_number" />
+            <result property="teacherName" column="dzx_teacher_name" />
+            <result property="teacherTitle" column="dzx_teacher_title" />
+            <result property="semester" column="dzx_semester" />
+            <result property="score" column="dzx_score" />
+            <result property="gradeLevel" column="dzx_grade_level" />
+            <result property="examDate" column="dzx_exam_date" />
+            <result property="scoreStatus" column="dzx_score_status" />
+            <result property="isPassed" column="dzx_is_passed" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_student_number,dzx_student_name,dzx_student_gender,dzx_student_age,dzx_class_name,dzx_department_name,
+        dzx_region_name,dzx_course_number,dzx_course_name,dzx_course_type,dzx_course_credits,
+        dzx_course_hours,dzx_teacher_number,dzx_teacher_name,dzx_teacher_title,dzx_semester,
+        dzx_score,dzx_grade_level,dzx_exam_date,dzx_score_status,dzx_is_passed
+    </sql>
+</mapper>
