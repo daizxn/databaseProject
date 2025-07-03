@@ -13,7 +13,7 @@
   height: 60px;
   padding-left: 10px;
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 .manager-header-left img {
@@ -26,14 +26,14 @@
   margin-left: 5px;
   font-size: 20px;
   font-weight: bold;
-  color: #ddd
+  color: #ddd;
 }
 
 .manager-header-center {
   flex: 1;
   width: 0;
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 .manager-header-right {
@@ -48,14 +48,14 @@
   align-items: center;
   padding-right: 10px;
   color: #ccc;
-  cursor: default
+  cursor: default;
 }
 
 .manager-header-right .avatar img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 5px
+  margin-right: 5px;
 }
 
 .manager-main {
@@ -65,7 +65,7 @@
 .manager-main-left {
   width: 200px;
   min-height: calc(100vh - 60px);
-  box-shadow: 0 0 6px rgba(0, 21, 41, .35);
+  box-shadow: 0 0 6px rgba(0, 21, 41, 0.35);
 }
 
 .manager-main-right {
@@ -86,7 +86,7 @@
   padding: 10px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1)
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
 }
 
 .manager-main-right .table {
@@ -94,7 +94,7 @@
   padding: 15px 10px;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
 .manager-main-right .table .pagination {

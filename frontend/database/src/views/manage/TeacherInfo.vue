@@ -161,7 +161,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="年龄" prop="teacherAge">
-        <el-input v-model="teacherUpdateParam.teacherAge"></el-input>
+        <el-input v-model.number="teacherUpdateParam.teacherAge"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="teacherEmail">
         <el-input v-model="teacherUpdateParam.teacherEmail"></el-input>
@@ -226,9 +226,13 @@ const getTeacherData = async (
       pageSize,
     },
   })
-  if (response.data === null) teacherData.value = []
-  else teacherData.value = response.data.records
-  total.value = response.data?.total
+  if (response.data === null) {
+    teacherData.value = []
+    total.value = 0
+  } else {
+    teacherData.value = response.data.records
+    total.value = response.data?.total
+  }
 }
 
 const handleCurrentChange = (val: number) => {
@@ -281,7 +285,6 @@ const save = async (formRef: FormInstance) => {
     // 重置查询参数
     addFlag.value = false
     teacherUpdateParam.value = {}
-    teacherSelectParam.value = {}
     dialogVisible.value = false
     getTeacherData(teacherSelectParam.value, pageNum.value, pageSize.value)
   } else if (response.code === '5022') {

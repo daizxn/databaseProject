@@ -29,6 +29,11 @@ const router = createRouter({
           name: 'teacher-info',
           component: () => import('../views/manage/TeacherInfo.vue'),
         },
+        {
+          path: 'course-info',
+          name: 'course-info',
+          component: () => import('../views/manage/CourseInfo.vue'),
+        },
       ],
     },
   ],

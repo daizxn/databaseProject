@@ -34,7 +34,7 @@
                 <el-icon><i-ep-setting /></el-icon>课程管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="3-1">课程信息查看</el-menu-item>
+                <el-menu-item index="course-info">课程信息查看</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
           </el-menu>

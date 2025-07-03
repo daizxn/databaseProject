@@ -76,6 +76,16 @@ public class CoursesController {
         return coursesService.removeByIds(Ids) ? Result.success() : Result.error(ResultCodeEnum.DELETE_ERROR);
     }
 
+    @DeleteMapping("/deleteByNumber/{number}")
+    @ResponseBody
+    public Result deleteByNumber(@PathVariable String number) {
+        if (number == null || number.isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        LambdaQueryWrapper<Courses> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Courses::getCourseNumber, number);
+        return coursesService.remove(queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.DELETE_ERROR);
+    }
     /**
      * @param department 需要更新的数据
      * @return 返回Result状态
