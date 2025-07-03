@@ -9,8 +9,10 @@ import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Teachers;
 import org.example.database.service.TeachersService;
+import org.example.database.utils.NameChangeUtil;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @RestController
@@ -68,27 +70,51 @@ public class TeachersController {
         return teachersService.removeByIds(Ids) ? Result.success() : Result.error(ResultCodeEnum.DELETE_ERROR);
     }
 
+    @DeleteMapping("/deleteByNumber/{number}")
+    @ResponseBody
+    public Result deleteByNumber(@PathVariable String number) {
+        if (number == null || number.isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        LambdaQueryWrapper<Teachers> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Teachers::getTeacherNumber, number);
+        return teachersService.remove(queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.DELETE_ERROR);
+    }
     /**
-     * @param department 需要更新的数据
+     * @param teacher 需要更新的数据
      * @return 返回Result状态
      */
-    @PostMapping("/updateById")
+    @PutMapping("/updateById")
     @ResponseBody
-    public Result updateById(@RequestBody Teachers department) {
-        return teachersService.updateById(department) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
+    public Result updateById(@RequestBody Teachers teacher) {
+        return teachersService.updateById(teacher) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
-    @PostMapping("/updateBatch")
+    @PutMapping("/updateBatch")
     @ResponseBody
     public Result updateBatch(@RequestBody List<Teachers> teachers) {
         return teachersService.updateBatchById(teachers) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
+    @PutMapping("/updateByNumber")
+    @ResponseBody
+    public Result updateByNumber(@RequestBody Teachers teachers) {
+        if (teachers.getTeacherNumber() == null || teachers.getTeacherNumber().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        LambdaQueryWrapper<Teachers> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Teachers::getTeacherNumber, teachers.getTeacherNumber());
+        if (teachersService.count(queryWrapper) < 0) {
+            return Result.error(ResultCodeEnum.ID_NOT_EXIST_ERROR);
+        }
+        return teachersService.update(teachers,queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
+    }
+
     @GetMapping("/selectById/{Id}")
     @ResponseBody
     public Result selectById(@PathVariable Integer Id) {
-        Teachers department = teachersService.getById(Id);
-        return department != null ? Result.success(department) : Result.error(ResultCodeEnum.SELECT_ERROR);
+        Teachers teacher = teachersService.getById(Id);
+        return teacher != null ? Result.success(teacher) : Result.error(ResultCodeEnum.SELECT_ERROR);
     }
 
     @GetMapping("/selectAll")
@@ -109,11 +135,30 @@ public class TeachersController {
 
     @GetMapping("/selectByPage")
     @ResponseBody
-    public Result selectByPage(@RequestBody Teachers teachers,
+    public Result selectByPage(Teachers teachers,
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
-        LambdaQueryWrapper<Teachers> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(Teachers::getTeacherName, teachers.getTeacherName());
+//        LambdaQueryWrapper<Teachers> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.like(Teachers::getTeacherName, teachers.getTeacherName());
+        QueryWrapper<Teachers> queryWrapper = new QueryWrapper<>();
+
+        Field[] fields = Teachers.class.getDeclaredFields();
+        for(Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(teachers);
+                if (value != null) {
+                    String fieldName = field.getName();
+                    String ColumnName = "dzx_" + NameChangeUtil.camelToSnake(fieldName);
+                    queryWrapper.like(ColumnName, value);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        queryWrapper.orderByAsc("dzx_teacher_number"); // 按教师编号升序排序
+
         IPage<Teachers> page =new Page<>(pageNum,pageSize);
         IPage<Teachers> teachersPage = teachersService.page(page, queryWrapper);
         if (teachersPage.getRecords().isEmpty()) {

@@ -66,7 +66,7 @@ public class Teachers {
      * 
      */
     @TableField(value = "dzx_teacher_email")
-    private Integer teacherEmail;
+    private String teacherEmail;
 
     @Override
     public boolean equals(Object that) {

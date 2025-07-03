@@ -26,7 +26,7 @@
                 <el-icon><i-ep-menu /></el-icon>教师信息管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="2-1">教师信息查看</el-menu-item>
+                <el-menu-item index="teacher-info">教师信息查看</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
             <el-sub-menu index="3">
