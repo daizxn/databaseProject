@@ -80,16 +80,30 @@ public class CoursesController {
      * @param department 需要更新的数据
      * @return 返回Result状态
      */
-    @PostMapping("/updateById")
+    @PutMapping("/updateById")
     @ResponseBody
     public Result updateById(@RequestBody Courses department) {
         return coursesService.updateById(department) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
-    @PostMapping("/updateBatch")
+    @PutMapping("/updateBatch")
     @ResponseBody
     public Result updateBatch(@RequestBody List<Courses> courses) {
         return coursesService.updateBatchById(courses) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
+    }
+
+    @PutMapping("/updateByNumber")
+    @ResponseBody
+    public Result updateByNumber(@RequestBody Courses courses) {
+        if (courses.getCourseNumber() == null || courses.getCourseNumber().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+        LambdaQueryWrapper<Courses> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Courses::getCourseNumber, courses.getCourseNumber());
+        if (coursesService.count(queryWrapper) < 0) {
+            return Result.error(ResultCodeEnum.PARAM_NAME_EXISTED);
+        }
+        return coursesService.update(courses, queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
     @GetMapping("/selectById/{Id}")
@@ -117,7 +131,7 @@ public class CoursesController {
 
     @GetMapping("/selectByPage")
     @ResponseBody
-    public Result selectByPage(@RequestBody Courses courses,
+    public Result selectByPage(Courses courses,
                                @RequestParam(defaultValue = "1") Integer pageNum,
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Courses> queryWrapper = new LambdaQueryWrapper<>();
@@ -129,6 +143,34 @@ public class CoursesController {
         } else {
             return Result.success(coursesPage);
         }
+    }
+
+    @GetMapping("/selectByPage/FullInfo")
+    @ResponseBody
+    public Result selectByPageFullInfo(TeacherCourses teacherCourses,
+                                       @RequestParam(defaultValue = "1") Integer pageNum,
+                                       @RequestParam(defaultValue = "10") Integer pageSize) {
+        QueryWrapper<TeacherCourses> queryWrapper = new QueryWrapper<>();
+        //若对应字段不为空，则设为参数
+        Field[] fields = TeacherCourses.class.getDeclaredFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object value = field.get(teacherCourses);
+                if (value != null) {
+                    String fieldName = field.getName();
+                    String ColumnName = "dzx_" + NameChangeUtil.camelToSnake(fieldName);
+                    queryWrapper.like(ColumnName, value);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        queryWrapper.orderByAsc("dzx_course_number"); // 按教课程号升序排序
+
+        IPage<TeacherCourses> page = new Page<>(pageNum, pageSize);
+        IPage<TeacherCourses> teacherCoursesPage = teacherCoursesService.page(page, queryWrapper);
+        return teacherCoursesPage.getRecords().isEmpty() ? Result.error(ResultCodeEnum.NO_GOODS) : Result.success(teacherCoursesPage);
     }
 
     @GetMapping("/selectByTeacher/{teacherNumber}")

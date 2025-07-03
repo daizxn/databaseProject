@@ -73,6 +73,12 @@ public class Courses {
     @TableField(value = "dzx_course_status")
     private String courseStatus;
 
+    /**
+     * 
+     */
+    @TableField(value = "dzx_course_exam_type")
+    private String courseExamType;
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -94,7 +100,8 @@ public class Courses {
             && (this.getCourseType() == null ? other.getCourseType() == null : this.getCourseType().equals(other.getCourseType()))
             && (this.getCourseCredits() == null ? other.getCourseCredits() == null : this.getCourseCredits().equals(other.getCourseCredits()))
             && (this.getClassId() == null ? other.getClassId() == null : this.getClassId().equals(other.getClassId()))
-            && (this.getCourseStatus() == null ? other.getCourseStatus() == null : this.getCourseStatus().equals(other.getCourseStatus()));
+            && (this.getCourseStatus() == null ? other.getCourseStatus() == null : this.getCourseStatus().equals(other.getCourseStatus()))
+            && (this.getCourseExamType() == null ? other.getCourseExamType() == null : this.getCourseExamType().equals(other.getCourseExamType()));
     }
 
     @Override
@@ -111,6 +118,7 @@ public class Courses {
         result = prime * result + ((getCourseCredits() == null) ? 0 : getCourseCredits().hashCode());
         result = prime * result + ((getClassId() == null) ? 0 : getClassId().hashCode());
         result = prime * result + ((getCourseStatus() == null) ? 0 : getCourseStatus().hashCode());
+        result = prime * result + ((getCourseExamType() == null) ? 0 : getCourseExamType().hashCode());
         return result;
     }
 
@@ -130,6 +138,7 @@ public class Courses {
         sb.append(", courseCredits=").append(courseCredits);
         sb.append(", classId=").append(classId);
         sb.append(", courseStatus=").append(courseStatus);
+        sb.append(", courseExamType=").append(courseExamType);
         sb.append("]");
         return sb.toString();
     }

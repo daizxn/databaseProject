@@ -8,12 +8,14 @@ import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Teachers;
+import org.example.database.entity.TeachersDTO;
 import org.example.database.service.TeachersService;
 import org.example.database.utils.NameChangeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/teachers")
@@ -122,6 +124,16 @@ public class TeachersController {
     public Result selectAll() {
         List<Teachers> teachersList = teachersService.list();
         return teachersList.isEmpty() ? Result.error(ResultCodeEnum.NO_GOODS) : Result.success(teachersList);
+    }
+
+    @GetMapping("/selectTeacherList")
+    @ResponseBody
+    public Result selectTeacherList() {
+        LambdaQueryWrapper<Teachers> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.select(Teachers::getTeacherName, Teachers::getTeacherNumber);
+        List<Teachers> teachersList = teachersService.list(queryWrapper);
+        List<TeachersDTO> teachersDTOList = teachersList.stream().map(teachers -> new TeachersDTO(teachers.getTeacherName(), teachers.getTeacherNumber())).toList();
+        return !teachersDTOList.isEmpty() ? Result.success(teachersDTOList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
 
     @GetMapping("/selectByName/{name}")

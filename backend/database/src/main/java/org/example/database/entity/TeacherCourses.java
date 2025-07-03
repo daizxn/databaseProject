@@ -103,6 +103,12 @@ public class TeacherCourses {
     @TableField(value = "dzx_course_status")
     private String courseStatus;
 
+    /**
+     * 
+     */
+    @TableField(value = "dzx_course_exam_type")
+    private String courseExamType;
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -129,7 +135,8 @@ public class TeacherCourses {
             && (this.getSemester() == null ? other.getSemester() == null : this.getSemester().equals(other.getSemester()))
             && (this.getClassName() == null ? other.getClassName() == null : this.getClassName().equals(other.getClassName()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
-            && (this.getCourseStatus() == null ? other.getCourseStatus() == null : this.getCourseStatus().equals(other.getCourseStatus()));
+            && (this.getCourseStatus() == null ? other.getCourseStatus() == null : this.getCourseStatus().equals(other.getCourseStatus()))
+            && (this.getCourseExamType() == null ? other.getCourseExamType() == null : this.getCourseExamType().equals(other.getCourseExamType()));
     }
 
     @Override
@@ -151,6 +158,7 @@ public class TeacherCourses {
         result = prime * result + ((getClassName() == null) ? 0 : getClassName().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
         result = prime * result + ((getCourseStatus() == null) ? 0 : getCourseStatus().hashCode());
+        result = prime * result + ((getCourseExamType() == null) ? 0 : getCourseExamType().hashCode());
         return result;
     }
 
@@ -175,6 +183,7 @@ public class TeacherCourses {
         sb.append(", className=").append(className);
         sb.append(", departmentName=").append(departmentName);
         sb.append(", courseStatus=").append(courseStatus);
+        sb.append(", courseExamType=").append(courseExamType);
         sb.append("]");
         return sb.toString();
     }

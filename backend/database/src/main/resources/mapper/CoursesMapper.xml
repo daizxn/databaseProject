@@ -15,10 +15,11 @@
             <result property="courseCredits" column="dzx_course_credits" />
             <result property="classId" column="dzx_class_id" />
             <result property="courseStatus" column="dzx_course_status" />
+            <result property="courseExamType" column="dzx_course_exam_type" />
     </resultMap>
 
     <sql id="Base_Column_List">
         dzx_course_number,dzx_course_name,dzx_teacher_number,dzx_academic_year,dzx_semester,dzx_course_hours,
-        dzx_course_type,dzx_course_credits,dzx_class_id,dzx_course_status
+        dzx_course_type,dzx_course_credits,dzx_class_id,dzx_course_status,dzx_course_exam_type
     </sql>
 </mapper>

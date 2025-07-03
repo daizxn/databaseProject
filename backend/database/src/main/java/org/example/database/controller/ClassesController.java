@@ -8,7 +8,10 @@ import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Classes;
+import org.example.database.entity.ClassesTreeDTO;
+import org.example.database.entity.Departments;
 import org.example.database.service.ClassesService;
+import org.example.database.service.DepartmentsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,9 @@ import java.util.stream.Collectors;
 public class ClassesController {
     @Resource
     private ClassesService classesService;
+
+    @Resource
+    private DepartmentsService departmentsService;
 
     /**
      * 插入
@@ -111,6 +117,47 @@ public class ClassesController {
     public Result selectAll() {
         List<Classes> classesList = classesService.list();
         return classesList.isEmpty() ? Result.error(ResultCodeEnum.NO_GOODS) : Result.success(classesList);
+    }
+
+    @GetMapping("/selectClassesListGroupByDepartment")
+    @ResponseBody
+    public Result selectClassesList() {
+        // 获取所有专业
+        List<Departments> departmentsList = departmentsService.list();
+
+        // 获取所有班级
+        List<Classes> classesList = classesService.list();
+
+        // 按专业分组班级
+        Map<Integer, List<Classes>> classesGroupByDepartment = classesList.stream()
+                .collect(Collectors.groupingBy(Classes::getDepartmentId));
+
+        // 构建二级分类结构
+        List<ClassesTreeDTO> treeList = departmentsList.stream()
+                .map(department -> {
+                    // 创建专业节点
+                    ClassesTreeDTO departmentNode = new ClassesTreeDTO(
+                            department.getDepartmentId().toString(),
+                            department.getDepartmentName()
+                    );
+
+                    // 获取该专业下的班级并转换为子节点
+                    List<Classes> departmentClasses = classesGroupByDepartment.get(department.getDepartmentId());
+                    if (departmentClasses != null && !departmentClasses.isEmpty()) {
+                        List<ClassesTreeDTO> children = departmentClasses.stream()
+                                .map(clazz -> new ClassesTreeDTO(
+                                        clazz.getClassId().toString(),
+                                        clazz.getClassName()
+                                ))
+                                .collect(Collectors.toList());
+                        departmentNode.setChildren(children);
+                    }
+
+                    return departmentNode;
+                })
+                .collect(Collectors.toList());
+
+        return !treeList.isEmpty() ? Result.success(treeList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
 
     @GetMapping("/selectByName/{name}")

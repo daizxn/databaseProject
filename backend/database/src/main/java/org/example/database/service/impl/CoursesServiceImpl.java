@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 /**
 * @author daizxn
 * @description 针对表【daizx_courses】的数据库操作Service实现
-* @createDate 2025-06-28 22:15:46
+* @createDate 2025-07-03 20:52:09
 */
 @Service
 public class CoursesServiceImpl extends ServiceImpl<CoursesMapper, Courses>
