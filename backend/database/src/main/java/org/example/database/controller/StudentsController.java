@@ -104,6 +104,9 @@ public class StudentsController {
         }
         LambdaQueryWrapper<Students> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Students::getStudentNumber, student.getStudentNumber());
+        if( studentsService.count(queryWrapper) < 0) {
+            return Result.error(ResultCodeEnum.ID_NOT_EXIST_ERROR);
+        }
         return studentsService.update(student, queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
