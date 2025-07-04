@@ -11,6 +11,7 @@ import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Scores;
 import org.example.database.entity.StudentCourseTeacherScores;
 import org.example.database.entity.StudentScoresDTO;
+import org.example.database.entity.StudentScoreSimpleDTO;
 import org.example.database.service.ScoresService;
 import org.example.database.service.StudentCourseTeacherScoresService;
 import org.example.database.utils.NameChangeUtil;
@@ -174,5 +175,21 @@ public class ScoresController {
 
         return studentScoresIPage.getRecords().isEmpty() ?
             Result.error(ResultCodeEnum.NO_GOODS) : Result.success(studentScoresIPage);
+    }
+
+    /**
+     * 根据课程号查询该课程的学生成绩（只包含学号、姓名、成绩）
+     * @param courseNumber 课程编号
+     * @return 返回学生成绩简化信息列表
+     */
+    @GetMapping("/selectByCourseNumber/{courseNumber}")
+    @ResponseBody
+    public Result selectByCourseNumber(@PathVariable String courseNumber) {
+        if (courseNumber == null || courseNumber.isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+
+        List<StudentScoreSimpleDTO> studentScores = scoresService.selectStudentsByCourseNumber(courseNumber);
+        return !studentScores.isEmpty() ? Result.success(studentScores) : Result.error(ResultCodeEnum.NO_GOODS);
     }
 }

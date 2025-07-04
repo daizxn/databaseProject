@@ -110,7 +110,37 @@
       </el-form>
     </el-container>
     <el-container class="data">
-      <el-table style="width: 100%" :data="courseInfoData">
+      <el-table style="width: 100%" :data="courseInfoData" @expand-change="handleExpand">
+        <el-table-column type="expand">
+          <template #default="props">
+            <div style="padding: 20px">
+              <h4>{{ props.row.courseName }}({{ props.row.courseNumber }}) - 学生成绩列表</h4>
+              <el-table
+                :data="studentScoresMap[props.row.courseNumber] || []"
+                style="width: 100%; margin-top: 10px"
+                v-loading="expandLoading[props.row.courseNumber]"
+              >
+                <el-table-column prop="studentNumber" label="学号" width="120" />
+                <el-table-column prop="studentName" label="姓名" width="120" />
+                <el-table-column prop="score" label="成绩" width="100" />
+                <el-table-column fixed="right" label="操作" width="120">
+                  <template #default="scope">
+                    <el-button
+                      text
+                      size="small"
+                      type="primary"
+                      @click="
+                        editScore(props.row.courseNumber, scope.row.studentNumber, scope.row.score)
+                      "
+                    >
+                      修改成绩
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column label="课程编号" prop="courseNumber"></el-table-column>
         <el-table-column label="课程名称" prop="courseName"></el-table-column>
         <el-table-column label="学年" prop="academicYear"></el-table-column>
@@ -293,18 +323,53 @@
       </div>
     </template>
   </el-dialog>
+
+  <!-- 成绩修改对话框 -->
+  <el-dialog
+    title="修改成绩"
+    v-model="scoreDialogVisible"
+    :close-on-click-modal="false"
+    destroy-on-close
+  >
+    <el-form label-width="80px">
+      <el-form-item label="学号">
+        <el-input v-model="scoreUpdateParam.studentNumber" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="课程编号">
+        <el-input v-model="scoreUpdateParam.courseNumber" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="成绩">
+        <el-input
+          v-model="scoreUpdateParam.score"
+          placeholder="请输入成绩"
+          type="number"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <template v-slot:footer>
+      <div class="dialog-footer">
+        <el-button @click="scoreDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveScore">确 定</el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import request from '@/utils/request'
-import type { ApiResponse } from '@/utils/request'
 
-// import { ElMessageBox } from 'element-plus'
 import { ElMessage, type FormInstance } from 'element-plus'
 
 const courseInfoData = ref([])
 const teacherData = ref([])
 const classesData = ref([])
+
+// 存储每个课程的学生成绩数据
+const studentScoresMap = ref<
+  Record<string, Array<{ studentNumber: string; studentName: string; score: number }>>
+>({})
+// 存储展开行的加载状态
+const expandLoading = ref<Record<string, boolean>>({})
 
 const courseSelectParam = ref({})
 const courseUpdateParam = ref({})
@@ -342,6 +407,13 @@ const academicYear = ref(['2020/2021', '2021/2022', '2022/2023', '2023/2024', '2
 const dialogVisible = ref(false)
 const addFlag = ref(false)
 
+const scoreDialogVisible = ref(false)
+const scoreUpdateParam = ref({
+  studentNumber: '',
+  courseNumber: '',
+  score: null,
+})
+
 const getCourseData = async (
   courseParam: Record<string, unknown>,
   pageNum: number,
@@ -359,6 +431,7 @@ const getCourseData = async (
     total.value = 0
   } else {
     courseInfoData.value = response.data.records
+    console.log('获取课程数据成功:', courseInfoData.value)
     total.value = response.data.total
   }
 }
@@ -390,62 +463,123 @@ const updateRow = (row?: Record<string, unknown>) => {
 }
 
 const deleteRow = async (courseNumber: string) => {
-  const response: ApiResponse = await request.delete(`/courses/deleteByNumber/${courseNumber}`)
-  if (response.code === '200') {
-    ElMessage.success('删除课程成功')
-    getCourseData({}, pageNum.value, pageSize.value)
-  } else {
+  try {
+    const response = await request.delete(`/courses/deleteByNumber/${courseNumber}`)
+    if (response.data.code === '200') {
+      ElMessage.success('删除课程成功')
+      getCourseData({}, pageNum.value, pageSize.value)
+    } else {
+      ElMessage.error('删除课程失败，请稍后再试')
+    }
+  } catch (error) {
+    console.error('删除课程失败:', error)
     ElMessage.error('删除课程失败，请稍后再试')
   }
 }
 
 const save = async (formRef: FormInstance) => {
   if (!formRef) return
-  await formRef.validate()
-  const params = {
-    courseNumber: courseUpdateParam.value.courseNumber,
-    courseName: courseUpdateParam.value.courseName,
-    teacherNumber: courseUpdateParam.value.teacherNumber,
-    academicYear: courseUpdateParam.value.academicYear,
-    semester: courseUpdateParam.value.semester,
-    courseHours: courseUpdateParam.value.courseHours,
-    courseType: courseUpdateParam.value.courseType,
-    courseCredits: courseUpdateParam.value.courseCredits,
-    classId: courseUpdateParam.value.classId[1],
-    courseStatus: courseUpdateParam.value.courseStatus,
-    courseExamType: courseUpdateParam.value.courseExamType,
+  try {
+    await formRef.validate()
+    const params = {
+      courseNumber: courseUpdateParam.value.courseNumber,
+      courseName: courseUpdateParam.value.courseName,
+      teacherNumber: courseUpdateParam.value.teacherNumber,
+      academicYear: courseUpdateParam.value.academicYear,
+      semester: courseUpdateParam.value.semester,
+      courseHours: courseUpdateParam.value.courseHours,
+      courseType: courseUpdateParam.value.courseType,
+      courseCredits: courseUpdateParam.value.courseCredits,
+      classId: courseUpdateParam.value.classId[1],
+      courseStatus: courseUpdateParam.value.courseStatus,
+      courseExamType: courseUpdateParam.value.courseExamType,
+    }
+
+    let response
+    if (addFlag.value) {
+      response = await request.post('/courses/add', params)
+    } else {
+      response = await request.put('/courses/updateByNumber', params)
+    }
+
+    if (response.data.code === '200') {
+      dialogVisible.value = false
+      formRef.resetFields()
+      addFlag.value = false
+      courseUpdateParam.value = {}
+      ElMessage.success('操作成功')
+      getCourseData({}, pageNum.value, pageSize.value)
+    } else if (response.data.code === '5022') {
+      ElMessage.warning('课程已存在，请重新输入')
+    } else {
+      ElMessage.error('操作失败，请稍后再试')
+    }
+  } catch (error) {
+    console.error('保存课程失败:', error)
+    ElMessage.error('操作失败，请稍后再试')
   }
+}
 
-  let response: ApiResponse
-  if (addFlag.value) {
-    response = await request.post('/courses/add', params)
-    ElMessage.success('新增课程成功')
-  } else {
-    response = await request.put('/courses/updateByNumber', params)
-    ElMessage.success('更新课程成功')
+// 处理表格展开行
+const handleExpand = async (
+  row: Record<string, unknown>,
+  expandedRows: Record<string, unknown>[],
+) => {
+  const courseNumber = row.courseNumber as string
+
+  // 如果是展开状态且还没有数据，则获取数据
+  if (expandedRows.find((r) => r.courseNumber === courseNumber)) {
+    if (!studentScoresMap.value[courseNumber]) {
+      await getStudentScores(courseNumber)
+    }
   }
+}
 
-  if (response.code === '200') {
-    dialogVisible.value = false
+// 获取指定课程的学生成绩
+const getStudentScores = async (courseNumber: string) => {
+  try {
+    expandLoading.value[courseNumber] = true
+    const response = await request.get(`/scores/selectByCourseNumber/${courseNumber}`)
 
-    formRef.value?.resetFields()
+    if (response.data && Array.isArray(response.data)) {
+      studentScoresMap.value[courseNumber] = response.data
+    } else {
+      studentScoresMap.value[courseNumber] = []
+    }
+  } catch (error) {
+    console.error('获取学生成绩失败:', error)
+    studentScoresMap.value[courseNumber] = []
+  } finally {
+    expandLoading.value[courseNumber] = false
+  }
+}
 
-    addFlag.value = false
-    courseUpdateParam.value = {}
-    ElMessage.success('操作成功')
+// 编辑成绩
+const editScore = (courseNumber: string, studentNumber: string, currentScore: number) => {
+  scoreUpdateParam.value = {
+    courseNumber,
+    studentNumber,
+    score: currentScore,
+  }
+  scoreDialogVisible.value = true
+}
 
-    getCourseData({}, pageNum.value, pageSize.value)
-  } else if (response.code === '5022') {
-    // 工号已存在
-    ElMessageBox.alert('课程已存在，请重新输入', '提示', {
-      confirmButtonText: '确定',
-      type: 'warning',
-    })
-  } else {
-    ElMessageBox.alert('操作失败，请稍后再试', '错误', {
-      confirmButtonText: '确定',
-      type: 'error',
-    })
+// 保存修改的成绩
+const saveScore = async () => {
+  try {
+    const response = await request.put('/scores/updateScoresByNumber', scoreUpdateParam.value)
+
+    if (response.data.code === '200') {
+      ElMessage.success('修改成绩成功')
+      scoreDialogVisible.value = false
+      // 重新获取该课程的学生成绩
+      await getStudentScores(scoreUpdateParam.value.courseNumber)
+    } else {
+      ElMessage.error('修改成绩失败')
+    }
+  } catch (error) {
+    console.error('修改成绩失败:', error)
+    ElMessage.error('修改成绩失败，请稍后再试')
   }
 }
 

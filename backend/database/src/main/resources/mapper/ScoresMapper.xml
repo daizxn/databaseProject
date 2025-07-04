@@ -33,6 +33,12 @@
         <result property="scoreStatus" column="dzx_score_status" />
     </resultMap>
 
+    <resultMap id="StudentScoreSimpleResultMap" type="org.example.database.entity.StudentScoreSimpleDTO">
+        <result property="studentNumber" column="dzx_student_number" />
+        <result property="studentName" column="dzx_student_name" />
+        <result property="score" column="dzx_score" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         dzx_student_number,dzx_course_number,dzx_academic_year,dzx_semester,dzx_score,dzx_teacher_number,
         dzx_grade_level,dzx_exam_date,dzx_score_status
@@ -86,6 +92,17 @@
                 AND t.dzx_teacher_name LIKE CONCAT('%', #{studentScores.teacherName}, '%')
             </if>
         </where>
+        ORDER BY sc.dzx_student_number
+    </select>
+
+    <select id="selectStudentsByCourseNumber" parameterType="java.lang.String" resultMap="StudentScoreSimpleResultMap">
+        SELECT
+            sc.dzx_student_number,
+            s.dzx_student_name,
+            sc.dzx_score
+        FROM daizx_scores sc
+        LEFT JOIN daizx_students s ON sc.dzx_student_number = s.dzx_student_number
+        WHERE sc.dzx_course_number = #{courseNumber}
         ORDER BY sc.dzx_student_number
     </select>
 </mapper>

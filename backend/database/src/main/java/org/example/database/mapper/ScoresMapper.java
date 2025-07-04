@@ -4,8 +4,11 @@ import com.github.jeffreyning.mybatisplus.base.MppBaseMapper;
 import org.example.database.entity.Scores;
 import org.example.database.entity.StudentCourseTeacherScores;
 import org.example.database.entity.StudentScoresDTO;
+import org.example.database.entity.StudentScoreSimpleDTO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author daizxn
@@ -22,5 +25,12 @@ public interface ScoresMapper extends MppBaseMapper<Scores> {
      * @return 学生成绩详细信息的分页结果
      */
     IPage<StudentCourseTeacherScores> selectStudentScoresByPage(IPage<StudentCourseTeacherScores> page, @Param("studentScores") StudentScoresDTO studentScoresDTO);
+
+    /**
+     * 根据课程号查询该课程的学生成绩（只包含学号、姓名、成绩）
+     * @param courseNumber 课程编号
+     * @return 学生成绩简化信息列表
+     */
+    List<StudentScoreSimpleDTO> selectStudentsByCourseNumber(@Param("courseNumber") String courseNumber);
 
 }
