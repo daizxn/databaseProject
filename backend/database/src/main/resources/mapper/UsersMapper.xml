@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.UsersMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.Users">
+        <id property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="refId" column="ref_id" />
+        <result property="enable" column="enable" />
+        <result property="roles" column="roles" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,password,ref_id,enable,roles
+    </sql>
+
+    <!-- ========== 基本CRUD操作SQL ========== -->
+
+    <!-- 新增用户 -->
+    <insert id="insertUsers" parameterType="org.example.database.entity.Users">
+        <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO daizx_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">username,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="refId != null and refId != ''">ref_id,</if>
+            <if test="enable != null">enable,</if>
+            <if test="roles != null and roles != ''">roles,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="refId != null and refId != ''">#{refId},</if>
+            <if test="enable != null">#{enable},</if>
+            <if test="roles != null and roles != ''">#{roles},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据ID删除用户 -->
+    <delete id="deleteUsersById" parameterType="java.lang.Integer">
+        DELETE FROM daizx_users WHERE id = #{id}
+    </delete>
+
+    <!-- 根据用户名删除用户 -->
+    <delete id="deleteUsersByUsername" parameterType="java.lang.String">
+        DELETE FROM daizx_users WHERE username = #{username}
+    </delete>
+
+    <!-- 批量删除用户 -->
+    <delete id="deleteUsersBatch" parameterType="java.util.List">
+        DELETE FROM daizx_users WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 更新用户信息 -->
+    <update id="updateUsers" parameterType="org.example.database.entity.Users">
+        UPDATE daizx_users
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="refId != null and refId != ''">
+                ref_id = #{refId},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+            <if test="roles != null and roles != ''">
+                roles = #{roles},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID查询用户 -->
+    <select id="selectUsersById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_users
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据用户名查询用户 -->
+    <select id="selectUsersByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_users
+        WHERE username = #{username}
+    </select>
+
+    <!-- 查询所有用户 -->
+    <select id="selectAllUsers" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_users
+        ORDER BY id
+    </select>
+
+    <!-- 根据角色查询用户 -->
+    <select id="selectUsersByRoles" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_users
+        WHERE roles LIKE CONCAT('%', #{roles}, '%')
+        ORDER BY id
+    </select>
+
+    <!-- 根据启用状态查询用户 -->
+    <select id="selectUsersByEnable" parameterType="java.lang.Boolean" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_users
+        WHERE enable = #{enable}
+        ORDER BY id
+    </select>
+
+    <!-- 分页查询用户信息 -->
+    <select id="selectUsersByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_users
+        <where>
+            <if test="users.username != null and users.username != ''">
+                AND username LIKE CONCAT('%', #{users.username}, '%')
+            </if>
+            <if test="users.refId != null and users.refId != ''">
+                AND ref_id = #{users.refId}
+            </if>
+            <if test="users.enable != null">
+                AND enable = #{users.enable}
+            </if>
+            <if test="users.roles != null and users.roles != ''">
+                AND roles LIKE CONCAT('%', #{users.roles}, '%')
+            </if>
+        </where>
+        ORDER BY id
+    </select>
+
+    <!-- 用户登录验证 -->
+    <select id="login" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_users
+        WHERE username = #{username} AND password = #{password} AND enable = true
+    </select>
+
+    <!-- 修改用户密码 -->
+    <update id="changePassword">
+        UPDATE daizx_users
+        SET password = #{newPassword}
+        WHERE username = #{username} AND password = #{oldPassword}
+    </update>
+
+    <!-- 启用/禁用用户 -->
+    <update id="toggleUserStatus">
+        UPDATE daizx_users
+        SET enable = #{enable}
+        WHERE id = #{id}
+    </update>
+</mapper>
