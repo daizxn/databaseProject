@@ -18,7 +18,7 @@
               </template>
               <el-menu-item-group>
                 <el-menu-item index="student-info">学生信息查看</el-menu-item>
-                <el-menu-item index="about">学生地区统计</el-menu-item>
+                <el-menu-item index="regions">学生地区统计</el-menu-item>
                 <el-menu-item index="student-score">学生成绩查询</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
@@ -35,15 +35,10 @@
                 <el-icon><i-ep-setting /></el-icon>课程管理
               </template>
               <el-menu-item-group>
-                <el-menu-item index="course-info">课程信息查看</el-menu-item>
+                <el-menu-item index="course-info">课程信息管理</el-menu-item>
               </el-menu-item-group>
-            </el-sub-menu>
-            <el-sub-menu index="4">
-              <template #title>
-                <el-icon><i-ep-setting /></el-icon>成绩管理
-              </template>
               <el-menu-item-group>
-                <el-menu-item index="grade-info">成绩信息查看</el-menu-item>
+                <el-menu-item index="class-course">班级课程查看</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
           </el-menu>

@@ -39,6 +39,16 @@ const router = createRouter({
           name: 'student-score',
           component: () => import('../views/manage/StudentScore.vue'),
         },
+        {
+          path: 'class-course',
+          name: 'class-course',
+          component: () => import('../views/manage/ClassCourse.vue'),
+        },
+        {
+          path: 'regions',
+          name: 'regions',
+          component: () => import('../views/manage/StudentRegion.vue'),
+        },
       ],
     },
   ],
