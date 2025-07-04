@@ -60,6 +60,11 @@ const router = createRouter({
           name: 'regions',
           component: () => import('../views/manage/StudentRegion.vue'),
         },
+        {
+          path: 'student-person-info',
+          name: 'student-person-info',
+          component: () => import('../views/manage/StudentPersonInfo.vue'),
+        },
       ],
     },
   ],
@@ -116,7 +121,7 @@ function checkPermission(routeName: string, userRole: string): boolean {
 
   // 学生权限：只能访问 welcome, class-course, student-score
   if (userRole === 'student') {
-    const studentRoutes = ['welcome', 'class-course', 'student-score']
+    const studentRoutes = ['welcome', 'class-course', 'student-score', 'student-person-info']
     return studentRoutes.includes(routeName)
   }
 

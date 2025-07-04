@@ -8,11 +8,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
-import org.example.database.entity.StudentFullInfo;
-import org.example.database.entity.Students;
+import org.example.database.entity.*;
+import org.example.database.exception.CustomException;
+import org.example.database.service.StudentCourseTeacherScoresService;
 import org.example.database.service.StudentFullInfoService;
 import org.example.database.service.StudentsService;
 import org.example.database.utils.NameChangeUtil;
+import org.example.database.utils.PermissionUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
@@ -27,6 +29,9 @@ public class StudentsController {
     @Resource
     private StudentFullInfoService studentFullInfoService;
 
+    @Resource
+    private StudentCourseTeacherScoresService studentCourseTeacherScoresService;
+
     /**
      * 插入
      *
@@ -37,7 +42,7 @@ public class StudentsController {
     @ResponseBody
     public Result add(@RequestBody Students students) {
         //name不为空
-        if (students.getStudentName() == null ) {
+        if (students.getStudentName() == null) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
         //Number唯一
@@ -104,7 +109,7 @@ public class StudentsController {
         }
         LambdaQueryWrapper<Students> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Students::getStudentNumber, student.getStudentNumber());
-        if( studentsService.count(queryWrapper) < 0) {
+        if (studentsService.count(queryWrapper) < 0) {
             return Result.error(ResultCodeEnum.ID_NOT_EXIST_ERROR);
         }
         return studentsService.update(student, queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
@@ -147,7 +152,7 @@ public class StudentsController {
                                @RequestParam(defaultValue = "10") Integer pageSize) {
         LambdaQueryWrapper<Students> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.like(Students::getStudentName, students.getStudentName());
-        IPage<Students> page =new Page<>(pageNum,pageSize);
+        IPage<Students> page = new Page<>(pageNum, pageSize);
         IPage<Students> studentsPage = studentsService.page(page, queryWrapper);
         if (studentsPage.getRecords().isEmpty()) {
             return Result.error(ResultCodeEnum.NO_GOODS);
@@ -163,7 +168,7 @@ public class StudentsController {
                                        @RequestParam(defaultValue = "10") Integer pageSize) {
         QueryWrapper<StudentFullInfo> queryWrapper = new QueryWrapper<>();
         Field[] fields = StudentFullInfo.class.getDeclaredFields();
-        for(Field field : fields) {
+        for (Field field : fields) {
             try {
                 field.setAccessible(true);
                 Object value = field.get(studentDTO);
@@ -177,15 +182,45 @@ public class StudentsController {
             }
         }
 
-        queryWrapper.orderByAsc("dzx_student_number"); // 按学号升序排序
+        queryWrapper.orderByAsc("dzx_student_number"); // 按学号升序��序
 
-        IPage<StudentFullInfo> page =new Page<>(pageNum,pageSize);
+        IPage<StudentFullInfo> page = new Page<>(pageNum, pageSize);
         IPage<StudentFullInfo> studentsPage = studentFullInfoService.page(page, queryWrapper);
 
         if (studentsPage.getRecords().isEmpty()) {
             return Result.error(ResultCodeEnum.NO_GOODS);
         } else {
             return Result.success(studentsPage);
+        }
+    }
+
+
+    @GetMapping("/selectScoreStatistics")
+    @ResponseBody
+    public Result selectScoreStatistics(@RequestParam String academicYear) {
+        try {
+            String studentNumber;
+
+            // 权限验证：只有学生可以查询自己的成绩统计
+            if (PermissionUtil.isStudent()) {
+                studentNumber = PermissionUtil.getCurrentStudentNumber();
+            } else {
+                throw new CustomException(ResultCodeEnum.NO_PERMISSION);
+            }
+
+            // 调用服务层获取成绩统计信息
+            ScoreStatistics statistics = studentCourseTeacherScoresService.getScoreStatistics(studentNumber, academicYear);
+
+            if (statistics == null) {
+                return Result.error(ResultCodeEnum.DATA_NOT_FOUND);
+            }
+
+            return Result.success(statistics);
+
+        } catch (CustomException e) {
+            return Result.error(e.getCode(), e.getMsg());
+        } catch (Exception e) {
+            return Result.error(ResultCodeEnum.SYSTEM_ERROR);
         }
     }
 }

@@ -141,6 +141,12 @@ public class StudentCourseTeacherScores {
     @TableField(value = "dzx_is_passed")
     private String isPassed;
 
+    /**
+     * 
+     */
+    @TableField(value = "dzx_academic_year")
+    private String academicYear;
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -173,7 +179,8 @@ public class StudentCourseTeacherScores {
             && (this.getGradeLevel() == null ? other.getGradeLevel() == null : this.getGradeLevel().equals(other.getGradeLevel()))
             && (this.getExamDate() == null ? other.getExamDate() == null : this.getExamDate().equals(other.getExamDate()))
             && (this.getScoreStatus() == null ? other.getScoreStatus() == null : this.getScoreStatus().equals(other.getScoreStatus()))
-            && (this.getIsPassed() == null ? other.getIsPassed() == null : this.getIsPassed().equals(other.getIsPassed()));
+            && (this.getIsPassed() == null ? other.getIsPassed() == null : this.getIsPassed().equals(other.getIsPassed()))
+            && (this.getAcademicYear() == null ? other.getAcademicYear() == null : this.getAcademicYear().equals(other.getAcademicYear()));
     }
 
     @Override
@@ -201,6 +208,7 @@ public class StudentCourseTeacherScores {
         result = prime * result + ((getExamDate() == null) ? 0 : getExamDate().hashCode());
         result = prime * result + ((getScoreStatus() == null) ? 0 : getScoreStatus().hashCode());
         result = prime * result + ((getIsPassed() == null) ? 0 : getIsPassed().hashCode());
+        result = prime * result + ((getAcademicYear() == null) ? 0 : getAcademicYear().hashCode());
         return result;
     }
 
@@ -231,6 +239,7 @@ public class StudentCourseTeacherScores {
         sb.append(", examDate=").append(examDate);
         sb.append(", scoreStatus=").append(scoreStatus);
         sb.append(", isPassed=").append(isPassed);
+        sb.append(", academicYear=").append(academicYear);
         sb.append("]");
         return sb.toString();
     }

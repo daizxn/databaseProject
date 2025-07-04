@@ -26,12 +26,14 @@
             <result property="examDate" column="dzx_exam_date" />
             <result property="scoreStatus" column="dzx_score_status" />
             <result property="isPassed" column="dzx_is_passed" />
+            <result property="academicYear" column="dzx_academic_year" />
     </resultMap>
 
     <sql id="Base_Column_List">
         dzx_student_number,dzx_student_name,dzx_student_gender,dzx_student_age,dzx_class_name,dzx_department_name,
         dzx_region_name,dzx_course_number,dzx_course_name,dzx_course_type,dzx_course_credits,
         dzx_course_hours,dzx_teacher_number,dzx_teacher_name,dzx_teacher_title,dzx_semester,
-        dzx_score,dzx_grade_level,dzx_exam_date,dzx_score_status,dzx_is_passed
+        dzx_score,dzx_grade_level,dzx_exam_date,dzx_score_status,dzx_is_passed,
+        dzx_academic_year
     </sql>
 </mapper>

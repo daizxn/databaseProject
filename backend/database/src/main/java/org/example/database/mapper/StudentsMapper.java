@@ -22,4 +22,5 @@ public interface StudentsMapper extends BaseMapper<Students> {
      */
     IPage<StudentFullInfo> selectStudentFullInfoByPage(IPage<StudentFullInfo> page, @Param("student") StudentFullInfo studentFullInfo);
 
+
 }

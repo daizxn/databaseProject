@@ -15,6 +15,7 @@ import org.example.database.entity.StudentScoreSimpleDTO;
 import org.example.database.service.ScoresService;
 import org.example.database.service.StudentCourseTeacherScoresService;
 import org.example.database.utils.NameChangeUtil;
+import org.example.database.utils.PermissionUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
@@ -135,6 +136,23 @@ public class ScoresController {
     public Result selectByPageWithStudent(StudentScoresDTO studentScoreDTO,
                                           @RequestParam(defaultValue = "1") Integer pageNum,
                                           @RequestParam(defaultValue = "10") Integer pageSize) {
+
+        // 权限验证：学生只能查询自己的成绩信息，其他用户必须是管理员
+        if (PermissionUtil.isStudent()) {
+            // 学生生只能查询自己的成绩信息
+            String currentStudentNumber = PermissionUtil.getCurrentStudentNumber();
+            if (currentStudentNumber == null) {
+                return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+            }
+
+            // 强制设置查询条件为当前学生的学号，确保学生只能查看自己的成绩
+            studentScoreDTO.setStudentNumber(currentStudentNumber);
+        } else if (!PermissionUtil.isAdmin()) {
+            // 如果不是学生，必须是管理员才能使用此接口
+            return Result.error(ResultCodeEnum.PARAM_ERROR);
+        }
+        // 管理员可以查询所有学生的成绩信息，无需额外限制
+
         QueryWrapper<StudentCourseTeacherScores> queryWrapper = new QueryWrapper<>();
         Field[] fields = StudentScoresDTO.class.getDeclaredFields();
         for(Field field : fields) {

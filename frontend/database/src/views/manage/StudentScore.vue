@@ -7,16 +7,32 @@
         :rules="selectFormRules"
         ref="selectFormRef"
       >
-        <el-form-item label="学号" prop="studentNumber">
+        <el-form-item
+          label="学号"
+          prop="studentNumber"
+          v-if="current_user?.userInfo?.roles === 'admin'"
+        >
           <el-input v-model="studentsSelectParam.studentNumber" placeholder="请输入学号" />
         </el-form-item>
-        <el-form-item label="学生姓名" prop="studentName">
+        <el-form-item
+          label="学生姓名"
+          prop="studentName"
+          v-if="current_user?.userInfo?.roles === 'admin'"
+        >
           <el-input v-model="studentsSelectParam.studentName" placeholder="请输入学生姓名" />
         </el-form-item>
-        <el-form-item label="专业" prop="departmentName">
+        <el-form-item
+          label="专业"
+          prop="departmentName"
+          v-if="current_user?.userInfo?.roles === 'admin'"
+        >
           <el-input v-model="studentsSelectParam.departmentName" placeholder="请输入专业" />
         </el-form-item>
-        <el-form-item label="班级" prop="className">
+        <el-form-item
+          label="班级"
+          prop="className"
+          v-if="current_user?.userInfo?.roles === 'admin'"
+        >
           <el-input v-model="studentsSelectParam.className" placeholder="请输入班级" />
         </el-form-item>
         <el-form-item label="课程" prop="courseName">
@@ -45,7 +61,12 @@
         <el-table-column prop="courseName" label="课程" />
         <el-table-column prop="teacherName" label="教师姓名" />
         <el-table-column prop="score" label="分数" />
-        <el-table-column fixed="right" label="Operations" min-width="240">
+        <el-table-column
+          fixed="right"
+          label="Operations"
+          min-width="240"
+          v-if="current_user?.userInfo?.roles === 'admin'"
+        >
           <template #default="scope">
             <el-button
               text
@@ -98,6 +119,17 @@ const current_user = ref()
 
 const dialogVisible = ref(false)
 
+const getCurrentUser = () => {
+  const userInfo = localStorage.getItem('xm-user') || sessionStorage.getItem('xm-user')
+  console.log('获取当前用户信息:', userInfo)
+  if (userInfo) {
+    current_user.value = JSON.parse(userInfo)
+    console.log('当前用户信息:', current_user.value)
+  } else {
+    console.error('当前用户信息未找到')
+  }
+}
+
 const getStudentScoresData = async (
   params: Record<string, unknown>,
   pageNum: number,
@@ -148,6 +180,7 @@ const save = async () => {
 
 onMounted(() => {
   getStudentScoresData({}, pageNum.value, pageSize.value)
+  getCurrentUser()
 })
 </script>
 
