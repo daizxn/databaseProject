@@ -8,6 +8,7 @@ import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Regions;
+import org.example.database.entity.RegionStudentCount;
 import org.example.database.service.RegionStudentsService;
 import org.example.database.service.RegionsService;
 import org.springframework.web.bind.annotation.*;
@@ -122,6 +123,21 @@ public class RegionsController {
             return Result.error(ResultCodeEnum.NO_GOODS);
         } else {
             return Result.success(regionsPage);
+        }
+    }
+
+    @GetMapping("/selectByPage/FullInfo")
+    @ResponseBody
+    public Result selectByPageFullInfo(String regionName,
+                                       @RequestParam(defaultValue = "1") Integer pageNum,
+                                       @RequestParam(defaultValue = "10") Integer pageSize) {
+        IPage<RegionStudentCount> page = new Page<>(pageNum, pageSize);
+        IPage<RegionStudentCount> regionStudentCountPage = regionsService.selectRegionStudentCountByPage(page, regionName);
+
+        if (regionStudentCountPage.getRecords().isEmpty()) {
+            return Result.error(ResultCodeEnum.NO_GOODS);
+        } else {
+            return Result.success(regionStudentCountPage);
         }
     }
 

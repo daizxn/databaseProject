@@ -18,8 +18,262 @@
             <result property="courseExamType" column="dzx_course_exam_type" />
     </resultMap>
 
+    <resultMap id="TeacherCoursesResultMap" type="org.example.database.entity.TeacherCourses">
+        <id property="courseNumber" column="dzx_course_number" />
+        <result property="courseName" column="dzx_course_name" />
+        <result property="teacherNumber" column="dzx_teacher_number" />
+        <result property="teacherName" column="dzx_teacher_name" />
+        <result property="academicYear" column="dzx_academic_year" />
+        <result property="semester" column="dzx_semester" />
+        <result property="courseHours" column="dzx_course_hours" />
+        <result property="courseType" column="dzx_course_type" />
+        <result property="courseCredits" column="dzx_course_credits" />
+        <result property="classId" column="dzx_class_id" />
+        <result property="className" column="dzx_class_name" />
+        <result property="courseStatus" column="dzx_course_status" />
+        <result property="courseExamType" column="dzx_course_exam_type" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         dzx_course_number,dzx_course_name,dzx_teacher_number,dzx_academic_year,dzx_semester,dzx_course_hours,
         dzx_course_type,dzx_course_credits,dzx_class_id,dzx_course_status,dzx_course_exam_type
     </sql>
+
+    <select id="selectTeacherCoursesByPage" resultMap="TeacherCoursesResultMap">
+        SELECT
+            c.dzx_course_number,
+            c.dzx_course_name,
+            c.dzx_teacher_number,
+            t.dzx_teacher_name,
+            c.dzx_academic_year,
+            c.dzx_semester,
+            c.dzx_course_hours,
+            c.dzx_course_type,
+            c.dzx_course_credits,
+            c.dzx_class_id,
+            cl.dzx_class_name,
+            c.dzx_course_status,
+            c.dzx_course_exam_type
+        FROM daizx_courses c
+        LEFT JOIN daizx_teachers t ON c.dzx_teacher_number = t.dzx_teacher_number
+        LEFT JOIN daizx_classes cl ON c.dzx_class_id = cl.dzx_class_id
+        <where>
+            <if test="teacherCourses.courseNumber != null and teacherCourses.courseNumber != ''">
+                AND c.dzx_course_number LIKE CONCAT('%', #{teacherCourses.courseNumber}, '%')
+            </if>
+            <if test="teacherCourses.courseName != null and teacherCourses.courseName != ''">
+                AND c.dzx_course_name LIKE CONCAT('%', #{teacherCourses.courseName}, '%')
+            </if>
+            <if test="teacherCourses.teacherNumber != null and teacherCourses.teacherNumber != ''">
+                AND c.dzx_teacher_number LIKE CONCAT('%', #{teacherCourses.teacherNumber}, '%')
+            </if>
+            <if test="teacherCourses.teacherName != null and teacherCourses.teacherName != ''">
+                AND t.dzx_teacher_name LIKE CONCAT('%', #{teacherCourses.teacherName}, '%')
+            </if>
+            <if test="teacherCourses.className != null and teacherCourses.className != ''">
+                AND cl.dzx_class_name LIKE CONCAT('%', #{teacherCourses.className}, '%')
+            </if>
+        </where>
+        ORDER BY c.dzx_course_number
+    </select>
+
+    <!-- ========== 基本CRUD操作SQL ========== -->
+
+    <!-- 新增课程 -->
+    <insert id="insertCourses" parameterType="org.example.database.entity.Courses">
+        INSERT INTO daizx_courses
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseNumber != null and courseNumber != ''">dzx_course_number,</if>
+            <if test="courseName != null and courseName != ''">dzx_course_name,</if>
+            <if test="teacherNumber != null and teacherNumber != ''">dzx_teacher_number,</if>
+            <if test="academicYear != null and academicYear != ''">dzx_academic_year,</if>
+            <if test="semester != null and semester != ''">dzx_semester,</if>
+            <if test="courseHours != null">dzx_course_hours,</if>
+            <if test="courseType != null and courseType != ''">dzx_course_type,</if>
+            <if test="courseCredits != null">dzx_course_credits,</if>
+            <if test="classId != null">dzx_class_id,</if>
+            <if test="courseStatus != null and courseStatus != ''">dzx_course_status,</if>
+            <if test="courseExamType != null and courseExamType != ''">dzx_course_exam_type,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseNumber != null and courseNumber != ''">#{courseNumber},</if>
+            <if test="courseName != null and courseName != ''">#{courseName},</if>
+            <if test="teacherNumber != null and teacherNumber != ''">#{teacherNumber},</if>
+            <if test="academicYear != null and academicYear != ''">#{academicYear},</if>
+            <if test="semester != null and semester != ''">#{semester},</if>
+            <if test="courseHours != null">#{courseHours},</if>
+            <if test="courseType != null and courseType != ''">#{courseType},</if>
+            <if test="courseCredits != null">#{courseCredits},</if>
+            <if test="classId != null">#{classId},</if>
+            <if test="courseStatus != null and courseStatus != ''">#{courseStatus},</if>
+            <if test="courseExamType != null and courseExamType != ''">#{courseExamType},</if>
+        </trim>
+    </insert>
+
+    <!-- 根据课程编号删除课程 -->
+    <delete id="deleteCoursesByNumber" parameterType="java.lang.String">
+        DELETE FROM daizx_courses WHERE dzx_course_number = #{courseNumber}
+    </delete>
+
+    <!-- 根据ID删除课程 -->
+    <delete id="deleteCoursesById" parameterType="java.lang.Integer">
+        DELETE FROM daizx_courses WHERE dzx_course_number = #{courseId}
+    </delete>
+
+    <!-- 批量删除课程 -->
+    <delete id="deleteCoursesBatch" parameterType="java.util.List">
+        DELETE FROM daizx_courses WHERE dzx_course_number IN
+        <foreach collection="courseIds" item="courseId" open="(" separator="," close=")">
+            #{courseId}
+        </foreach>
+    </delete>
+
+    <!-- 更新课程信息 -->
+    <update id="updateCourses" parameterType="org.example.database.entity.Courses">
+        UPDATE daizx_courses
+        <set>
+            <if test="courseName != null and courseName != ''">
+                dzx_course_name = #{courseName},
+            </if>
+            <if test="teacherNumber != null and teacherNumber != ''">
+                dzx_teacher_number = #{teacherNumber},
+            </if>
+            <if test="academicYear != null and academicYear != ''">
+                dzx_academic_year = #{academicYear},
+            </if>
+            <if test="semester != null and semester != ''">
+                dzx_semester = #{semester},
+            </if>
+            <if test="courseHours != null">
+                dzx_course_hours = #{courseHours},
+            </if>
+            <if test="courseType != null and courseType != ''">
+                dzx_course_type = #{courseType},
+            </if>
+            <if test="courseCredits != null">
+                dzx_course_credits = #{courseCredits},
+            </if>
+            <if test="classId != null">
+                dzx_class_id = #{classId},
+            </if>
+            <if test="courseStatus != null and courseStatus != ''">
+                dzx_course_status = #{courseStatus},
+            </if>
+            <if test="courseExamType != null and courseExamType != ''">
+                dzx_course_exam_type = #{courseExamType},
+            </if>
+        </set>
+        WHERE dzx_course_number = #{courseNumber}
+    </update>
+
+    <!-- 根据课程编号更新课程信息 -->
+    <update id="updateCoursesByNumber" parameterType="org.example.database.entity.Courses">
+        UPDATE daizx_courses
+        <set>
+            <if test="courseName != null and courseName != ''">
+                dzx_course_name = #{courseName},
+            </if>
+            <if test="teacherNumber != null and teacherNumber != ''">
+                dzx_teacher_number = #{teacherNumber},
+            </if>
+            <if test="academicYear != null and academicYear != ''">
+                dzx_academic_year = #{academicYear},
+            </if>
+            <if test="semester != null and semester != ''">
+                dzx_semester = #{semester},
+            </if>
+            <if test="courseHours != null">
+                dzx_course_hours = #{courseHours},
+            </if>
+            <if test="courseType != null and courseType != ''">
+                dzx_course_type = #{courseType},
+            </if>
+            <if test="courseCredits != null">
+                dzx_course_credits = #{courseCredits},
+            </if>
+            <if test="classId != null">
+                dzx_class_id = #{classId},
+            </if>
+            <if test="courseStatus != null and courseStatus != ''">
+                dzx_course_status = #{courseStatus},
+            </if>
+            <if test="courseExamType != null and courseExamType != ''">
+                dzx_course_exam_type = #{courseExamType},
+            </if>
+        </set>
+        WHERE dzx_course_number = #{courseNumber}
+    </update>
+
+    <!-- 根据ID查询课程 -->
+    <select id="selectCoursesById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_courses
+        WHERE dzx_course_number = #{courseId}
+    </select>
+
+    <!-- 根据课程编号查询课程 -->
+    <select id="selectCoursesByNumber" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_courses
+        WHERE dzx_course_number = #{courseNumber}
+    </select>
+
+    <!-- 查询所有课程 -->
+    <select id="selectAllCourses" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_courses
+        ORDER BY dzx_course_number
+    </select>
+
+    <!-- 根据课程名称模糊查询 -->
+    <select id="selectCoursesByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_courses
+        WHERE dzx_course_name LIKE CONCAT('%', #{courseName}, '%')
+        ORDER BY dzx_course_number
+    </select>
+
+    <!-- 根据教师编号查询课程 -->
+    <select id="selectCoursesByTeacher" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_courses
+        WHERE dzx_teacher_number = #{teacherNumber}
+        ORDER BY dzx_course_number
+    </select>
+
+    <!-- 根据班级ID查询课程 -->
+    <select id="selectCoursesByClassId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_courses
+        WHERE dzx_class_id = #{classId}
+        ORDER BY dzx_course_number
+    </select>
+
+    <!-- 分页查询课程信息 -->
+    <select id="selectCoursesByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_courses
+        <where>
+            <if test="courses.courseName != null and courses.courseName != ''">
+                AND dzx_course_name LIKE CONCAT('%', #{courses.courseName}, '%')
+            </if>
+            <if test="courses.teacherNumber != null and courses.teacherNumber != ''">
+                AND dzx_teacher_number = #{courses.teacherNumber}
+            </if>
+            <if test="courses.classId != null">
+                AND dzx_class_id = #{courses.classId}
+            </if>
+            <if test="courses.courseType != null and courses.courseType != ''">
+                AND dzx_course_type = #{courses.courseType}
+            </if>
+            <if test="courses.academicYear != null and courses.academicYear != ''">
+                AND dzx_academic_year = #{courses.academicYear}
+            </if>
+            <if test="courses.semester != null and courses.semester != ''">
+                AND dzx_semester = #{courses.semester}
+            </if>
+        </where>
+        ORDER BY dzx_course_number
+    </select>
 </mapper>

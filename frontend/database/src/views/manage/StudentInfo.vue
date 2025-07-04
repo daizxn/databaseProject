@@ -104,6 +104,12 @@
         <el-table-column prop="studentTotalCredits" label="学分"></el-table-column>
         <el-table-column prop="enrollmentDate" label="入学日期"></el-table-column>
         <el-table-column prop="studentStatus" label="状态"></el-table-column>
+        <el-table-column prop="weightedGpa" label="绩点"></el-table-column>
+        <el-table-column prop="departmentGpaRank" label="专业内排名">
+          <template #default="scope">
+            {{ scope.row.departmentGpaRank + '/' + scope.row.departmentTotalStudents }}
+          </template>
+        </el-table-column>
         <el-table-column fixed="right" label="Operations" min-width="120">
           <template #default="scope">
             <el-button text size="default" @click.prevent="updateRow(scope.row)">编辑 </el-button>
@@ -473,6 +479,7 @@ const getStudentsData = async (studentParam: Record<string, unknown>) => {
       },
     })
     studentsData.value = response.data.records
+    console.log('获取学生数据成功:', studentsData.value)
     total.value = response.data?.total
   } catch (error) {
     console.error('获取学生数据失败:', error)

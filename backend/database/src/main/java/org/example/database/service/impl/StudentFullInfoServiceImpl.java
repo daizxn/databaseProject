@@ -1,7 +1,7 @@
 package org.example.database.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.example.database.entity.StudentDTO;
+import org.example.database.entity.StudentFullInfo;
 import org.example.database.service.StudentFullInfoService;
 import org.example.database.mapper.StudentFullInfoMapper;
 import org.springframework.stereotype.Service;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 /**
 * @author daizxn
 * @description 针对表【view_student_full_info】的数据库操作Service实现
-* @createDate 2025-06-29 23:17:53
+* @createDate 2025-07-04 14:57:01
 */
 @Service
-public class StudentFullInfoServiceImpl extends ServiceImpl<StudentFullInfoMapper, StudentDTO>
+public class StudentFullInfoServiceImpl extends ServiceImpl<StudentFullInfoMapper, StudentFullInfo>
     implements StudentFullInfoService{
 
 }

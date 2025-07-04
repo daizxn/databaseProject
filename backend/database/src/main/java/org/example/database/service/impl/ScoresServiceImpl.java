@@ -1,7 +1,10 @@
 package org.example.database.service.impl;
 
 import com.github.jeffreyning.mybatisplus.service.MppServiceImpl;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.example.database.entity.Scores;
+import org.example.database.entity.StudentCourseTeacherScores;
+import org.example.database.entity.StudentScoresDTO;
 import org.example.database.service.ScoresService;
 import org.example.database.mapper.ScoresMapper;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,9 @@ import org.springframework.stereotype.Service;
 public class ScoresServiceImpl extends MppServiceImpl<ScoresMapper, Scores>
     implements ScoresService{
 
+    @Override
+    public IPage<StudentCourseTeacherScores> selectStudentScoresByPage(IPage<StudentCourseTeacherScores> page, StudentScoresDTO studentScoresDTO) {
+        return baseMapper.selectStudentScoresByPage(page, studentScoresDTO);
+    }
+
 }
-
-
-
-

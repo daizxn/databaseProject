@@ -16,8 +16,66 @@
             <result property="studentStatus" column="dzx_student_status" />
     </resultMap>
 
+    <resultMap id="StudentFullInfoResultMap" type="org.example.database.entity.StudentFullInfo">
+        <id property="studentNumber" column="dzx_student_number" />
+        <result property="studentName" column="dzx_student_name" />
+        <result property="studentGender" column="dzx_student_gender" />
+        <result property="studentAge" column="dzx_student_age" />
+        <result property="regionId" column="dzx_region_id" />
+        <result property="regionName" column="dzx_region_name" />
+        <result property="studentTotalCredits" column="dzx_student_total_credits" />
+        <result property="classId" column="dzx_class_id" />
+        <result property="className" column="dzx_class_name" />
+        <result property="departmentId" column="dzx_department_id" />
+        <result property="departmentName" column="dzx_department_name" />
+        <result property="enrollmentDate" column="dzx_enrollment_date" />
+        <result property="studentStatus" column="dzx_student_status" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         dzx_student_number,dzx_student_name,dzx_student_gender,dzx_student_age,dzx_region_id,dzx_student_total_credits,
         dzx_class_id,dzx_enrollment_date,dzx_student_status
     </sql>
+
+    <select id="selectStudentFullInfoByPage" resultMap="StudentFullInfoResultMap">
+        SELECT
+            s.dzx_student_number,
+            s.dzx_student_name,
+            s.dzx_student_gender,
+            s.dzx_student_age,
+            s.dzx_region_id,
+            r.dzx_region_name,
+            s.dzx_student_total_credits,
+            s.dzx_class_id,
+            c.dzx_class_name,
+            c.dzx_department_id,
+            d.dzx_department_name,
+            s.dzx_enrollment_date,
+            s.dzx_student_status
+        FROM daizx_students s
+        LEFT JOIN daizx_regions r ON s.dzx_region_id = r.dzx_region_id
+        LEFT JOIN daizx_classes c ON s.dzx_class_id = c.dzx_class_id
+        LEFT JOIN daizx_departments d ON c.dzx_department_id = d.dzx_department_id
+        <where>
+            <if test="student.studentNumber != null and student.studentNumber != ''">
+                AND s.dzx_student_number LIKE CONCAT('%', #{student.studentNumber}, '%')
+            </if>
+            <if test="student.studentName != null and student.studentName != ''">
+                AND s.dzx_student_name LIKE CONCAT('%', #{student.studentName}, '%')
+            </if>
+            <if test="student.studentGender != null and student.studentGender != ''">
+                AND s.dzx_student_gender LIKE CONCAT('%', #{student.studentGender}, '%')
+            </if>
+            <if test="student.regionName != null and student.regionName != ''">
+                AND r.dzx_region_name LIKE CONCAT('%', #{student.regionName}, '%')
+            </if>
+            <if test="student.className != null and student.className != ''">
+                AND c.dzx_class_name LIKE CONCAT('%', #{student.className}, '%')
+            </if>
+            <if test="student.departmentName != null and student.departmentName != ''">
+                AND d.dzx_department_name LIKE CONCAT('%', #{student.departmentName}, '%')
+            </if>
+        </where>
+        ORDER BY s.dzx_student_number
+    </select>
 </mapper>

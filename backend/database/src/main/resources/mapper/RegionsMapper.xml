@@ -9,7 +9,29 @@
             <result property="regionName" column="dzx_region_name" />
     </resultMap>
 
+    <resultMap id="RegionStudentCountResultMap" type="org.example.database.entity.RegionStudentCount">
+        <id property="regionId" column="dzx_region_id" />
+        <result property="regionName" column="dzx_region_name" />
+        <result property="studentCount" column="student_count" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         dzx_region_id,dzx_region_name
     </sql>
+
+    <select id="selectRegionStudentCountByPage" resultMap="RegionStudentCountResultMap">
+        SELECT
+            r.dzx_region_id,
+            r.dzx_region_name,
+            COALESCE(COUNT(s.dzx_student_number), 0) as student_count
+        FROM daizx_regions r
+        LEFT JOIN daizx_students s ON r.dzx_region_id = s.dzx_region_id
+        <where>
+            <if test="regionName != null and regionName != ''">
+                AND r.dzx_region_name LIKE CONCAT('%', #{regionName}, '%')
+            </if>
+        </where>
+        GROUP BY r.dzx_region_id, r.dzx_region_name
+        ORDER BY r.dzx_region_id
+    </select>
 </mapper>

@@ -13,4 +13,98 @@
     <sql id="Base_Column_List">
         dzx_class_id,dzx_class_name,dzx_department_id
     </sql>
+
+    <select id="selectDepartmentClassesInfo" resultType="map">
+        SELECT
+            d.dzx_department_id as departmentId,
+            d.dzx_department_name as departmentName,
+            c.dzx_class_id as classId,
+            c.dzx_class_name as className
+        FROM daizx_departments d
+        LEFT JOIN daizx_classes c ON d.dzx_department_id = c.dzx_department_id
+        ORDER BY d.dzx_department_id, c.dzx_class_id
+    </select>
+
+    <!-- ========== 基本CRUD操作SQL ========== -->
+
+    <!-- 新增班级 -->
+    <insert id="insertClasses" parameterType="org.example.database.entity.Classes">
+        <selectKey keyProperty="classId" resultType="java.lang.Integer" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO daizx_classes (dzx_class_name, dzx_department_id)
+        VALUES (#{className}, #{departmentId})
+    </insert>
+
+    <!-- 根据ID删除班级 -->
+    <delete id="deleteClassesById" parameterType="java.lang.Integer">
+        DELETE FROM daizx_classes WHERE dzx_class_id = #{classId}
+    </delete>
+
+    <!-- 批量删除班级 -->
+    <delete id="deleteClassesBatch" parameterType="java.util.List">
+        DELETE FROM daizx_classes WHERE dzx_class_id IN
+        <foreach collection="classIds" item="classId" open="(" separator="," close=")">
+            #{classId}
+        </foreach>
+    </delete>
+
+    <!-- 更新班级信息 -->
+    <update id="updateClasses" parameterType="org.example.database.entity.Classes">
+        UPDATE daizx_classes
+        <set>
+            <if test="className != null and className != ''">
+                dzx_class_name = #{className},
+            </if>
+            <if test="departmentId != null">
+                dzx_department_id = #{departmentId},
+            </if>
+        </set>
+        WHERE dzx_class_id = #{classId}
+    </update>
+
+    <!-- 根据ID查询班级 -->
+    <select id="selectClassesById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_classes
+        WHERE dzx_class_id = #{classId}
+    </select>
+
+    <!-- 查询所有班级 -->
+    <select id="selectAllClasses" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_classes
+        ORDER BY dzx_class_id
+    </select>
+
+    <!-- 根据专业ID查询班级列表 -->
+    <select id="selectClassesByDepartmentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_classes
+        WHERE dzx_department_id = #{departmentId}
+        ORDER BY dzx_class_id
+    </select>
+
+    <!-- 根据班级名称模糊查询 -->
+    <select id="selectClassesByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_classes
+        WHERE dzx_class_name LIKE CONCAT('%', #{className}, '%')
+        ORDER BY dzx_class_id
+    </select>
+
+    <!-- 分页查询班级信息 -->
+    <select id="selectClassesByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM daizx_classes
+        <where>
+            <if test="classes.departmentId != null">
+                AND dzx_department_id = #{classes.departmentId}
+            </if>
+            <if test="classes.className != null and classes.className != ''">
+                AND dzx_class_name LIKE CONCAT('%', #{classes.className}, '%')
+            </if>
+        </where>
+        ORDER BY dzx_class_id
+    </select>
 </mapper>

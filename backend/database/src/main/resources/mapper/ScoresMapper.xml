@@ -16,8 +16,76 @@
             <result property="scoreStatus" column="dzx_score_status" />
     </resultMap>
 
+    <resultMap id="StudentCourseTeacherScoresResultMap" type="org.example.database.entity.StudentCourseTeacherScores">
+        <id property="studentNumber" column="dzx_student_number" />
+        <result property="studentName" column="dzx_student_name" />
+        <result property="className" column="dzx_class_name" />
+        <result property="departmentName" column="dzx_department_name" />
+        <result property="courseNumber" column="dzx_course_number" />
+        <result property="courseName" column="dzx_course_name" />
+        <result property="score" column="dzx_score" />
+        <result property="gradeLevel" column="dzx_grade_level" />
+        <result property="teacherNumber" column="dzx_teacher_number" />
+        <result property="teacherName" column="dzx_teacher_name" />
+        <result property="academicYear" column="dzx_academic_year" />
+        <result property="semester" column="dzx_semester" />
+        <result property="examDate" column="dzx_exam_date" />
+        <result property="scoreStatus" column="dzx_score_status" />
+    </resultMap>
+
     <sql id="Base_Column_List">
         dzx_student_number,dzx_course_number,dzx_academic_year,dzx_semester,dzx_score,dzx_teacher_number,
         dzx_grade_level,dzx_exam_date,dzx_score_status
     </sql>
+
+    <select id="selectStudentScoresByPage" resultMap="StudentCourseTeacherScoresResultMap">
+        SELECT
+            sc.dzx_student_number,
+            s.dzx_student_name,
+            c.dzx_class_name,
+            d.dzx_department_name,
+            sc.dzx_course_number,
+            co.dzx_course_name,
+            sc.dzx_score,
+            sc.dzx_grade_level,
+            sc.dzx_teacher_number,
+            t.dzx_teacher_name,
+            sc.dzx_academic_year,
+            sc.dzx_semester,
+            sc.dzx_exam_date,
+            sc.dzx_score_status
+        FROM daizx_scores sc
+        LEFT JOIN daizx_students s ON sc.dzx_student_number = s.dzx_student_number
+        LEFT JOIN daizx_classes c ON s.dzx_class_id = c.dzx_class_id
+        LEFT JOIN daizx_departments d ON c.dzx_department_id = d.dzx_department_id
+        LEFT JOIN daizx_courses co ON sc.dzx_course_number = co.dzx_course_number
+        LEFT JOIN daizx_teachers t ON sc.dzx_teacher_number = t.dzx_teacher_number
+        <where>
+            <if test="studentScores.studentNumber != null and studentScores.studentNumber != ''">
+                AND sc.dzx_student_number LIKE CONCAT('%', #{studentScores.studentNumber}, '%')
+            </if>
+            <if test="studentScores.studentName != null and studentScores.studentName != ''">
+                AND s.dzx_student_name LIKE CONCAT('%', #{studentScores.studentName}, '%')
+            </if>
+            <if test="studentScores.className != null and studentScores.className != ''">
+                AND c.dzx_class_name LIKE CONCAT('%', #{studentScores.className}, '%')
+            </if>
+            <if test="studentScores.departmentName != null and studentScores.departmentName != ''">
+                AND d.dzx_department_name LIKE CONCAT('%', #{studentScores.departmentName}, '%')
+            </if>
+            <if test="studentScores.courseNumber != null and studentScores.courseNumber != ''">
+                AND sc.dzx_course_number LIKE CONCAT('%', #{studentScores.courseNumber}, '%')
+            </if>
+            <if test="studentScores.courseName != null and studentScores.courseName != ''">
+                AND co.dzx_course_name LIKE CONCAT('%', #{studentScores.courseName}, '%')
+            </if>
+            <if test="studentScores.teacherNumber != null and studentScores.teacherNumber != ''">
+                AND sc.dzx_teacher_number LIKE CONCAT('%', #{studentScores.teacherNumber}, '%')
+            </if>
+            <if test="studentScores.teacherName != null and studentScores.teacherName != ''">
+                AND t.dzx_teacher_name LIKE CONCAT('%', #{studentScores.teacherName}, '%')
+            </if>
+        </where>
+        ORDER BY sc.dzx_student_number
+    </select>
 </mapper>

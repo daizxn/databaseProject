@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
-import org.example.database.entity.StudentDTO;
+import org.example.database.entity.StudentFullInfo;
 import org.example.database.entity.Students;
 import org.example.database.service.StudentFullInfoService;
 import org.example.database.service.StudentsService;
@@ -123,14 +123,6 @@ public class StudentsController {
         return student != null ? Result.success(student) : Result.error(ResultCodeEnum.SELECT_ERROR);
     }
 
-    @GetMapping("/selectById/FullInfo/{number}")
-    @ResponseBody
-    public Result selectByIdFullInfo(@PathVariable String number) {
-        LambdaQueryWrapper<StudentDTO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(StudentDTO::getStudentNumber, number);
-        StudentDTO studentDTO = studentFullInfoService.getOne(queryWrapper);
-        return studentDTO != null ? Result.success(studentDTO) : Result.error(ResultCodeEnum.SELECT_ERROR);
-    }
 
     @GetMapping("/selectAll")
     @ResponseBody
@@ -166,11 +158,11 @@ public class StudentsController {
 
     @GetMapping("/selectByPage/FullInfo")
     @ResponseBody
-    public Result selectByPageFullInfo(StudentDTO studentDTO,
+    public Result selectByPageFullInfo(StudentFullInfo studentDTO,
                                        @RequestParam(defaultValue = "1") Integer pageNum,
                                        @RequestParam(defaultValue = "10") Integer pageSize) {
-        QueryWrapper<StudentDTO> queryWrapper = new QueryWrapper<>();
-        Field[] fields = StudentDTO.class.getDeclaredFields();
+        QueryWrapper<StudentFullInfo> queryWrapper = new QueryWrapper<>();
+        Field[] fields = StudentFullInfo.class.getDeclaredFields();
         for(Field field : fields) {
             try {
                 field.setAccessible(true);
@@ -187,8 +179,8 @@ public class StudentsController {
 
         queryWrapper.orderByAsc("dzx_student_number"); // 按学号升序排序
 
-        IPage<StudentDTO> page =new Page<>(pageNum,pageSize);
-        IPage<StudentDTO> studentsPage = studentFullInfoService.page(page, queryWrapper);
+        IPage<StudentFullInfo> page =new Page<>(pageNum,pageSize);
+        IPage<StudentFullInfo> studentsPage = studentFullInfoService.page(page, queryWrapper);
 
         if (studentsPage.getRecords().isEmpty()) {
             return Result.error(ResultCodeEnum.NO_GOODS);

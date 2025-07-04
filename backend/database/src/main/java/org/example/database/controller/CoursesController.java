@@ -134,7 +134,7 @@ public class CoursesController {
     @ResponseBody
     public Result selectByName(@PathVariable String name) {
         QueryWrapper<Courses> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("dzx_dname", name);
+        queryWrapper.like("dzx_department_name", name);
         List<Courses> coursesList = coursesService.list(queryWrapper);
         return !coursesList.isEmpty() ? Result.success(coursesList) : Result.error(ResultCodeEnum.NO_GOODS);
     }
