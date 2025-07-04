@@ -3,8 +3,11 @@ package org.example.database.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.example.database.entity.Users;
+import org.example.database.entity.LoginResult;
 import org.example.database.service.UsersService;
 import org.example.database.mapper.UsersMapper;
+import org.example.database.utils.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,9 @@ import java.util.List;
 @Service
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
     implements UsersService{
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // ========== 基本CRUD操作实现 ==========
 
@@ -87,6 +93,40 @@ public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users>
     @Override
     public Users login(String username, String password) {
         return baseMapper.login(username, password);
+    }
+
+    @Override
+    public LoginResult loginWithToken(String username, String password) {
+        try {
+            // 验证用户名和密码
+            Users user = baseMapper.login(username, password);
+
+            if (user == null) {
+                return LoginResult.failure("用户名或密码错误");
+            }
+
+            // 检查用户是否被禁用
+            if (!user.getEnable()) {
+                return LoginResult.failure("用户账户已被禁用");
+            }
+
+            // 生成JWT Token
+            String token = jwtUtil.generateToken(user.getRefId(), user.getRoles(), user.getUsername());
+
+            // 创建返回的用户信息（不包含密码）
+            Users userInfo = new Users();
+            userInfo.setId(user.getId());
+            userInfo.setUsername(user.getUsername());
+            userInfo.setRefId(user.getRefId());
+            userInfo.setEnable(user.getEnable());
+            userInfo.setRoles(user.getRoles());
+            // 不设置password字段
+
+            return LoginResult.success(token, userInfo);
+
+        } catch (Exception e) {
+            return LoginResult.failure("登录过程中发生错误：" + e.getMessage());
+        }
     }
 
     @Override

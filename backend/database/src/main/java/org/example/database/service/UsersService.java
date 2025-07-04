@@ -1,6 +1,7 @@
 package org.example.database.service;
 
 import org.example.database.entity.Users;
+import org.example.database.entity.LoginResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
@@ -106,6 +107,14 @@ public interface UsersService extends IService<Users> {
      * @return 用户信息（验证成功）或null（验证失败）
      */
     Users login(String username, String password);
+
+    /**
+     * 用户登录验证并生成JWT Token
+     * @param username 用户名
+     * @param password 密码
+     * @return 包含JWT Token的登录结果
+     */
+    LoginResult loginWithToken(String username, String password);
 
     /**
      * 修改用户密码

@@ -205,52 +205,6 @@ public class UsersController {
     }
 
     /**
-     * 用户登录
-     * @param loginRequest 登录请求（包含用户名和密码）
-     * @return 返回登录结果和用户信息
-     */
-    @PostMapping("/login")
-    @ResponseBody
-    public Result login(@RequestBody LoginRequest loginRequest) {
-        if (loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty() ||
-            loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()) {
-            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
-        }
-
-        Users users = usersService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        if (users != null) {
-            // 不返回密码信息
-            users.setPassword(null);
-            return Result.success(users);
-        } else {
-            return Result.error(ResultCodeEnum.LOGIN_ERROR);
-        }
-    }
-
-    /**
-     * 修改用户密码
-     * @param changePasswordRequest 修改密码请求
-     * @return 返回Result状态
-     */
-    @PutMapping("/changePassword")
-    @ResponseBody
-    public Result changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
-        if (changePasswordRequest.getUsername() == null || changePasswordRequest.getUsername().isEmpty() ||
-            changePasswordRequest.getOldPassword() == null || changePasswordRequest.getOldPassword().isEmpty() ||
-            changePasswordRequest.getNewPassword() == null || changePasswordRequest.getNewPassword().isEmpty()) {
-            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
-        }
-
-        boolean success = usersService.changePassword(
-                changePasswordRequest.getUsername(),
-                changePasswordRequest.getOldPassword(),
-                changePasswordRequest.getNewPassword()
-        );
-
-        return success ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
-    }
-
-    /**
      * 启用/禁用用户
      * @param id 用户ID
      * @param enable 启用状态
@@ -267,30 +221,4 @@ public class UsersController {
         return success ? Result.success() : Result.error(ResultCodeEnum.UPDATE_ERROR);
     }
 
-    // 内部类用于接收登录请求
-    public static class LoginRequest {
-        private String username;
-        private String password;
-
-        // getters and setters
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
-    }
-
-    // 内部类用于接收修改密码请求
-    public static class ChangePasswordRequest {
-        private String username;
-        private String oldPassword;
-        private String newPassword;
-
-        // getters and setters
-        public String getUsername() { return username; }
-        public void setUsername(String username) { this.username = username; }
-        public String getOldPassword() { return oldPassword; }
-        public void setOldPassword(String oldPassword) { this.oldPassword = oldPassword; }
-        public String getNewPassword() { return newPassword; }
-        public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
-    }
 }

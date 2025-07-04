@@ -1,6 +1,9 @@
 package org.example.database.common.enums;
+import lombok.Getter;
 
 
+
+@Getter
 public enum ResultCodeEnum {
     SUCCESS("200", "成功"),
 
