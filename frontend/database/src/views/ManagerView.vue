@@ -327,4 +327,138 @@ const handleLogout = async () => {
     font-size: 14px;
   }
 }
+
+/* ElMessageBox 样式定制 */
+:deep(.el-message-box) {
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+:deep(.el-message-box__header) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 25px;
+  border-bottom: none;
+}
+
+:deep(.el-message-box__title) {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+:deep(.el-message-box__headerbtn) {
+  top: 20px;
+  right: 20px;
+}
+
+:deep(.el-message-box__headerbtn .el-message-box__close) {
+  color: white;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-message-box__headerbtn .el-message-box__close:hover) {
+  color: rgba(255, 255, 255, 0.8);
+  transform: scale(1.1);
+}
+
+:deep(.el-message-box__content) {
+  padding: 30px 25px 20px 25px;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+:deep(.el-message-box__icon) {
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+:deep(.el-message-box__icon.el-icon--warning) {
+  color: #e6a23c;
+}
+
+:deep(.el-message-box__message) {
+  color: #2c3e50;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+:deep(.el-message-box__btns) {
+  padding: 15px 25px 25px 25px;
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid rgba(240, 240, 240, 0.5);
+}
+
+:deep(.el-message-box__btns .el-button) {
+  border-radius: 12px;
+  font-weight: 500;
+  padding: 10px 20px;
+  min-width: 80px;
+  transition: all 0.3s ease;
+}
+
+:deep(.el-message-box__btns .el-button--primary) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+}
+
+:deep(.el-message-box__btns .el-button--primary:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+:deep(.el-message-box__btns .el-button--default) {
+  background: rgba(240, 240, 240, 0.8);
+  border: 1px solid rgba(220, 220, 220, 0.6);
+  color: #606266;
+}
+
+:deep(.el-message-box__btns .el-button--default:hover) {
+  transform: translateY(-1px);
+  background: rgba(230, 230, 230, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ElMessageBox 遮罩层样式 */
+:deep(.el-overlay) {
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+/* ElMessageBox 动画增强 */
+:deep(.el-message-box.msgbox-fade-enter-active) {
+  animation: messageBoxFadeIn 0.3s ease-out;
+}
+
+:deep(.el-message-box.msgbox-fade-leave-active) {
+  animation: messageBoxFadeOut 0.3s ease-in;
+}
+
+@keyframes messageBoxFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes messageBoxFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+}
 </style>

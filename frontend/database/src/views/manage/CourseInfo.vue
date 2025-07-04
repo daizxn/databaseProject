@@ -111,7 +111,7 @@
     </el-container>
     <el-container class="data">
       <el-table style="width: 100%" :data="courseInfoData" @expand-change="handleExpand">
-        <el-table-column type="expand">
+        <el-table-column fit type="expand">
           <template #default="props">
             <div style="padding: 20px">
               <h4>{{ props.row.courseName }}({{ props.row.courseNumber }}) - 学生成绩列表</h4>
@@ -141,21 +141,21 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="课程编号" prop="courseNumber"></el-table-column>
-        <el-table-column label="课程名称" prop="courseName"></el-table-column>
-        <el-table-column label="学年" prop="academicYear"></el-table-column>
-        <el-table-column label="学期" prop="semester"></el-table-column>
-        <el-table-column label="专业" prop="departmentName"></el-table-column>
-        <el-table-column label="班级" prop="className"></el-table-column>
-        <el-table-column label="课程状态" prop="courseStatus"></el-table-column>
-        <el-table-column label="考核方式" prop="courseExamType"></el-table-column>
-        <el-table-column label="课程类型" prop="courseType"></el-table-column>
-        <el-table-column label="学分" prop="courseCredits"></el-table-column>
-        <el-table-column label="学时" prop="courseHours"></el-table-column>
-        <el-table-column label="教师姓名" prop="teacherName"></el-table-column>
-        <el-table-column label="教师编号" prop="teacherNumber"></el-table-column>
-        <el-table-column label="教师职称" prop="teacherTitle"></el-table-column>
-        <el-table-column fixed="right" label="Operations" min-width="240">
+        <el-table-column fit label="课程编号" prop="courseNumber"></el-table-column>
+        <el-table-column fit label="课程名称" prop="courseName"></el-table-column>
+        <el-table-column fit label="学年" prop="academicYear"></el-table-column>
+        <el-table-column fit label="学期" prop="semester"></el-table-column>
+        <el-table-column fit label="专业" prop="departmentName"></el-table-column>
+        <el-table-column fit label="班级" prop="className"></el-table-column>
+        <el-table-column fit label="课程状态" prop="courseStatus"></el-table-column>
+        <el-table-column fit label="考核方式" prop="courseExamType"></el-table-column>
+        <el-table-column fit label="课程类型" prop="courseType"></el-table-column>
+        <el-table-column fit label="学分" prop="courseCredits"></el-table-column>
+        <el-table-column fit label="学时" prop="courseHours"></el-table-column>
+        <el-table-column fit label="教师姓名" prop="teacherName"></el-table-column>
+        <el-table-column fit label="教师编号" prop="teacherNumber"></el-table-column>
+        <el-table-column fit label="教师职称" prop="teacherTitle"></el-table-column>
+        <el-table-column fit fixed="right" label="Operations" min-width="240">
           <template #default="scope">
             <el-button text size="default" @click.prevent="updateRow(scope.row)">编辑 </el-button>
             <el-button text size="default" @click.prevent="deleteRow(scope.row.courseNumber)"
@@ -539,6 +539,7 @@ const getStudentScores = async (courseNumber: string) => {
 
     if (response.data && Array.isArray(response.data)) {
       studentScoresMap.value[courseNumber] = response.data
+      console.log(`获取课程 ${courseNumber} 的学生成绩成功:`, studentScoresMap.value[courseNumber])
     } else {
       studentScoresMap.value[courseNumber] = []
     }

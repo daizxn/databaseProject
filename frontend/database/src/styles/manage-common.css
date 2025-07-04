@@ -1,5 +1,4 @@
 /* 通用管理页面样式 - 与 LoginView 和 WelcomeView 风格保持一致 */
-
 .layout-container {
   display: flex;
   flex-direction: column;
@@ -98,6 +97,12 @@
 
 :deep(.el-table__header) {
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+:deep(.el-table__header-wrapper) {
+  justify-content: center;
+  text-align: center;
+  display: flex;
 }
 
 :deep(.el-table__header th) {

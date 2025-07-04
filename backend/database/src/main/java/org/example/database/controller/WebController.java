@@ -8,6 +8,7 @@ import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Users;
 import org.example.database.entity.LoginResult;
 import org.example.database.service.UsersService;
+import org.example.database.utils.UserInfoUtil;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -154,6 +155,44 @@ public class WebController {
         return Result.success("登出成功");
     }
 
+    /**
+     * 获取当前用户信息（需要JWT Token验证）
+     * 用于测试JWT拦截器是否正常工作
+     */
+    @GetMapping("/currentUser")
+    @ResponseBody
+    public Result getCurrentUser() {
+        String username = UserInfoUtil.getCurrentUsername();
+        String refId = UserInfoUtil.getCurrentRefId();
+        String roles = UserInfoUtil.getCurrentRoles();
+
+        if (username == null) {
+            return Result.error(ResultCodeEnum.LOGIN_ERROR.getCode(), "无法获取用户信息");
+        }
+
+        // 构建当前用户信息
+        CurrentUserInfo userInfo = new CurrentUserInfo();
+        userInfo.setUsername(username);
+        userInfo.setRefId(refId);
+        userInfo.setRoles(roles);
+        userInfo.setIsAdmin(UserInfoUtil.isAdmin());
+
+        return Result.success(userInfo);
+    }
+
+    /**
+     * 管理员专用接口（测试角色权限）
+     */
+    @GetMapping("/admin/test")
+    @ResponseBody
+    public Result adminTest() {
+        if (!UserInfoUtil.isAdmin()) {
+            return Result.error(ResultCodeEnum.NO_PERMISSION.getCode(), "权限不足，需要管理员权限");
+        }
+
+        return Result.success("管理员接口访问成功");
+    }
+
     // ========== 内部类定义 ==========
 
     /**
@@ -188,5 +227,25 @@ public class WebController {
         private String password;
         private String refId;
         private String roles;
+    }
+
+    /**
+     * 当前用户信息封装类
+     */
+    public static class CurrentUserInfo {
+        private String username;
+        private String refId;
+        private String roles;
+        private Boolean isAdmin;
+
+        // getters and setters
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+        public String getRefId() { return refId; }
+        public void setRefId(String refId) { this.refId = refId; }
+        public String getRoles() { return roles; }
+        public void setRoles(String roles) { this.roles = roles; }
+        public Boolean getIsAdmin() { return isAdmin; }
+        public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
     }
 }
