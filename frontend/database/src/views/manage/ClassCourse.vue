@@ -45,20 +45,55 @@
     </el-container>
     <el-container class="data">
       <el-table style="width: 100%" :data="courseInfoData">
-        <el-table-column label="课程编号" prop="courseNumber"></el-table-column>
-        <el-table-column label="课程名称" prop="courseName"></el-table-column>
-        <el-table-column label="学年" prop="academicYear"></el-table-column>
-        <el-table-column label="学期" prop="semester"></el-table-column>
-        <el-table-column label="专业" prop="departmentName"></el-table-column>
-        <el-table-column label="班级" prop="className"></el-table-column>
-        <el-table-column label="课程状态" prop="courseStatus"></el-table-column>
-        <el-table-column label="考核方式" prop="courseExamType"></el-table-column>
-        <el-table-column label="课程类型" prop="courseType"></el-table-column>
-        <el-table-column label="学分" prop="courseCredits"></el-table-column>
-        <el-table-column label="学时" prop="courseHours"></el-table-column>
-        <el-table-column label="教师姓名" prop="teacherName"></el-table-column>
-        <el-table-column label="教师编号" prop="teacherNumber"></el-table-column>
-        <el-table-column label="教师职称" prop="teacherTitle"></el-table-column>
+        <el-table-column label="课程编号" prop="courseNumber" width="120"></el-table-column>
+        <el-table-column label="课程名称" prop="courseName" min-width="150"></el-table-column>
+        <el-table-column label="学年" prop="academicYear" width="100"></el-table-column>
+        <el-table-column
+          label="学期"
+          prop="semester"
+          width="80"
+          class-name="number-column"
+        ></el-table-column>
+        <el-table-column label="专业" prop="departmentName" min-width="120"></el-table-column>
+        <el-table-column label="班级" prop="className" width="100"></el-table-column>
+        <el-table-column
+          label="课程状态"
+          prop="courseStatus"
+          width="100"
+          class-name="status-column"
+        >
+          <template #default="scope">
+            <el-tag
+              :type="
+                scope.row.courseStatus === '进行中'
+                  ? 'success'
+                  : scope.row.courseStatus === '已结束'
+                    ? 'info'
+                    : 'warning'
+              "
+              size="small"
+            >
+              {{ scope.row.courseStatus }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="考核方式" prop="courseExamType" width="100"></el-table-column>
+        <el-table-column label="课程类型" prop="courseType" width="100"></el-table-column>
+        <el-table-column
+          label="学分"
+          prop="courseCredits"
+          width="80"
+          class-name="number-column"
+        ></el-table-column>
+        <el-table-column
+          label="学时"
+          prop="courseHours"
+          width="80"
+          class-name="number-column"
+        ></el-table-column>
+        <el-table-column label="教师姓名" prop="teacherName" width="100"></el-table-column>
+        <el-table-column label="教师编号" prop="teacherNumber" width="120"></el-table-column>
+        <el-table-column label="教师职称" prop="teacherTitle" width="100"></el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
@@ -148,31 +183,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.layout-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.select {
-  padding: 20px;
-}
-
-.select .select-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.select .select-form .el-form-item {
-  min-width: 250px;
-  flex: 0 0 auto;
-}
-
-.data {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
+@import '@/styles/manage-common.css';
 </style>

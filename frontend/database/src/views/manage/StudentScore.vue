@@ -45,7 +45,7 @@
         <el-table-column prop="courseName" label="课程" />
         <el-table-column prop="teacherName" label="教师姓名" />
         <el-table-column prop="score" label="分数" />
-        <el-table-column fixed="right" label="Operations" min-width="120">
+        <el-table-column fixed="right" label="Operations" min-width="240">
           <template #default="scope">
             <el-button
               text
@@ -150,30 +150,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.layout-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.select {
-  padding: 20px;
-}
-
-.select .select-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.select .select-form .el-form-item {
-  min-width: 250px;
-  flex: 0 0 auto;
-}
-.data {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
+@import '@/styles/manage-common.css';
 </style>

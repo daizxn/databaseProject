@@ -50,31 +50,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.layout-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.select {
-  padding: 20px;
-}
-
-.select .select-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.select .select-form .el-form-item {
-  min-width: 250px;
-  flex: 0 0 auto;
-}
-
-.data {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
+@import '@/styles/manage-common.css';
 </style>

@@ -5,6 +5,11 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue'),
+    },
+    {
       path: '/home',
       name: 'home',
       component: HomeView,
@@ -13,7 +18,13 @@ const router = createRouter({
       path: '/',
       name: 'manage',
       component: () => import('../views/ManagerView.vue'),
+      redirect: '/welcome',
       children: [
+        {
+          path: 'welcome',
+          name: 'welcome',
+          component: () => import('../views/WelcomeView.vue'),
+        },
         {
           path: 'student-info',
           name: 'student-info',
@@ -52,6 +63,30 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  // 获取用户信息
+  const userInfo = localStorage.getItem('xm-user') || sessionStorage.getItem('xm-user')
+
+  // 如果要访问登录页面
+  if (to.path === '/login') {
+    // 如果已经登录，重定向到主页
+    if (userInfo) {
+      next('/')
+    } else {
+      next()
+    }
+  } else {
+    // 访问其他页面需要登录
+    if (userInfo) {
+      next()
+    } else {
+      // 未登录，重定向到登录页面
+      next('/login')
+    }
+  }
 })
 
 export default router

@@ -155,14 +155,10 @@
         <el-table-column label="教师姓名" prop="teacherName"></el-table-column>
         <el-table-column label="教师编号" prop="teacherNumber"></el-table-column>
         <el-table-column label="教师职称" prop="teacherTitle"></el-table-column>
-        <el-table-column fixed="right" label="Operations" min-width="120">
+        <el-table-column fixed="right" label="Operations" min-width="240">
           <template #default="scope">
             <el-button text size="default" @click.prevent="updateRow(scope.row)">编辑 </el-button>
-            <el-button
-              text
-              size="default"
-              style="color: red"
-              @click.prevent="deleteRow(scope.row.courseNumber)"
+            <el-button text size="default" @click.prevent="deleteRow(scope.row.courseNumber)"
               >删除
             </el-button>
           </template>
@@ -591,31 +587,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.layout-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.select {
-  padding: 20px;
-}
-
-.select .select-form {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.select .select-form .el-form-item {
-  min-width: 250px;
-  flex: 0 0 auto;
-}
-
-.data {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
+@import '@/styles/manage-common.css';
 </style>
