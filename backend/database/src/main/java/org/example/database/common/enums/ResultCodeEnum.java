@@ -26,7 +26,7 @@ public enum ResultCodeEnum {
 
     NO_AUTH("403", "无权限访问"),
     NO_GOODS("404", "信息不存在"),
-    ;
+    LOGIN_ERROR("405","登录失败" );
 
     public final String code;
     public final String msg;
