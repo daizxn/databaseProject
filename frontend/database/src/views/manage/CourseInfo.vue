@@ -415,6 +415,7 @@ const getCourseData = async (
   pageNum: number,
   pageSize: number,
 ) => {
+  console.log('查询课程参数:', courseParam)
   const response = await request.get('/courses/selectByPage/FullInfo', {
     params: {
       pageNum: pageNum,
@@ -425,6 +426,7 @@ const getCourseData = async (
   if (response.data === null) {
     courseInfoData.value = []
     total.value = 0
+    console.error('获取课程数据失败: 数据为空', response)
   } else {
     courseInfoData.value = response.data.records
     console.log('获取课程数据成功:', courseInfoData.value)

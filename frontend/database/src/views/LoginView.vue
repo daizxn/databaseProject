@@ -150,8 +150,6 @@ const handleLogin = async () => {
     })
 
     if (response.code === '200') {
-      ElMessage.success(response.data.message || '登录成功！')
-
       // 保存用户信息到本地存储
       const userInfo = {
         token: response.data.token,

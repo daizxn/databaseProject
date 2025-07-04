@@ -9,10 +9,13 @@ import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
 import org.example.database.entity.Courses;
 import org.example.database.entity.CoursesDTO;
+import org.example.database.entity.Students;
 import org.example.database.entity.TeacherCourses;
 import org.example.database.service.CoursesService;
+import org.example.database.service.StudentsService;
 import org.example.database.service.TeacherCoursesService;
 import org.example.database.utils.NameChangeUtil;
+import org.example.database.utils.PermissionUtil;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,9 @@ public class CoursesController {
 
     @Resource
     private TeacherCoursesService teacherCoursesService;
+
+    @Resource
+    private StudentsService studentsService;
 
     /**
      * 插入
@@ -160,6 +166,33 @@ public class CoursesController {
     public Result selectByPageFullInfo(TeacherCourses teacherCourses,
                                        @RequestParam(defaultValue = "1") Integer pageNum,
                                        @RequestParam(defaultValue = "10") Integer pageSize) {
+
+        // 权限验证：学生只能查询自己班级的课程，其他情况必须是管理员
+        if (PermissionUtil.isStudent()) {
+            // 学生只能查询自己班级的课程
+            String currentStudentNumber = PermissionUtil.getCurrentStudentNumber();
+            if (currentStudentNumber == null) {
+                return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+            }
+
+            // 查询当前学生的班级信息
+            LambdaQueryWrapper<Students> studentQueryWrapper = new LambdaQueryWrapper<>();
+            studentQueryWrapper.eq(Students::getStudentNumber, currentStudentNumber);
+            Students currentStudent = studentsService.getOne(studentQueryWrapper);
+
+            if (currentStudent == null || currentStudent.getClassId() == null) {
+                return Result.error(ResultCodeEnum.NO_GOODS);
+            }
+
+            // 限制查询条件为当前学生所在班级的课程
+            // 创建新的TeacherCourses对象，确保只查询学生所在班级的课程
+            teacherCourses.setClassId(currentStudent.getClassId());
+        } else if (!PermissionUtil.isAdmin()) {
+            // 如果不是学生，必须是管理员才能使用此接口
+            return Result.error(ResultCodeEnum.PARAM_ERROR);
+        }
+        // 管理员可以查询所有课程信息，无需额外限制
+
         QueryWrapper<TeacherCourses> queryWrapper = new QueryWrapper<>();
         //若对应字段不为空，则设为参数
         Field[] fields = TeacherCourses.class.getDeclaredFields();

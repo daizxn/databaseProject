@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
@@ -20,10 +20,110 @@ const userInfo = ref<{
 // 当前激活的导航项
 const activeIndex = ref('/')
 
+// 用户角色
+const userRole = ref('')
+
+// 根据角色过滤的导航菜单
+const filteredMenuItems = computed(() => {
+  const role = userRole.value
+
+  // 基础菜单项
+  const baseMenuItems: Array<{
+    key: string
+    icon: string
+    iconColor?: string
+    label: string
+    type: 'item' | 'submenu'
+    children?: Array<{ key: string; label: string }>
+  }> = [
+    {
+      key: '/',
+      icon: 'house',
+      label: '首页',
+      type: 'item',
+    },
+  ]
+
+  // 根据角色添加菜单项
+  if (role === 'student') {
+    // 学生：只能看到 welcome, class-course, student-score
+    baseMenuItems.push(
+      {
+        key: 'student-score',
+        icon: 'document',
+        iconColor: '#909399',
+        label: '学生成绩查询',
+        type: 'item',
+      },
+      {
+        key: 'class-course',
+        icon: 'reading',
+        iconColor: '#f56c6c',
+        label: '班级课程查看',
+        type: 'item',
+      },
+    )
+  } else if (role === 'teacher') {
+    // 教师：只能看到 welcome, course-info
+    baseMenuItems.push({
+      key: 'course-info',
+      icon: 'reading',
+      iconColor: '#f56c6c',
+      label: '课程信息管理',
+      type: 'item',
+    })
+  } else if (role === 'admin') {
+    // 管理员：可以看到所有菜单
+    baseMenuItems.push(
+      {
+        key: 'student',
+        icon: 'user',
+        iconColor: '#67c23a',
+        label: '学生管理',
+        type: 'submenu',
+        children: [
+          { key: 'student-info', label: '学生信息查看' },
+          { key: 'regions', label: '学生地区统计' },
+          { key: 'student-score', label: '学生成绩查询' },
+        ],
+      },
+      {
+        key: 'teacher',
+        icon: 'avatar',
+        iconColor: '#e6a23c',
+        label: '教师管理',
+        type: 'submenu',
+        children: [{ key: 'teacher-info', label: '教师信息查看' }],
+      },
+      {
+        key: 'course',
+        icon: 'reading',
+        iconColor: '#f56c6c',
+        label: '课程管理',
+        type: 'submenu',
+        children: [
+          { key: 'course-info', label: '课程信息管理' },
+          { key: 'class-course', label: '班级课程查看' },
+        ],
+      },
+    )
+  }
+
+  return baseMenuItems
+})
+
 onMounted(() => {
   const userStr = localStorage.getItem('xm-user') || sessionStorage.getItem('xm-user')
   if (userStr) {
-    userInfo.value = JSON.parse(userStr)
+    try {
+      userInfo.value = JSON.parse(userStr)
+      userRole.value = userInfo.value?.userInfo?.roles || ''
+    } catch (error) {
+      console.error('解析用户信息失败:', error)
+      localStorage.removeItem('xm-user')
+      sessionStorage.removeItem('xm-user')
+      router.push('/login')
+    }
   }
 
   // 设置当前激活的导航项
@@ -70,8 +170,6 @@ const handleLogout = async () => {
     localStorage.removeItem('xm-user')
     sessionStorage.removeItem('xm-user')
 
-    ElMessage.success('退出登录成功')
-
     // 跳转到登录页面
     router.push('/login')
   } catch {
@@ -87,6 +185,19 @@ const handleLogout = async () => {
       <div class="toolbar">
         <span class="system-title">学生成绩管理系统</span>
         <div class="user-info">
+          <!-- 角色显示 -->
+          <div class="role-indicator">
+            <el-tag
+              :type="
+                userRole === 'admin' ? 'danger' : userRole === 'teacher' ? 'warning' : 'success'
+              "
+              size="small"
+              style="margin-right: 12px"
+            >
+              {{ userRole === 'admin' ? '管理员' : userRole === 'teacher' ? '教师' : '学生' }}
+            </el-tag>
+          </div>
+
           <el-dropdown @command="handleCommand" trigger="click">
             <div class="user-avatar">
               <el-icon style="margin-right: 8px"><i-ep-user /></el-icon>
@@ -115,37 +226,29 @@ const handleLogout = async () => {
         :router="true"
         @select="handleSelect"
       >
-        <el-menu-item index="/" class="nav-item">
-          <el-icon><i-ep-house /></el-icon>
-          <span>首页</span>
-        </el-menu-item>
+        <!-- 动态渲染菜单项 -->
+        <template v-for="item in filteredMenuItems" :key="item.key">
+          <!-- 普通菜单项 -->
+          <el-menu-item v-if="item.type === 'item'" :index="item.key" class="nav-item">
+            <el-icon :color="item.iconColor">
+              <component :is="`i-ep-${item.icon}`" />
+            </el-icon>
+            <span>{{ item.label }}</span>
+          </el-menu-item>
 
-        <el-sub-menu index="student" class="nav-item">
-          <template #title>
-            <el-icon color="#67c23a"><i-ep-user /></el-icon>
-            <span>学生管理</span>
-          </template>
-          <el-menu-item index="student-info">学生信息查看</el-menu-item>
-          <el-menu-item index="regions">学生地区统计</el-menu-item>
-          <el-menu-item index="student-score">学生成绩查询</el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="teacher" class="nav-item">
-          <template #title>
-            <el-icon color="#e6a23c"><i-ep-avatar /></el-icon>
-            <span>教师管理</span>
-          </template>
-          <el-menu-item index="teacher-info">教师信息查看</el-menu-item>
-        </el-sub-menu>
-
-        <el-sub-menu index="course" class="nav-item">
-          <template #title>
-            <el-icon color="#f56c6c"><i-ep-reading /></el-icon>
-            <span>课程管理</span>
-          </template>
-          <el-menu-item index="course-info">课程信息管理</el-menu-item>
-          <el-menu-item index="class-course">班级课程查看</el-menu-item>
-        </el-sub-menu>
+          <!-- 子菜单项 -->
+          <el-sub-menu v-else-if="item.type === 'submenu'" :index="item.key" class="nav-item">
+            <template #title>
+              <el-icon :color="item.iconColor">
+                <component :is="`i-ep-${item.icon}`" />
+              </el-icon>
+              <span>{{ item.label }}</span>
+            </template>
+            <el-menu-item v-for="child in item.children" :key="child.key" :index="child.key">
+              {{ child.label }}
+            </el-menu-item>
+          </el-sub-menu>
+        </template>
       </el-menu>
     </el-header>
 
@@ -460,5 +563,16 @@ const handleLogout = async () => {
     opacity: 0;
     transform: scale(0.9) translateY(-20px);
   }
+}
+
+/* 角色指示器样式 */
+.role-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.role-indicator .el-tag {
+  font-weight: 500;
+  border-radius: 12px;
 }
 </style>

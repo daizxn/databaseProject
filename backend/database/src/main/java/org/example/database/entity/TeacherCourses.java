@@ -109,6 +109,12 @@ public class TeacherCourses {
     @TableField(value = "dzx_course_exam_type")
     private String courseExamType;
 
+    /**
+     * 
+     */
+    @TableField(value = "dzx_class_id")
+    private Integer classId;
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -136,7 +142,8 @@ public class TeacherCourses {
             && (this.getClassName() == null ? other.getClassName() == null : this.getClassName().equals(other.getClassName()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
             && (this.getCourseStatus() == null ? other.getCourseStatus() == null : this.getCourseStatus().equals(other.getCourseStatus()))
-            && (this.getCourseExamType() == null ? other.getCourseExamType() == null : this.getCourseExamType().equals(other.getCourseExamType()));
+            && (this.getCourseExamType() == null ? other.getCourseExamType() == null : this.getCourseExamType().equals(other.getCourseExamType()))
+            && (this.getClassId() == null ? other.getClassId() == null : this.getClassId().equals(other.getClassId()));
     }
 
     @Override
@@ -159,6 +166,7 @@ public class TeacherCourses {
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
         result = prime * result + ((getCourseStatus() == null) ? 0 : getCourseStatus().hashCode());
         result = prime * result + ((getCourseExamType() == null) ? 0 : getCourseExamType().hashCode());
+        result = prime * result + ((getClassId() == null) ? 0 : getClassId().hashCode());
         return result;
     }
 
@@ -184,6 +192,7 @@ public class TeacherCourses {
         sb.append(", departmentName=").append(departmentName);
         sb.append(", courseStatus=").append(courseStatus);
         sb.append(", courseExamType=").append(courseExamType);
+        sb.append(", classId=").append(classId);
         sb.append("]");
         return sb.toString();
     }

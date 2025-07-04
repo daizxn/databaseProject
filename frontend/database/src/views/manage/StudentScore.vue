@@ -94,6 +94,8 @@ const pageNum = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 
+const current_user = ref()
+
 const dialogVisible = ref(false)
 
 const getStudentScoresData = async (
