@@ -31,4 +31,9 @@ public class ScoresServiceImpl extends MppServiceImpl<ScoresMapper, Scores>
         return baseMapper.selectStudentsByCourseNumber(courseNumber);
     }
 
+    @Override
+    public List<String> batchUpdateScores(String teacherNumber, String courseNumber, String academicYear, Integer semester, String scoresJson) {
+        return baseMapper.batchUpdateScores(teacherNumber, courseNumber, academicYear, semester, scoresJson);
+    }
+
 }

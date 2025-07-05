@@ -33,4 +33,19 @@ public interface ScoresMapper extends MppBaseMapper<Scores> {
      */
     List<StudentScoreSimpleDTO> selectStudentsByCourseNumber(@Param("courseNumber") String courseNumber);
 
+    /**
+     * 批量更新成绩 - 调用存储过程
+     * @param teacherNumber 教师编号
+     * @param courseNumber 课程编号
+     * @param academicYear 学年
+     * @param semester 学期
+     * @param scoresJson 成绩数据（JSON格式）
+     * @return 更新结果
+     */
+    List<String> batchUpdateScores(@Param("teacherNumber") String teacherNumber,
+                                  @Param("courseNumber") String courseNumber,
+                                  @Param("academicYear") String academicYear,
+                                  @Param("semester") Integer semester,
+                                  @Param("scoresJson") String scoresJson);
+
 }

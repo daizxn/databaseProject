@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
+import org.example.database.entity.BatchUpdateScoresDTO;
 import org.example.database.entity.Scores;
 import org.example.database.entity.StudentCourseTeacherScores;
 import org.example.database.entity.StudentScoresDTO;
@@ -209,5 +211,51 @@ public class ScoresController {
 
         List<StudentScoreSimpleDTO> studentScores = scoresService.selectStudentsByCourseNumber(courseNumber);
         return !studentScores.isEmpty() ? Result.success(studentScores) : Result.error(ResultCodeEnum.NO_GOODS);
+    }
+
+    /**
+     * 批量更新成绩
+     * @param batchUpdateScoresDTO 批量更新成绩请求参数
+     * @return 返回更新结果
+     */
+    @PostMapping("/batchUpdate")
+    @ResponseBody
+    public Result batchUpdateScores(@RequestBody BatchUpdateScoresDTO batchUpdateScoresDTO) {
+        // 参数校验
+        if (batchUpdateScoresDTO.getTeacherNumber() == null || batchUpdateScoresDTO.getTeacherNumber().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "教师编号不能为空");
+        }
+        if (batchUpdateScoresDTO.getCourseNumber() == null || batchUpdateScoresDTO.getCourseNumber().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "课程编号不能为空");
+        }
+        if (batchUpdateScoresDTO.getAcademicYear() == null || batchUpdateScoresDTO.getAcademicYear().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "学年不能为空");
+        }
+        if (batchUpdateScoresDTO.getSemester() == null) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "学期不能为空");
+        }
+        if (batchUpdateScoresDTO.getScores() == null || batchUpdateScoresDTO.getScores().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "成绩数据不能为空");
+        }
+
+        try {
+            // 将成绩列表转换为JSON字符串
+            ObjectMapper objectMapper = new ObjectMapper();
+            String scoresJson = objectMapper.writeValueAsString(batchUpdateScoresDTO.getScores());
+
+            // 调用存储过程
+            List<String> result = scoresService.batchUpdateScores(
+                    batchUpdateScoresDTO.getTeacherNumber(),
+                    batchUpdateScoresDTO.getCourseNumber(),
+                    batchUpdateScoresDTO.getAcademicYear(),
+                    batchUpdateScoresDTO.getSemester(),
+                    scoresJson
+            );
+            if(result.get(0).equals("f"))
+                throw new RuntimeException("批量更新成绩失败: " + result.get(1));
+            return Result.success(result);
+        } catch (Exception e) {
+            return Result.error(ResultCodeEnum.UPDATE_ERROR.code, "批量更新成绩失败: " + e.getMessage());
+        }
     }
 }

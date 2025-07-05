@@ -31,4 +31,15 @@ public interface ScoresService extends IMppService<Scores> {
      */
     List<StudentScoreSimpleDTO> selectStudentsByCourseNumber(String courseNumber);
 
+    /**
+     * 批量更新成绩
+     * @param teacherNumber 教师编号
+     * @param courseNumber 课程编号
+     * @param academicYear 学年
+     * @param semester 学期
+     * @param scoresJson 成绩数据（JSON格式）
+     * @return 更新结果
+     */
+    List<String> batchUpdateScores(String teacherNumber, String courseNumber, String academicYear, Integer semester, String scoresJson);
+
 }

@@ -105,4 +105,15 @@
         WHERE sc.dzx_course_number = #{courseNumber}
         ORDER BY sc.dzx_student_number
     </select>
+
+    <!-- 批量更新成绩 - 调用存储过程 -->
+    <select id="batchUpdateScores" statementType="CALLABLE" resultType="java.lang.String">
+        SELECT * FROM batch_update_scores(
+            #{teacherNumber},
+            #{courseNumber},
+            #{academicYear},
+            #{semester},
+            #{scoresJson}
+        )
+    </select>
 </mapper>
