@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.database.mapper.StudentYearlyStatisticsMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.database.entity.StudentYearlyStatistics">
+            <result property="studentNumber" column="dzx_student_number" />
+            <result property="studentName" column="dzx_student_name" />
+            <result property="className" column="dzx_class_name" />
+            <result property="departmentName" column="dzx_department_name" />
+            <result property="academicYear" column="dzx_academic_year" />
+            <result property="averageScore" column="dzx_average_score" />
+            <result property="averageGpa" column="dzx_average_gpa" />
+            <result property="totalCredits" column="dzx_total_credits" />
+            <result property="earnedCredits" column="dzx_earned_credits" />
+            <result property="totalCourses" column="dzx_total_courses" />
+            <result property="passedCourses" column="dzx_passed_courses" />
+            <result property="excellentCourses" column="dzx_excellent_courses" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dzx_student_number,dzx_student_name,dzx_class_name,dzx_department_name,dzx_academic_year,dzx_average_score,
+        dzx_average_gpa,dzx_total_credits,dzx_earned_credits,dzx_total_courses,dzx_passed_courses,
+        dzx_excellent_courses
+    </sql>
+</mapper>

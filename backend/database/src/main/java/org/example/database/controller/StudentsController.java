@@ -13,6 +13,7 @@ import org.example.database.exception.CustomException;
 import org.example.database.service.StudentCourseTeacherScoresService;
 import org.example.database.service.StudentFullInfoService;
 import org.example.database.service.StudentsService;
+import org.example.database.service.StudentYearlyStatisticsService;
 import org.example.database.utils.NameChangeUtil;
 import org.example.database.utils.PermissionUtil;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,9 @@ public class StudentsController {
 
     @Resource
     private StudentCourseTeacherScoresService studentCourseTeacherScoresService;
+
+    @Resource
+    private StudentYearlyStatisticsService studentYearlyStatisticsService;
 
     /**
      * 插入
@@ -194,10 +198,14 @@ public class StudentsController {
         }
     }
 
-
-    @GetMapping("/selectScoreStatistics")
+    /**
+     * 获取学生在指定学年的成绩统计和专业排名信息
+     * @param academicYear 学年（例如：2023-2024）
+     * @return 包含成绩统计、绩点计算和专业内排名信息的结果
+     */
+    @GetMapping("/yearlyRanking")
     @ResponseBody
-    public Result selectScoreStatistics(@RequestParam String academicYear) {
+    public Result getStudentYearlyRanking(@RequestParam String academicYear) {
         try {
             String studentNumber;
 
@@ -208,14 +216,14 @@ public class StudentsController {
                 throw new CustomException(ResultCodeEnum.NO_PERMISSION);
             }
 
-            // 调用服务层获取成绩统计信息
-            ScoreStatistics statistics = studentCourseTeacherScoresService.getScoreStatistics(studentNumber, academicYear);
+            // 调用服务层获取学年成绩统计和专业排名信息
+            StudentYearlyRanking ranking = studentYearlyStatisticsService.getStudentYearlyRankingByDepartment(studentNumber, academicYear);
 
-            if (statistics == null) {
+            if (ranking == null) {
                 return Result.error(ResultCodeEnum.DATA_NOT_FOUND);
             }
 
-            return Result.success(statistics);
+            return Result.success(ranking);
 
         } catch (CustomException e) {
             return Result.error(e.getCode(), e.getMsg());
@@ -223,4 +231,45 @@ public class StudentsController {
             return Result.error(ResultCodeEnum.SYSTEM_ERROR);
         }
     }
+
+    /**
+     * 获取指定学年指定专业所有学生的成绩统计和排名信息（管理员接口）
+     * @param academicYear 学年（例如：2023-2024）
+     * @param departmentName 专业名称（可选，不传则获���所有专业）
+     * @return 指定专业所有学生的成绩统计、绩点计算和专业内排名信息列表
+     */
+    @GetMapping("/departmentYearlyRanking")
+    @ResponseBody
+    public Result getDepartmentYearlyRanking(@RequestParam String academicYear,
+                                           @RequestParam(required = false) String departmentName) {
+        try {
+            // 权限验证：只有管理员可以查询所有学生的成绩统计
+            if (!PermissionUtil.isAdmin()) {
+                throw new CustomException(ResultCodeEnum.NO_PERMISSION);
+            }
+
+            List<StudentYearlyRanking> rankings;
+
+            if (departmentName != null && !departmentName.trim().isEmpty()) {
+                // 获取指定专业的学生排名
+                rankings = studentYearlyStatisticsService.getDepartmentStudentsYearlyRanking(academicYear, departmentName);
+            } else {
+                // 获取所有专业的学生排名
+                rankings = studentYearlyStatisticsService.getAllStudentsYearlyRankingByDepartment(academicYear);
+            }
+
+            if (rankings.isEmpty()) {
+                return Result.error(ResultCodeEnum.DATA_NOT_FOUND);
+            }
+
+            return Result.success(rankings);
+
+        } catch (CustomException e) {
+            return Result.error(e.getCode(), e.getMsg());
+        } catch (Exception e) {
+            return Result.error(ResultCodeEnum.SYSTEM_ERROR);
+        }
+    }
+
+
 }
