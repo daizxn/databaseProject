@@ -133,7 +133,7 @@ const pageSize = ref(10)
 const total = ref(0)
 
 const current_user = ref()
-const academicYear = ref(['2020/2021', '2021/2022', '2022/2023', '2023/2024', '2024/2025'])
+const academicYear = ref(['2020-2021', '2021-2022', '2022-2023', '2023-2024', '2024-2025'])
 
 const getCourseData = async (courseParam: CourseParam, pageNum: number, pageSize: number) => {
   console.log('查询课程参数:', courseParam)

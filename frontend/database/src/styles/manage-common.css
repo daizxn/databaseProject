@@ -61,6 +61,8 @@
 .select .select-form .el-form-item {
   min-width: 250px;
   flex: 0 0 auto;
+  text-align: center;
+  align-items: center;
 }
 
 .data {
@@ -100,6 +102,12 @@
 }
 
 :deep(.el-table__header-wrapper) {
+  justify-content: center;
+  text-align: center;
+  display: flex;
+}
+
+:deep(.el-table__body-wrapper) {
   justify-content: center;
   text-align: center;
   display: flex;

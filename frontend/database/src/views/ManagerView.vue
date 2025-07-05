@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus'
+import request from '@/utils/request'
 import 'element-plus/theme-chalk/el-message-box.css'
 import 'element-plus/theme-chalk/el-message.css'
 
@@ -24,6 +25,15 @@ const activeIndex = ref('/')
 
 // 用户角色
 const userRole = ref('')
+
+// 修改密码相关状态
+const changePasswordVisible = ref(false)
+const changePasswordForm = ref({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: '',
+})
+const changePasswordLoading = ref(false)
 
 // 根据角色过滤的导航菜单
 const filteredMenuItems = computed(() => {
@@ -163,6 +173,88 @@ const handleSelect = (key: string) => {
 const handleCommand = (command: string) => {
   if (command === 'logout') {
     handleLogout()
+  } else if (command === 'changePassword') {
+    openChangePasswordDialog()
+  }
+}
+
+// 打开修改密码对话框
+const openChangePasswordDialog = () => {
+  changePasswordVisible.value = true
+  // 重置表单
+  changePasswordForm.value = {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  }
+}
+
+// 关闭修改密码对话框
+const closeChangePasswordDialog = () => {
+  changePasswordVisible.value = false
+  changePasswordForm.value = {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  }
+}
+
+// 修改密码
+const handleChangePassword = async () => {
+  // 表单验证
+  if (!changePasswordForm.value.oldPassword) {
+    ElMessage.error('请输入原密码')
+    return
+  }
+
+  if (!changePasswordForm.value.newPassword) {
+    ElMessage.error('请输入新密码')
+    return
+  }
+
+  if (changePasswordForm.value.newPassword.length < 6) {
+    ElMessage.error('新密码长度不能少于6位')
+    return
+  }
+
+  if (changePasswordForm.value.newPassword !== changePasswordForm.value.confirmPassword) {
+    ElMessage.error('两次输入的密码不一致')
+    return
+  }
+
+  if (changePasswordForm.value.oldPassword === changePasswordForm.value.newPassword) {
+    ElMessage.error('新密码不能与原密码相同')
+    return
+  }
+
+  changePasswordLoading.value = true
+
+  try {
+    const response = await request.post('/web/changePassword', {
+      username: userInfo.value?.userInfo?.username,
+      oldPassword: changePasswordForm.value.oldPassword,
+      newPassword: changePasswordForm.value.newPassword,
+    })
+
+    if (response.data) {
+      ElMessage.success('密码修改成功，请重新登录')
+      closeChangePasswordDialog()
+
+      // 清除用户信息并跳转到登录页
+      setTimeout(() => {
+        localStorage.removeItem('xm-user')
+        sessionStorage.removeItem('xm-user')
+        router.push('/login')
+      }, 1500)
+    } else {
+      ElMessage.error('密码修改失败')
+    }
+  } catch (error: unknown) {
+    console.error('修改密码失败:', error)
+    const errorMessage = error instanceof Error ? error.message : '密码修改失败'
+    ElMessage.error(errorMessage)
+  } finally {
+    changePasswordLoading.value = false
   }
 }
 
@@ -215,6 +307,10 @@ const handleLogout = async () => {
             </div>
             <template #dropdown>
               <el-dropdown-menu>
+                <el-dropdown-item command="changePassword">
+                  <el-icon><i-ep-key /></el-icon>
+                  修改密码
+                </el-dropdown-item>
                 <el-dropdown-item command="logout">
                   <el-icon><i-ep-switch-button /></el-icon>
                   退出登录
@@ -267,6 +363,56 @@ const handleLogout = async () => {
         <router-view />
       </el-scrollbar>
     </el-main>
+
+    <!-- 修改密码对话框 -->
+    <el-dialog
+      v-model="changePasswordVisible"
+      title="修改密码"
+      width="450px"
+      :before-close="closeChangePasswordDialog"
+      class="change-password-dialog"
+    >
+      <el-form :model="changePasswordForm" label-width="100px" class="change-password-form">
+        <el-form-item label="原密码" required>
+          <el-input
+            v-model="changePasswordForm.oldPassword"
+            type="password"
+            placeholder="请输入原密码"
+            show-password
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="新密码" required>
+          <el-input
+            v-model="changePasswordForm.newPassword"
+            type="password"
+            placeholder="请输入新密码（至少6位）"
+            show-password
+            clearable
+          />
+        </el-form-item>
+
+        <el-form-item label="确认密码" required>
+          <el-input
+            v-model="changePasswordForm.confirmPassword"
+            type="password"
+            placeholder="请再次输入新密码"
+            show-password
+            clearable
+          />
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="closeChangePasswordDialog">取消</el-button>
+          <el-button type="primary" @click="handleChangePassword" :loading="changePasswordLoading">
+            确认修改
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </el-container>
 </template>
 
@@ -440,140 +586,6 @@ const handleLogout = async () => {
   }
 }
 
-/* ElMessageBox 样式定制 */
-/* :deep(.el-message-box) {
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(20px);
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  overflow: hidden;
-}
-
-:deep(.el-message-box__header) {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 20px 25px;
-  border-bottom: none;
-}
-
-:deep(.el-message-box__title) {
-  color: white;
-  font-weight: 600;
-  font-size: 16px;
-}
-
-:deep(.el-message-box__headerbtn) {
-  top: 20px;
-  right: 20px;
-}
-
-:deep(.el-message-box__headerbtn .el-message-box__close) {
-  color: white;
-  font-size: 18px;
-  transition: all 0.3s ease;
-}
-
-:deep(.el-message-box__headerbtn .el-message-box__close:hover) {
-  color: rgba(255, 255, 255, 0.8);
-  transform: scale(1.1);
-}
-
-:deep(.el-message-box__content) {
-  padding: 30px 25px 20px 25px;
-  background: rgba(255, 255, 255, 0.95);
-}
-
-:deep(.el-message-box__icon) {
-  font-size: 24px;
-  margin-right: 15px;
-}
-
-:deep(.el-message-box__icon.el-icon--warning) {
-  color: #e6a23c;
-}
-
-:deep(.el-message-box__message) {
-  color: #2c3e50;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.6;
-}
-
-:deep(.el-message-box__btns) {
-  padding: 15px 25px 25px 25px;
-  background: rgba(255, 255, 255, 0.95);
-  border-top: 1px solid rgba(240, 240, 240, 0.5);
-}
-
-:deep(.el-message-box__btns .el-button) {
-  border-radius: 12px;
-  font-weight: 500;
-  padding: 10px 20px;
-  min-width: 80px;
-  transition: all 0.3s ease;
-}
-
-:deep(.el-message-box__btns .el-button--primary) {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  color: white;
-}
-
-:deep(.el-message-box__btns .el-button--primary:hover) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-}
-
-:deep(.el-message-box__btns .el-button--default) {
-  background: rgba(240, 240, 240, 0.8);
-  border: 1px solid rgba(220, 220, 220, 0.6);
-  color: #606266;
-}
-
-:deep(.el-message-box__btns .el-button--default:hover) {
-  transform: translateY(-1px);
-  background: rgba(230, 230, 230, 0.9);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-} */
-
-/* ElMessageBox 遮罩层样式 */
-/* :deep(.el-overlay) {
-  background-color: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(5px);
-} */
-
-/* ElMessageBox 动画增强 */
-/* :deep(.el-message-box.msgbox-fade-enter-active) {
-  animation: messageBoxFadeIn 0.3s ease-out;
-}
-
-:deep(.el-message-box.msgbox-fade-leave-active) {
-  animation: messageBoxFadeOut 0.3s ease-in;
-}
-
-@keyframes messageBoxFadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-@keyframes messageBoxFadeOut {
-  from {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: scale(0.9) translateY(-20px);
-  }
-} */
-
 /* 角色指示器样式 */
 .role-indicator {
   display: flex;
@@ -583,5 +595,88 @@ const handleLogout = async () => {
 .role-indicator .el-tag {
   font-weight: 500;
   border-radius: 12px;
+}
+
+/* 修改密码对话框样式 */
+:deep(.change-password-dialog) {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+:deep(.change-password-dialog .el-dialog__header) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px 25px;
+  margin: 0;
+  border-radius: 14px;
+}
+
+:deep(.change-password-dialog .el-dialog__title) {
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+:deep(.change-password-dialog .el-dialog__headerbtn) {
+  top: 20px;
+  right: 20px;
+}
+
+:deep(.change-password-dialog .el-dialog__close) {
+  color: white;
+  font-size: 18px;
+}
+
+:deep(.change-password-dialog .el-dialog__body) {
+  padding: 25px;
+}
+
+:deep(.change-password-dialog .el-dialog__footer) {
+  padding: 20px 25px 25px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.change-password-form {
+  margin-top: 10px;
+}
+
+.change-password-form .el-form-item {
+  margin-bottom: 20px;
+}
+
+:deep(.change-password-form .el-form-item__label) {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+:deep(.change-password-form .el-input__wrapper) {
+  border-radius: 8px;
+  border: 1px solid #dcdfe6;
+  transition: all 0.3s ease;
+}
+
+:deep(.change-password-form .el-input__wrapper:hover) {
+  border-color: #667eea;
+}
+
+:deep(.change-password-form .el-input__wrapper.is-focus) {
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.dialog-footer .el-button {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 500;
+}
+
+.dialog-footer .el-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+}
+
+.dialog-footer .el-button--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 </style>

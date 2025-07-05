@@ -15,7 +15,6 @@
           <el-input v-model="courseSelectParam.academicYear" placeholder="请输入学年"></el-input>
         </el-form-item>
         <el-form-item label="学期">
-          <!-- <el-input v-model="courseSelectParam.semester" placeholder="请输入学期"></el-input> -->
           <el-select
             v-model="courseSelectParam.semester"
             :empty-values="[null, undefined]"
@@ -34,10 +33,6 @@
           <el-input v-model="courseSelectParam.className" placeholder="请输入班级"></el-input>
         </el-form-item>
         <el-form-item label="课程状态">
-          <!-- <el-input
-            v-model="courseSelectParam.courseStatus"
-            placeholder="请输入课程状态"
-          ></el-input> -->
           <el-select
             v-model="courseSelectParam.courseStatus"
             :empty-values="[null, undefined]"
@@ -50,7 +45,6 @@
           </el-select>
         </el-form-item>
         <el-form-item label="课程类型">
-          <!-- <el-input v-model="courseSelectParam.courseType" placeholder="请输入课程类型"></el-input> -->
           <el-select
             v-model="courseSelectParam.courseType"
             :empty-values="[null, undefined]"
@@ -219,7 +213,6 @@
         </el-select>
       </el-form-item>
       <el-form-item label="学期" prop="semester">
-        <!-- <el-input v-model="courseSelectParam.semester" placeholder="请输入学期"></el-input> -->
         <el-select
           v-model="courseUpdateParam.semester"
           :empty-values="[null, undefined]"
@@ -232,12 +225,6 @@
           <el-option label="3" value="3"></el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="专业">
-        <el-input v-model="courseSelectParam.departmentName" placeholder="请输入专业"></el-input>
-      </el-form-item>
-      <el-form-item label="班级">
-        <el-input v-model="courseSelectParam.className" placeholder="请输入班级"></el-input>
-      </el-form-item> -->
       <el-form-item label="班级" prop="classId">
         <el-cascader
           v-model="courseUpdateParam.classId"
@@ -402,7 +389,7 @@ const pageNum = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 
-const academicYear = ref(['2020/2021', '2021/2022', '2022/2023', '2023/2024', '2024/2025'])
+const academicYear = ref(['2020-2021', '2021-2022', '2022-2023', '2023-2024', '2024-2025'])
 
 const dialogVisible = ref(false)
 const addFlag = ref(false)

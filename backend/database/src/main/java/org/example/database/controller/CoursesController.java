@@ -54,7 +54,7 @@ public class CoursesController {
             // 如果不是教师，必须是管理员才能使用此接口
             return Result.error(ResultCodeEnum.PARAM_ERROR);
         }
-        
+
         if (courses.getCourseName() == null) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }

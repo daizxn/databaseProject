@@ -49,6 +49,7 @@ declare module 'vue' {
     IEpDocument: typeof import('~icons/ep/document')['default']
     IEpHouse: typeof import('~icons/ep/house')['default']
     IEpIconMenu: typeof import('~icons/ep/icon-menu')['default']
+    IEpKey: typeof import('~icons/ep/key')['default']
     IEpMenu: typeof import('~icons/ep/menu')['default']
     IEpMessage: typeof import('~icons/ep/message')['default']
     IEpReading: typeof import('~icons/ep/reading')['default']
