@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
+import 'element-plus/theme-chalk/el-message-box.css'
+import 'element-plus/theme-chalk/el-message.css'
 
 const router = useRouter()
 const route = useRoute()
@@ -60,6 +62,13 @@ const filteredMenuItems = computed(() => {
         icon: 'reading',
         iconColor: '#f56c6c',
         label: '班级课程查看',
+        type: 'item',
+      },
+      {
+        key: 'student-person-info',
+        icon: 'user',
+        iconColor: '#67c23a',
+        label: '个人信息查看',
         type: 'item',
       },
     )
@@ -432,7 +441,7 @@ const handleLogout = async () => {
 }
 
 /* ElMessageBox 样式定制 */
-:deep(.el-message-box) {
+/* :deep(.el-message-box) {
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(20px);
@@ -526,16 +535,16 @@ const handleLogout = async () => {
   transform: translateY(-1px);
   background: rgba(230, 230, 230, 0.9);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+} */
 
 /* ElMessageBox 遮罩层样式 */
-:deep(.el-overlay) {
+/* :deep(.el-overlay) {
   background-color: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(5px);
-}
+} */
 
 /* ElMessageBox 动画增强 */
-:deep(.el-message-box.msgbox-fade-enter-active) {
+/* :deep(.el-message-box.msgbox-fade-enter-active) {
   animation: messageBoxFadeIn 0.3s ease-out;
 }
 
@@ -563,7 +572,7 @@ const handleLogout = async () => {
     opacity: 0;
     transform: scale(0.9) translateY(-20px);
   }
-}
+} */
 
 /* 角色指示器样式 */
 .role-indicator {

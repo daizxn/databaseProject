@@ -75,6 +75,7 @@
 import request from '@/utils/request'
 import { ElMessage, type FormInstance } from 'element-plus'
 import { useRouter } from 'vue-router'
+import 'element-plus/theme-chalk/el-message.css'
 
 const router = useRouter()
 

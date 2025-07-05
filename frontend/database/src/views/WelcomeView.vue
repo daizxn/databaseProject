@@ -156,6 +156,14 @@ const filteredFeatureCards = computed(() => {
       description: '查看学生地区分布统计',
       roles: ['admin'],
     },
+    {
+      route: 'student-person-info',
+      icon: 'user-filled',
+      color: '#67c23a',
+      title: '个人信息查看',
+      description: '查看和管理个人信息',
+      roles: ['student'],
+    },
   ]
 
   // 根据用户角色过滤卡片

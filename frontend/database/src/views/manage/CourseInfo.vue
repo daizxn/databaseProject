@@ -81,16 +81,16 @@
         <el-form-item label="学时">
           <el-input v-model="courseSelectParam.courseHours" placeholder="请输入学时"></el-input>
         </el-form-item>
-        <el-form-item label="教师姓名">
+        <el-form-item label="教师姓名" v-if="current_user?.userInfo?.roles === 'admin'">
           <el-input v-model="courseSelectParam.teacherName" placeholder="请输入教师姓名"></el-input>
         </el-form-item>
-        <el-form-item label="教师编号">
+        <el-form-item label="教师编号" v-if="current_user?.userInfo?.roles === 'admin'">
           <el-input
             v-model="courseSelectParam.teacherNumber"
             placeholder="请输入教师编号"
           ></el-input>
         </el-form-item>
-        <el-form-item label="教师职称">
+        <el-form-item label="教师职称" v-if="current_user?.userInfo?.roles === 'admin'">
           <el-select
             v-model="courseSelectParam.teacherTitle"
             :empty-values="[null, undefined]"
@@ -294,7 +294,11 @@
           placeholder="请输入学时"
         ></el-input>
       </el-form-item>
-      <el-form-item label="教师姓名" prop="teacherName">
+      <el-form-item
+        label="教师姓名"
+        prop="teacherName"
+        v-if="current_user?.userInfo?.roles === 'admin'"
+      >
         <el-select
           v-model="courseUpdateParam.teacherNumber"
           :options="teacherData"
@@ -352,7 +356,7 @@
 </template>
 
 <script setup lang="ts">
-import request from '@/utils/request'
+import request, { type ApiResponse } from '@/utils/request'
 
 import { ElMessage, type FormInstance } from 'element-plus'
 
@@ -402,6 +406,8 @@ const academicYear = ref(['2020/2021', '2021/2022', '2022/2023', '2023/2024', '2
 
 const dialogVisible = ref(false)
 const addFlag = ref(false)
+
+const current_user = ref()
 
 const scoreDialogVisible = ref(false)
 const scoreUpdateParam = ref({
@@ -462,8 +468,8 @@ const updateRow = (row?: Record<string, unknown>) => {
 
 const deleteRow = async (courseNumber: string) => {
   try {
-    const response = await request.delete(`/courses/deleteByNumber/${courseNumber}`)
-    if (response.data.code === '200') {
+    const response: ApiResponse = await request.delete(`/courses/deleteByNumber/${courseNumber}`)
+    if (response.code === '200') {
       ElMessage.success('删除课程成功')
       getCourseData({}, pageNum.value, pageSize.value)
     } else {
@@ -492,22 +498,22 @@ const save = async (formRef: FormInstance) => {
       courseStatus: courseUpdateParam.value.courseStatus,
       courseExamType: courseUpdateParam.value.courseExamType,
     }
-
-    let response
+    console.log('保存课程参数:', params)
+    let response: ApiResponse
     if (addFlag.value) {
       response = await request.post('/courses/add', params)
     } else {
       response = await request.put('/courses/updateByNumber', params)
     }
 
-    if (response.data.code === '200') {
+    if (response.code === '200') {
       dialogVisible.value = false
       formRef.resetFields()
       addFlag.value = false
       courseUpdateParam.value = {}
       ElMessage.success('操作成功')
       getCourseData({}, pageNum.value, pageSize.value)
-    } else if (response.data.code === '5022') {
+    } else if (response.code === '5022') {
       ElMessage.warning('课程已存在，请重新输入')
     } else {
       ElMessage.error('操作失败，请稍后再试')
@@ -537,7 +543,7 @@ const handleExpand = async (
 const getStudentScores = async (courseNumber: string) => {
   try {
     expandLoading.value[courseNumber] = true
-    const response = await request.get(`/scores/selectByCourseNumber/${courseNumber}`)
+    const response: ApiResponse = await request.get(`/scores/selectByCourseNumber/${courseNumber}`)
 
     if (response.data && Array.isArray(response.data)) {
       studentScoresMap.value[courseNumber] = response.data
@@ -566,9 +572,12 @@ const editScore = (courseNumber: string, studentNumber: string, currentScore: nu
 // 保存修改的成绩
 const saveScore = async () => {
   try {
-    const response = await request.put('/scores/updateScoresByNumber', scoreUpdateParam.value)
+    const response: ApiResponse = await request.put(
+      '/scores/updateScoresByNumber',
+      scoreUpdateParam.value,
+    )
 
-    if (response.data.code === '200') {
+    if (response.code === '200') {
       ElMessage.success('修改成绩成功')
       scoreDialogVisible.value = false
       // 重新获取该课程的学生成绩
@@ -582,10 +591,22 @@ const saveScore = async () => {
   }
 }
 
+const getCurrentUser = async () => {
+  const userInfo = localStorage.getItem('xm-user') || sessionStorage.getItem('xm-user')
+  console.log('获取当前用户信息:', userInfo)
+  if (userInfo) {
+    current_user.value = JSON.parse(userInfo)
+    console.log('当前用户信息:', current_user.value)
+  } else {
+    console.error('当前用户信息未找到')
+  }
+}
+
 onMounted(() => {
   getCourseData({}, pageNum.value, pageSize.value)
   getTeacherData()
   getClassesData()
+  getCurrentUser()
 })
 </script>
 

@@ -490,13 +490,13 @@ const handleCurrentChange = (newPage: number) => {
 
 const deleteRow = async (number: string) => {
   try {
-    const response = await request.delete(`/students/deleteByNumber/${number}`)
-    if (response.data.code === 200) {
+    const response: ApiResponse = await request.delete(`/students/deleteByNumber/${number}`)
+    if (response.code === '200') {
       console.log('删除学生成功:', number)
       // 重新获取学生数据
       getStudentsData(studentsSelectParam.value)
-    } else if (response.data.msg) {
-      console.error('删除学生失败:', response.data.msg)
+    } else if (response.msg) {
+      console.error('删除学生失败:', response.msg)
     }
   } catch (error) {
     console.error('删除学生失败:', error)

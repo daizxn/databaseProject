@@ -2,7 +2,7 @@
   <el-container class="layout-container">
     <el-container class="select" ref="selectFormRef">
       <el-form class="select-form" label-width="80px" :model="courseSelectParam">
-        <el-form-item label="班级" prop="classId">
+        <el-form-item label="班级" prop="classId" v-if="current_user?.userInfo?.roles === 'admin'">
           <el-cascader
             v-model="courseSelectParam.classId"
             :options="classesData"
@@ -132,6 +132,7 @@ const pageNum = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
 
+const current_user = ref()
 const academicYear = ref(['2020/2021', '2021/2022', '2022/2023', '2023/2024', '2024/2025'])
 
 const getCourseData = async (courseParam: CourseParam, pageNum: number, pageSize: number) => {
@@ -139,7 +140,7 @@ const getCourseData = async (courseParam: CourseParam, pageNum: number, pageSize
   const params = {
     academicYear: courseParam.academicYear,
     semester: courseParam.semester,
-    className: cascaderRef.value.presentText.split(' / ')[1] || courseParam.className,
+    className: cascaderRef.value?.presentText.split(' / ')[1] || courseParam.className,
   }
 
   console.log('查询课程参数:', params)
@@ -156,6 +157,17 @@ const getCourseData = async (courseParam: CourseParam, pageNum: number, pageSize
   } else {
     courseInfoData.value = response.data.records
     total.value = response.data.total
+  }
+}
+
+const getCurrentUser = () => {
+  const userInfo = localStorage.getItem('xm-user') || sessionStorage.getItem('xm-user')
+  console.log('获取当前用户信息:', userInfo)
+  if (userInfo) {
+    current_user.value = JSON.parse(userInfo)
+    console.log('当前用户信息:', current_user.value)
+  } else {
+    console.error('当前用户信息未找到')
   }
 }
 
@@ -179,6 +191,7 @@ onMounted(() => {
   getCourseData({}, pageNum.value, pageSize.value)
   getTeacherData()
   getClassesData()
+  getCurrentUser()
 })
 </script>
 

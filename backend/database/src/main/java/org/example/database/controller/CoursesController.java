@@ -43,7 +43,18 @@ public class CoursesController {
     @PostMapping("/add")
     @ResponseBody
     public Result add(@RequestBody Courses courses) {
-        //name不为空
+        if(PermissionUtil.isTeacher()) {
+            String teacherNumber = PermissionUtil.getCurrentTeacherNumber();
+            if (teacherNumber == null || teacherNumber.isEmpty()) {
+                return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+            }
+            // 教师只能添加自己教授的课程
+            courses.setTeacherNumber(teacherNumber);
+        }else if(!PermissionUtil.isAdmin()){
+            // 如果不是教师，必须是管理员才能使用此接口
+            return Result.error(ResultCodeEnum.PARAM_ERROR);
+        }
+        
         if (courses.getCourseName() == null) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
@@ -92,6 +103,7 @@ public class CoursesController {
         queryWrapper.eq(Courses::getCourseNumber, number);
         return coursesService.remove(queryWrapper) ? Result.success() : Result.error(ResultCodeEnum.DELETE_ERROR);
     }
+
     /**
      * @param department 需要更新的数据
      * @return 返回Result状态
@@ -111,6 +123,17 @@ public class CoursesController {
     @PutMapping("/updateByNumber")
     @ResponseBody
     public Result updateByNumber(@RequestBody Courses courses) {
+        if(PermissionUtil.isTeacher()){
+            String teacherNumber = PermissionUtil.getCurrentTeacherNumber();
+            if (teacherNumber == null || teacherNumber.isEmpty()) {
+                return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+            }
+            // 教师只能更新自己教授的课程
+            courses.setTeacherNumber(teacherNumber);
+        }else if(!PermissionUtil.isAdmin()){
+            // 如果不是教师，必须是管理员才能使用此接口
+            return Result.error(ResultCodeEnum.PARAM_ERROR);
+        }
         if (courses.getCourseNumber() == null || courses.getCourseNumber().isEmpty()) {
             return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
         }
@@ -187,6 +210,14 @@ public class CoursesController {
             // 限制查询条件为当前学生所在班级的课程
             // 创建新的TeacherCourses对象，确保只查询学生所在班级的课程
             teacherCourses.setClassId(currentStudent.getClassId());
+        } else if (PermissionUtil.isTeacher()) {
+
+            // 教师只能查询自己教授的课程
+            String currentTeacherNumber = PermissionUtil.getCurrentTeacherNumber();
+            if (currentTeacherNumber == null) {
+                return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+            }
+            teacherCourses.setTeacherNumber(currentTeacherNumber);
         } else if (!PermissionUtil.isAdmin()) {
             // 如果不是学生，必须是管理员才能使用此接口
             return Result.error(ResultCodeEnum.PARAM_ERROR);
