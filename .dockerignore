@@ -1,0 +1,47 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+*.tmp
+*.temp
+
+# 操作系统
+.DS_Store
+Thumbs.db
+
+# Node.js (前端)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Java (后端)
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+mvnw
+mvnw.cmd
+
+# 数据库
+*.db
+*.sqlite
+database_data/

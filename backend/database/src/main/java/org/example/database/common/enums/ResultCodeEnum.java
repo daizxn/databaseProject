@@ -31,7 +31,10 @@ public enum ResultCodeEnum {
     NO_GOODS("404", "信息不存在"),
     DATA_NOT_FOUND("404", "数据未找到"),
     LOGIN_ERROR("405","登录失败" ),
-    NO_PERMISSION("406", "权限不足");
+    NO_PERMISSION("406", "权限不足"),
+
+    BATCH_IMPORT_ERROR("5031", "批量导入失败"),
+    PARTIAL_SUCCESS("2001", "部分成功");
 
     public final String code;
     public final String msg;

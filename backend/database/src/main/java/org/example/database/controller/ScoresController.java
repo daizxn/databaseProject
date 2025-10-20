@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import org.example.database.common.Result;
 import org.example.database.common.enums.ResultCodeEnum;
+import org.example.database.entity.BatchImportScoresDTO;
 import org.example.database.entity.BatchUpdateScoresDTO;
 import org.example.database.entity.Scores;
 import org.example.database.entity.StudentCourseTeacherScores;
@@ -256,6 +257,124 @@ public class ScoresController {
             return Result.success(result);
         } catch (Exception e) {
             return Result.error(ResultCodeEnum.UPDATE_ERROR.code, "批量更新成绩失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 批量导入成绩
+     * @param batchImportScoresDTO 批量导入成绩请求参数
+     * @return 返回导入结果，包含成功和失败的统计信息
+     */
+    @PostMapping("/batchImport")
+    @ResponseBody
+    public Result batchImportScores(@RequestBody BatchImportScoresDTO batchImportScoresDTO) {
+        // 参数校验
+        if (batchImportScoresDTO.getTeacherNumber() == null || batchImportScoresDTO.getTeacherNumber().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "教师编号不能为空");
+        }
+        if (batchImportScoresDTO.getCourseNumber() == null || batchImportScoresDTO.getCourseNumber().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "课程编号不能为空");
+        }
+        if (batchImportScoresDTO.getAcademicYear() == null || batchImportScoresDTO.getAcademicYear().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "学年不能为空");
+        }
+        if (batchImportScoresDTO.getSemester() == null) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "学期不能为空");
+        }
+        if (batchImportScoresDTO.getScores() == null || batchImportScoresDTO.getScores().isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR.code, "成绩数据不能为空");
+        }
+
+        int successCount = 0;
+        int errorCount = 0;
+        StringBuilder errorMessages = new StringBuilder();
+
+        for (BatchImportScoresDTO.StudentScoreItem scoreItem : batchImportScoresDTO.getScores()) {
+            try {
+                // 验证必要字段
+                if (scoreItem.getStudent_no() == null || scoreItem.getStudent_no().trim().isEmpty()) {
+                    errorCount++;
+                    errorMessages.append("学号不能为空；");
+                    continue;
+                }
+
+                if (scoreItem.getScore() == null) {
+                    errorCount++;
+                    errorMessages.append("学生").append(scoreItem.getStudent_no()).append("成绩不能为空；");
+                    continue;
+                }
+
+                // 成绩范围验证
+                if (scoreItem.getScore() < 0 || scoreItem.getScore() > 100) {
+                    errorCount++;
+                    errorMessages.append("学生").append(scoreItem.getStudent_no()).append("成绩范围应在0-100之间；");
+                    continue;
+                }
+
+                // 检查成绩记录是否已存在
+                LambdaQueryWrapper<Scores> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(Scores::getStudentNumber, scoreItem.getStudent_no())
+                           .eq(Scores::getCourseNumber, batchImportScoresDTO.getCourseNumber())
+                           .eq(Scores::getAcademicYear, batchImportScoresDTO.getAcademicYear())
+                           .eq(Scores::getSemester, batchImportScoresDTO.getSemester());
+
+                // 创建成绩记录
+                Scores score = new Scores();
+                score.setStudentNumber(scoreItem.getStudent_no());
+                score.setCourseNumber(batchImportScoresDTO.getCourseNumber());
+                score.setAcademicYear(batchImportScoresDTO.getAcademicYear());
+                score.setSemester(batchImportScoresDTO.getSemester());
+                score.setScore(java.math.BigDecimal.valueOf(scoreItem.getScore()));
+
+                // 如果记录已存在，则更新；否则插入新记录
+                if (scoresService.count(queryWrapper) > 0) {
+                    // 更新现有记录
+                    LambdaUpdateWrapper<Scores> updateWrapper = new LambdaUpdateWrapper<>();
+                    updateWrapper.eq(Scores::getStudentNumber, scoreItem.getStudent_no())
+                               .eq(Scores::getCourseNumber, batchImportScoresDTO.getCourseNumber())
+                               .eq(Scores::getAcademicYear, batchImportScoresDTO.getAcademicYear())
+                               .eq(Scores::getSemester, batchImportScoresDTO.getSemester())
+                               .set(Scores::getScore, java.math.BigDecimal.valueOf(scoreItem.getScore()));
+
+                    if (scoresService.update(updateWrapper)) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                        errorMessages.append("学生").append(scoreItem.getStudent_no()).append("成绩更新失败；");
+                    }
+                } else {
+                    // 插入新记录
+                    if (scoresService.save(score)) {
+                        successCount++;
+                    } else {
+                        errorCount++;
+                        errorMessages.append("学生").append(scoreItem.getStudent_no()).append("成绩保存失败；");
+                    }
+                }
+
+            } catch (Exception e) {
+                errorCount++;
+                errorMessages.append("学生").append(scoreItem.getStudent_no() != null ? scoreItem.getStudent_no() : "NULL")
+                           .append("数据处理异常：").append(e.getMessage()).append("；");
+            }
+        }
+
+        // 构建返回结果
+        String message = String.format("批量导入成绩完成：成功%d条，失败%d条。%s",
+                                      successCount, errorCount,
+                                      !errorMessages.isEmpty() ? errorMessages.toString() : "");
+
+        // 如果全部成功，返回成功状态
+        if (errorCount == 0) {
+            return Result.success(message);
+        }
+        // 如果部分成功，返回警告信息
+        else if (successCount > 0) {
+            return Result.error("2001", message);
+        }
+        // 如果全部失败，返回错误状态
+        else {
+            return Result.error("5031", message);
         }
     }
 }

@@ -1,0 +1,123 @@
+spring:
+  application:
+    name: zjut-database-system
+  
+  # 数据源配置
+  datasource:
+    url: jdbc:opengauss://database:5432/db_zjut
+    username: ${SPRING_DATASOURCE_USERNAME:db_user30}
+    password: ${SPRING_DATASOURCE_PASSWORD:Enmo@123}
+    driver-class-name: org.opengauss.Driver
+    hikari:
+      pool-name: ZjutHikariCP
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+      max-lifetime: 1200000
+      leak-detection-threshold: 60000
+  
+  # Redis 配置
+  redis:
+    host: ${SPRING_REDIS_HOST:redis}
+    port: ${SPRING_REDIS_PORT:6379}
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+
+  # JPA 配置
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+# 服务器配置
+server:
+  port: ${SERVER_PORT:9091}
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 200
+    min-spare-threads: 10
+
+# MyBatis Plus 配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: true
+    auto-mapping-behavior: partial
+    auto-mapping-unknown-column-behavior: warning
+    default-executor-type: simple
+    default-statement-timeout: 25000
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      table-prefix: daizx_
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  type-aliases-package: org.example.database.entity
+
+# PageHelper 配置
+pagehelper:
+  helper-dialect: opengauss
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+  page-size-zero: true
+  auto-runtime-dialect: true
+
+# 日志配置
+logging:
+  level:
+    org.example.database: INFO
+    org.springframework.web: INFO
+    org.mybatis: INFO
+    com.zaxxer.hikari: INFO
+  pattern:
+    console: '%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n'
+  file:
+    name: /app/logs/application.log
+    max-size: 10MB
+    max-history: 30
+
+# 管理端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    redis:
+      enabled: true
+    db:
+      enabled: true
+
+# 应用信息
+info:
+  app:
+    name: ZJUT Database Management System
+    version: 1.0.0
+    description: A comprehensive database management system for ZJUT
+  build:
+    time: '@maven.build.timestamp@'

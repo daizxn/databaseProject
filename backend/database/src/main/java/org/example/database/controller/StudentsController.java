@@ -271,5 +271,79 @@ public class StudentsController {
         }
     }
 
+    /**
+     * 批量导入学生信息
+     * @param studentsList 学生信息列表
+     * @return 导入结果，包含成功和失败的统计信息
+     */
+    @PostMapping("/batchImport")
+    @ResponseBody
+    public Result batchImport(@RequestBody List<Students> studentsList) {
+        if (studentsList == null || studentsList.isEmpty()) {
+            return Result.error(ResultCodeEnum.PARAM_LOST_ERROR);
+        }
+
+        int successCount = 0;
+        int errorCount = 0;
+        StringBuilder errorMessages = new StringBuilder();
+
+        for (Students student : studentsList) {
+            try {
+                // 验证必要字段
+                if (student.getStudentName() == null || student.getStudentName().trim().isEmpty()) {
+                    errorCount++;
+                    errorMessages.append("学生姓名不能为空；");
+                    continue;
+                }
+
+                if (student.getStudentNumber() == null || student.getStudentNumber().trim().isEmpty()) {
+                    errorCount++;
+                    errorMessages.append("学号不能为空；");
+                    continue;
+                }
+
+                // 检查学号是否已存在
+                LambdaQueryWrapper<Students> queryWrapper = new LambdaQueryWrapper<>();
+                queryWrapper.eq(Students::getStudentNumber, student.getStudentNumber());
+                if (studentsService.count(queryWrapper) > 0) {
+                    errorCount++;
+                    errorMessages.append("学号").append(student.getStudentNumber()).append("已存在；");
+                    continue;
+                }
+
+                // 保存学生信息
+                if (studentsService.save(student)) {
+                    successCount++;
+                } else {
+                    errorCount++;
+                    errorMessages.append("学生").append(student.getStudentNumber()).append("保存失败；");
+                }
+
+            } catch (Exception e) {
+                errorCount++;
+                errorMessages.append("学生").append(student.getStudentNumber() != null ? student.getStudentNumber() : "NULL")
+                           .append("数据处理异常：").append(e.getMessage()).append("；");
+            }
+        }
+
+        // 构建返回结果
+        String message = String.format("批量导入完成：成功%d条，失败%d条。%s",
+                                      successCount, errorCount,
+                                      !errorMessages.isEmpty() ? errorMessages.toString() : "");
+
+        // 如果全部成功，返回成功状态
+        if (errorCount == 0) {
+            return Result.success(message);
+        }
+        // 如果部分成功，返回警告信息
+        else if (successCount > 0) {
+            return Result.error("2001", message);
+        }
+        // 如果全部失败，返回错误状态
+        else {
+            return Result.error("5031", message);
+        }
+    }
+
 
 }

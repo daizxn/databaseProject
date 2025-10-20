@@ -1,6 +1,5 @@
 spring.application.name: my-application
 
-
 server:
   port: 9091
 
@@ -19,7 +18,6 @@ mybatis-plus:
       table-prefix: daizx_
       id-type: auto
   type-aliases-package: org.example.database.entity
-
 
 pagehelper:
   helper-dialect: opengauss
